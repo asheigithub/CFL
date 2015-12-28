@@ -8,6 +8,29 @@ Desktop.ini
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
+#
+/Tools/FreeTypeTest/outputpng/
+/Tools/FreeTypeTest/Release/
+/Tools/FreeTypeTest/Debug/
+/Libs/freetype-2.6.2/builds/
+/Libs/freetype-2.6.2/docs/
+/Libs/freetype-2.6.2/src/
+/Libs/PowerVR/
+/ipch/
+/CLR/
+/Test/Android/TestEntry/bin/
+/Test/Android/TestEntry/obj/
+/Test/Android/TestEntry/libs/
+
+*.Cache
+
+*.o
+*.o.d
+*.zip
+*.sdf
+Debug/
+Release/
+
 # Windows Installer files
 *.cab
 *.msi
