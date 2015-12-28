@@ -1,0 +1,513 @@
+// TestEntry.cpp : 定义控制台应用程序的入口点。
+
+#include "CFLEntry.h"
+#include "CFLFile.h"
+
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <type_traits>
+
+using namespace CFL::Tasks;
+
+CFL::CFLContext* context;
+
+float times = 0;
+void up(float dettime)
+{
+	static int mmm = 0;
+
+	times += dettime;
+	//CFL::trace("%f\n", dettime);
+	if (times >= 1)
+	{
+		CFL::trace("%d\n", (int)CFL::getFPS());
+		times = 0;
+		
+		
+
+		taskfun func = [](void * arg)->void
+		{
+			
+			auto v = reinterpret_cast<std::tuple<CFL::File::fileInfoPtr, CFL::File::fileData,int>*>(arg);
+			auto f = std::get<0>(*v);
+			CFL::trace("taskid %d,%s\n", std::get<2>(*v) ,(f)->getFilePath());
+			
+			auto data = &std::get<1>(*v);
+			(f)->readFile(data);
+			(f).reset();
+			
+		};
+
+		callbackfun callbacker = [](void * arg)->void
+		{
+			auto v = reinterpret_cast<std::tuple<CFL::File::fileInfoPtr, CFL::File::fileData,int>*>(arg);
+			auto f = std::get<0>(*v);
+
+			auto data = std::get<1>(*v);
+			CFL::trace("taskid %d,filelen %d\n", std::get<2>(*v) , data.length);
+
+			data.close();
+			
+			delete v;
+		};
+
+		for (size_t i = 0; i < 5; i++)
+		{
+			
+			/*auto dir = CFL::File::getDirectory(CFL::File::dirtype::asset);
+			
+			std::tuple<decltype(dir->getfile("")), CFL::File::fileData,int>* para =
+				new std::tuple<decltype(dir->getfile("")), CFL::File::fileData,int>(
+					dir->getfile("earth.bmp"), CFL::File::fileData(),i);
+
+			context->taskPool.pushtask(func, (void *)( para), callbacker);*/
+		}
+
+
+
+	}
+
+	
+
+};
+
+//#define ACCESS _access  
+//#define MKDIR(a) _mkdir((a))
+
+void* testdo();
+
+int cfl_main(CFL::CFLContext* ctx, int argc, char* argv[])
+{
+	context = ctx;
+
+	//CFL::setFPS(30);
+	CFL::drawfun kk = [](CFL::CFLContext* context )
+	{
+		glClearColor(0, 0, 1, 1);
+		glClear(GL_COLOR_BUFFER_BIT);
+	};
+	
+	CFL::registerDrawFunc(ctx, kk);
+
+	CFL::registerUpdateFunc(ctx, up);
+
+	testdo();
+
+	return 0;
+}
+
+
+
+
+template<typename T, typename C>
+struct AsyncHandlerBase
+{
+	using CallBackerF = void(*)(C&);
+
+	bool hasCamplate()
+	{
+		std::unique_lock<std::mutex> lock(mtx);
+
+		return *_hascomplate;
+	}
+
+	void setCallbackFun(CallBackerF callbacker)
+	{
+
+		std::unique_lock<std::mutex> lock(mtx);
+
+		if (*_hascomplate)
+		{
+			lock.unlock();
+			//已执行完毕直接返回
+			callbacker( *reinterpret_cast<C*>(this));
+		}
+		else
+		{
+			memcpy(callbackfunPointerBuff, (void *)&callbacker, sizeof(CallBackerF*));
+			auto pp = reinterpret_cast<CallBackerF*>(callbackfunPointerBuff);
+		}
+
+
+	}
+
+
+
+protected:
+
+	void doCallbacker()  
+	{
+		std::unique_lock<std::mutex> lock(mtx);
+
+		CallBackerF ff = nullptr;
+		auto pp = reinterpret_cast<CallBackerF*>(callbackfunPointerBuff);
+		if (pp != nullptr)
+		{
+			auto fun = *pp;
+			if (fun != nullptr)
+			{
+				ff = fun;
+			}
+
+		}
+		free(callbackfunPointerBuff);
+
+		lock.unlock();
+
+		if (ff != nullptr)
+		{
+			ff(* reinterpret_cast<C*>( this));
+		}
+	}
+
+	void* callbackfunPointerBuff;
+
+	static std::mutex mtx;
+	static std::condition_variable notifycomplate;
+
+	std::shared_ptr<bool> _hascomplate;
+
+	virtual void createFunpointerBuff()
+	{
+		_hascomplate = std::make_shared<bool>(false);
+
+		callbackfunPointerBuff = malloc(sizeof(CallBackerF*));
+		memset(callbackfunPointerBuff, 0, sizeof(CallBackerF*));
+	}
+};
+template<typename T, typename C>
+std::mutex AsyncHandlerBase<T,C>::mtx;
+template<typename T, typename C>
+std::condition_variable AsyncHandlerBase<T,C>::notifycomplate;
+
+
+
+
+template<typename RETURNTYPE>
+struct AsyncHandler : public AsyncHandlerBase<RETURNTYPE, AsyncHandler<RETURNTYPE>>
+{
+	template<typename Fn, typename A1, typename R> 
+	friend struct RunTask_A1;
+
+	template<typename Fn, typename A1>
+	friend auto getTaskFun(const Fn _f, const A1& a1)->AsyncHandler < decltype(_f(a1)) > ;
+	
+	RETURNTYPE& endAsync() const
+	{
+		while (!(*AsyncHandlerBase<RETURNTYPE, AsyncHandler<RETURNTYPE>>::_hascomplate))
+		{
+			std::unique_lock<std::mutex> lock(AsyncHandlerBase<RETURNTYPE, AsyncHandler<RETURNTYPE>>::mtx);
+			if (*AsyncHandlerBase<RETURNTYPE, AsyncHandler<RETURNTYPE>>::_hascomplate)
+			{
+				break;
+			}
+			AsyncHandlerBase<RETURNTYPE, AsyncHandler<RETURNTYPE>>::notifycomplate.wait(lock);
+			lock.unlock();
+		}
+		return *(*_value);					
+	}
+
+	
+
+private:
+
+	//***获取返回对象地址的分配器***
+	static std::allocator<RETURNTYPE> getRetAlloc()
+	{
+		static std::allocator<RETURNTYPE> alloc;
+		return alloc;
+	}
+
+	typedef decltype(getRetAlloc().allocate(1)) RETPointer;
+
+	std::shared_ptr<RETPointer> _value;
+	
+	
+
+	void  createFunpointerBuff() override final
+	{
+		
+		_value=
+			std::shared_ptr<RETPointer> (new RETPointer(),
+				[](RETPointer* add)
+			{
+				auto dealloc = getRetAlloc();
+				dealloc.destroy(*add);
+				//delete *add;
+				dealloc.deallocate( *add, 1);
+				delete add;
+					;
+			});
+
+		//_value = temp;
+		
+		AsyncHandlerBase<RETURNTYPE, AsyncHandler<RETURNTYPE>>::createFunpointerBuff();
+
+		/*_hascomplate = std::make_shared<bool>(false);
+		callbackfunPointerBuff = malloc(sizeof(CallBackerF*));
+		memset(callbackfunPointerBuff, 0, sizeof(CallBackerF*));*/
+	}
+
+	
+
+};
+
+
+template<>
+struct AsyncHandler<void> :public AsyncHandlerBase<void, AsyncHandler<void>>
+{
+	template<typename Fn, typename A1, typename R>
+	friend struct RunTask_A1;
+
+	template<typename Fn, typename A1>
+	friend auto getTaskFun(const Fn _f, const A1& a1)->AsyncHandler < decltype(_f(a1)) >;
+
+	void endAsync() const
+	{
+		while (!(*_hascomplate))
+		{
+			std::unique_lock<std::mutex> lock(mtx);
+			if (*_hascomplate)
+			{
+				break;
+			}
+			notifycomplate.wait(lock);
+			lock.unlock();
+		}
+		return;
+	}
+
+
+};
+
+template<typename F,typename A1,typename RETURNTYPE>
+struct RunTask_A1
+{
+	
+	
+	static void* packArgs(const F& fn,const AsyncHandler<RETURNTYPE>& handler,const A1& a1 )
+	{
+		
+		typedef decltype(std::make_tuple(fn,handler, a1)) ArgsTuple;
+
+		static std::allocator<ArgsTuple> alloc;
+
+		auto pt = alloc.allocate(1);
+		alloc.construct( pt, fn, handler,a1);
+
+		return reinterpret_cast<void*>(pt);
+	}
+	static void run(void* args)
+	{
+		F* fp = nullptr; A1* a1 = nullptr; AsyncHandler<RETURNTYPE>* hp = nullptr; 
+		typedef decltype(std::make_tuple(*fp, *hp, *a1)) ArgsTuple;
+		ArgsTuple* pack = reinterpret_cast<ArgsTuple*>(args);
+
+		F fn= std::get<0>(*pack);
+		AsyncHandler<RETURNTYPE> asynchandler = std::get<1>(*pack);
+		
+		auto ret = fn(std::get<2>(*pack));
+
+
+		static std::allocator<ArgsTuple> alloc;
+		alloc.destroy(pack);
+		alloc.deallocate(pack, 1);
+
+		std::unique_lock<std::mutex> lock(AsyncHandler<RETURNTYPE>::mtx);
+		{
+			*asynchandler._hascomplate = true;
+
+			
+			auto alloc = asynchandler.getRetAlloc();
+			auto retaddress=alloc.allocate(1);
+			alloc.construct(retaddress,ret);
+			*asynchandler._value = retaddress; 
+
+
+
+			AsyncHandler<RETURNTYPE>::notifycomplate.notify_all();
+
+		}
+		lock.unlock();
+
+		asynchandler.doCallbacker();
+	}
+
+
+};
+template<typename F, typename A1>
+struct RunTask_A1<F,A1,void>
+{
+	
+	static void* packArgs(const F& fn, const AsyncHandler<void>& handler, const A1& a1)
+	{
+		
+		typedef decltype(std::make_tuple(fn,handler, a1)) ArgsTuple;
+
+		static std::allocator<ArgsTuple> alloc;
+
+		auto pt = alloc.allocate(1);
+		alloc.construct(pt, fn,handler, a1);
+
+		return reinterpret_cast<void*>(pt);
+	}
+
+
+	static void run(void* args)
+	{
+		F* fp = nullptr; A1* a1 = nullptr; AsyncHandler<void>* hp = nullptr;
+		typedef decltype(std::make_tuple(*fp, *hp, *a1)) ArgsTuple;
+		ArgsTuple* pack = reinterpret_cast<ArgsTuple*>(args);
+
+		F fn = std::get<0>(*pack);
+		AsyncHandler<void> asynchandler = std::get<1>(*pack);
+		fn(std::get<2>(*pack));
+
+		static std::allocator<ArgsTuple> alloc;
+		alloc.destroy(pack);
+		alloc.deallocate(pack, 1);
+
+		std::unique_lock<std::mutex> lock(AsyncHandler<void>::mtx);
+		{
+			*asynchandler._hascomplate = true;
+			AsyncHandler<void>::notifycomplate.notify_all();
+		}
+		lock.unlock();
+
+		asynchandler.doCallbacker();
+	}
+	
+};
+
+template<typename Fn,typename A>
+auto getTaskFun(const Fn _f, const A& a1) ->AsyncHandler<decltype(_f(a1))>
+{
+	typedef decltype(_f(a1)) ReturnType;
+
+	auto asynchandler= AsyncHandler<ReturnType>();
+	asynchandler.createFunpointerBuff();
+	
+
+	auto argsbuff = RunTask_A1<Fn, A, ReturnType>::packArgs( _f,asynchandler,a1);
+
+
+	context->taskPool.pushtask(RunTask_A1<Fn, A, ReturnType>::run,
+		(void*)argsbuff, 
+		nullptr);
+
+	return asynchandler;
+
+}
+
+#define GETTASKFUN template<typename Fn, typename A1>\
+auto getTaskFun(const Fn _f, const A1& a1) ->AsyncHandler<decltype(_f(a1))>\
+{\
+	typedef decltype(_f(a1)) ReturnType;\
+	\
+	auto asynchandler = AsyncHandler<ReturnType>();\
+	asynchandler.createFunpointerBuff();\
+	\
+	\
+	auto argsbuff = RunTask_A1<Fn, A1, ReturnType>::packArgs(_f, asynchandler, a1);\
+	\
+	\
+	context->taskPool.pushtask(RunTask_A1<Fn, A1, ReturnType>::run,\
+		(void*)argsbuff,\
+		nullptr);\
+\
+	return asynchandler;\
+\
+}\
+
+
+
+
+int tf(const char* c){ 
+	CFL::trace("%s\n", c); 
+	return 0; 
+}
+void tf(int c){ CFL::trace("%d\n", c); }
+
+void* testdo()
+{
+
+	void(*fp)(int) = tf;
+	int(*fp2)(const char*) = tf;
+
+	
+	auto handler= getTaskFun(fp2,"haha");
+	
+	//std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+	handler.setCallbackFun(
+		[](decltype(handler)& h)
+		{
+			
+			auto result=h.endAsync();
+
+			CFL::trace("callback! result:%d\n",result);
+
+			; 
+		});
+
+	auto vh= getTaskFun(fp,123);
+	vh.endAsync();
+
+	//getTaskFun(tf,true);
+	//getTaskFun(tf,2.0f);
+
+	
+
+	auto h = getTaskFun([](std::tuple<int, int> a)
+	{ 
+		return "hhhchar"; //std::get<0>(a)+std::get<1>(a); 
+	}, std::make_tuple(2,3));
+
+	CFL::trace(" h: %s\n",h.endAsync());
+
+
+
+	auto filetest = [](const CFL::File::fileInfoPtr file)
+	{
+		//auto file=dir->getfile("earth.bmp");
+		CFL::trace("file len:%d\n", file->getFileLength());
+		return file;
+	};
+
+	auto dir = CFL::File::getDirectory(CFL::File::dirtype::asset);
+
+	for (size_t i = 0; i < 5; i++)
+	{
+		auto handle=getTaskFun(filetest, dir->getfile("earth.bmp"));
+
+		//auto f= handle.endAsync();
+		handle.setCallbackFun(
+			[](decltype(handle)& sender)
+		{
+			//std::this_thread::sleep_for(std::chrono::milliseconds(100));
+			
+			auto f= sender.endAsync();
+			CFL::trace( " callbacker! %s tid:%d \n"  ,f->getFilePath(),std::this_thread::get_id() );
+
+		}
+			
+			);
+	}
+	
+
+
+	
+
+	//char* c = new char[10]{0};
+	//c[0] = '1'; c[1] = 'b';
+
+	//auto arg = ppp(3.0, 'a',c,nullptr);
+
+	//auto v1 = std::get<2>(arg);
+	//delete v1;
+	/*char* a = "aa";
+	auto v = foo(a,3.0,5);
+	return 0;*/
+	return 0;
+}

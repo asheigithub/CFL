@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\Text">
+      <UniqueIdentifier>{295ff38f-00dd-40e1-9cc8-971934d9871a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Content">
+      <UniqueIdentifier>{883a650f-ad74-4478-b930-0110350244af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Graphic">
+      <UniqueIdentifier>{c9e89cf8-b2d2-48c6-bfbf-53d12f94ed5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Render">
+      <UniqueIdentifier>{16eee885-75e3-44fb-9c2c-7ccc3afa387f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Geom">
+      <UniqueIdentifier>{f258bcd7-d9d7-46c8-a514-a939c32bcfbf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\CFLEntry.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\clearwindows.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CFLFile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CFLThreadTasks.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CFLAsyncFunc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CFLString.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Text\CFLEncoding.h">
+      <Filter>头文件\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Text\CFLEncodingEnum.h">
+      <Filter>头文件\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Content\CFLBinaryCache.h">
+      <Filter>头文件\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphic\CFLGraphic.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CFLDrawCommand.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphic\CFLShader.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphic\CFLGLObjCollection.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphic\CFLGLObj.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphic\CFLProgram.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Content\CFLBuildInData.h">
+      <Filter>头文件\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphic\CFLVertexPointer.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CFLMath.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Geom\CFLGeom.h">
+      <Filter>头文件\Geom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphic\CFLGLTex2D.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Content\CFLCTF.h">
+      <Filter>头文件\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Content\CFLFileDataResource.h">
+      <Filter>头文件\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphic\CFLTextureBase.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphic\CFLTexture.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphic\IGLDataResouce.h">
+      <Filter>头文件\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphic\CFLGLVBO.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphic\CFLColor.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CFLCapability.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CFLHALF_FLOAT.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphic\CFLGameImage.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Content\CFLContent.h">
+      <Filter>头文件\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Content\CFLBinaryReader.h">
+      <Filter>头文件\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Content\CFLEndian.h">
+      <Filter>头文件\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Geom\CFLRectangle.h">
+      <Filter>头文件\Geom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CFLStage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphic\CFLGLProxy.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Content\CFLKTX.h">
+      <Filter>头文件\Content</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+</Project>

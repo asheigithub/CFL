@@ -1,0 +1,154 @@
+﻿0000-007F Basic Latin 基本拉丁字母 
+0080-00FF Latin-1 Supplement 拉丁字母補充-1 
+0100-017F Latin Extended-A 拉丁字母擴充-A 
+0180-024F Latin Extended-B 拉丁字母擴充-B 
+0250-02AF IPA Extensions 國際音標擴充 
+02B0-02FF Spacing Modifier Letters 進格修飾字元 
+0300-036F Combining Diacritical Marks 組合音標附加符號 
+0370-03FF Greek and Coptic 希臘字母 
+0400-04FF Cyrillic 西里爾字母 
+0500-052F Cyrillic Supplement 西里爾字母補充 
+0530-058F Armenian 亞美尼亞文 
+0590-05FF Hebrew 希伯來文 
+0600-06FF Arabic 基本阿拉伯文 
+0700-074F Syriac 敘利亞文 
+0750-077F Arabic Supplement 阿拉伯文補充 
+0780-07BF Thaana 塔納文 
+07C0-07FF N'Ko   
+0900-097F Devanagari 天城體梵文字母 
+0980-09FF Bengali 孟加拉文 
+0A00-0A7F Gurmukhi 古爾穆基文 
+0A80-0AFF Gujarati 古吉拉特文 
+0B00-0B7F Oriya 奧里亞文 
+0B80-0BFF Tamil 泰米爾文 
+0C00-0C7F Telugu 泰盧固文 
+0C80-0CFF Kannada 卡納達文 
+0D00-0D7F Malayalam 馬拉亞拉姆文 
+0D80-0DFF Sinhala 僧伽羅文 
+0E00-0E7F Thai 泰文 
+0E80-0EFF Lao 老撾文；寮文 
+0F00-0FFF Tibetan 藏文 
+1000-109F Myanmar 緬甸文 
+10A0-10FF Georgian 格魯吉亞文 
+1100-11FF Hangul Jamo 諺文字母 
+1200-137F Ethiopic 埃塞俄比亞文 
+1380-139F Ethiopic Supplement 埃塞俄比亞文補充 
+13A0-13FF Cherokee 切羅基文 
+1400-167F Unified Canadian Aboriginal Syllabics 加拿大土著統一音節文字 
+1680-169F Ogham 歐甘文 
+16A0-16FF Runic 北歐古文 
+1700-171F Tagalog 他加祿文 
+1720-173F Hanunoo 哈努諾文 
+1740-175F Buhid 布希德文 
+1760-177F Tagbanwa 塔格巴努亞文 
+1780-17FF Khmer 高棉文 
+1800-18AF Mongolian 蒙古文 
+1900-194F Limbu 林布文 
+1950-197F Tai Le 傣哪文；德宏傣文 
+1980-19DF New Tai Lue 新傣仂文 
+19E0-19FF Khmer Symbols 高棉符號 
+1A00-1A1F Buginese 布吉文 
+1B00-1B7F Balinese 巴厘文 
+1D00-1D7F Phonetic Extensions 音標擴充 
+1D80-1DBF Phonetic Extensions Supplement 音標擴充補充 
+1DC0-1DFF Combining Diacritical Marks Supplement 組合音標附加符號 
+1E00-1EFF Latin Extended Additional 拉丁字母擴充附加 
+1F00-1FFF Greek Extended 希臘文擴充 
+2000-206F General Punctuation 一般標點符號 
+2070-209F Superscripts and Subscripts 下標及上標 
+20A0-20CF Currency Symbols 貨幣符號 
+20D0-20FF Combining Diacritical Marks for Symbols 符號用組合附加符號 
+2100-214F Letterlike Symbols 似字母符號 
+2150-218F Number Forms 數字形式 
+2190-21FF Arrows 箭頭符號 
+2200-22FF Mathematical Operators 數學運算符號 
+2300-23FF Miscellaneous Technical 混合專門符號；零雜技術符號 
+2400-243F Control Pictures 控制圖像 
+2440-245F Optical Character Recognition 光學字元識別 
+2460-24FF Enclosed Alphanumerics 圈型字母數字 
+2500-257F Box Drawing 製表符 
+2580-259F Block Elements 區塊元件 
+25A0-25FF Geometric Shapes 幾何形狀 
+2600-26FF Miscellaneous Symbols 混合什錦符號；零雜符號 
+2700-27BF Dingbats 什錦符號 
+27C0-27EF Miscellaneous Mathematical Symbols-A 混合數學符號-A；零雜數學符號-A 
+27F0-27FF Supplemental Arrows-A 補充性箭頭符號-A 
+2800-28FF Braille Patterns 盲文；盲人點字 
+2900-297F Supplemental Arrows-B 補充性箭頭符號-B 
+2980-29FF Miscellaneous Mathematical Symbols-B 混合數學符號-B；零雜數學符號-B 
+2A00-2AFF Supplemental Mathematical Operators 補充性數學運算符號 
+2B00-2BFF Miscellaneous Symbols and Arrows 混合什錦符號和箭頭符號；零雜符號與箭頭 
+2C00-2C5F Glagolitic 格拉哥爾字母 
+2C60-2C7F Latin Extended-C 拉丁字母擴充-C 
+2C80-2CFF Coptic 科普特文 
+2D00-2D2F Georgian Supplement 格魯吉亞文補充 
+2D30-2D7F Tifinagh 提非納格字母 
+2D80-2DDF Ethiopic Extended 埃塞俄比亞文擴充 
+2E00-2E7F Supplemental Punctuation 補充性標點符號 
+2E80-2EFF CJK Radicals Supplement 中日韓部首補充 
+2F00-2FDF Kangxi Radicals 康熙部首 
+2FF0-2FFF Ideographic Description Characters 漢字結構描述字符 
+3000-303F CJK Symbols and Punctuation 中日韓符號和標點 
+3040-309F Hiragana 平假名 
+30A0-30FF Katakana 片假名 
+3100-312F Bopomofo 注音符號 
+3130-318F Hangul Compatibility Jamo 諺文相容字母 
+3190-319F Kanbun 漢文標註號 
+31A0-31BF Bopomofo Extended 注音符號擴充 
+31C0-31EF CJK Strokes 中日韓筆畫部件 
+31F0-31FF Katakana Phonetic Extensions 片假名音標擴充 
+3200-32FF Enclosed CJK Letters and Months 括號中日韓字母及月份；圈型中日韓字母及月份 
+3300-33FF CJK Compatibility 中日韓相容字元 
+3400-4DBF CJK Unified Ideographs Extension A 中日韓統一表意文字擴充A 
+4DC0-4DFF Yijing Hexagram Symbols 易經六十四卦象 
+4E00-9FFF CJK Unified Ideographs 中日韓統一表意文字 
+A000-A48F Yi Syllables 彝文音節 
+A490-A4CF Yi Radicals 彝文字母 
+A700-A71F Modifier Tone Letters 聲調符號 
+A720-A7FF Latin Extended-D 拉丁字母擴充-D 
+A800-A82F Syloti Nagri   
+A840-A87F Phags-pa 八思巴字母 
+AC00-D7AF Hangul Syllables 諺文音節 
+D800-DB7F High Surrogates 高半代用區 
+DB80-DBFF High Private Use Surrogates 高半專用代用區 
+DC00-DFFF Low Surrogates 低半代用區 
+E000-F8FF Private Use Area 專用區 
+F900-FAFF CJK Compatibility Ideographs 中日韓相容表意文字 
+FB00-FB4F Alphabetic Presentation Forms 字母變體顯現形式 
+FB50-FDFF Arabic Presentation Forms-A 阿拉伯文變體顯現形式-A 
+FE00-FE0F Variation Selectors 字型變換選取器 
+FE10-FE1F Vertical Forms 豎式標點 
+FE20-FE2F Combining Half Marks 組合半形標示 
+FE30-FE4F CJK Compatibility Forms 中日韓相容形式 
+FE50-FE6F Small Form Variants 小寫變體 
+FE70-FEFF Arabic Presentation Forms-B 阿拉伯文變體顯現形式-B 
+FF00-FFEF Halfwidth and Fullwidth Forms 半形及全形字符 
+FFF0-FFFF Specials 特殊區域 
+10000-1007F Linear B Syllabary 線形文字B音節文字 
+10080-100FF Linear B Ideograms 線形文字B表意文字 
+10100-1013F Aegean Numbers 愛琴數字 
+10140-1018F Ancient Greek Numbers 古希臘數字 
+10300-1032F Old Italic 古意大利文 
+10330-1034F Gothic 哥特文 
+10380-1039F Ugaritic 烏加里特楔形文字 
+103A0-103DF Old Persian 古波斯文 
+10400-1044F Deseret 猶他大學音標 
+10450-1047F Shavian 肅伯納字母 
+10480-104AF Osmanya   
+10800-1083F Cypriot Syllabary 塞浦路斯音節文字 
+10900-1091F Phoenician 腓尼基字母 
+10A00-10A5F Kharoshthi 佉盧字母 
+12000-123FF Cuneiform 楔形文字 
+12400-1247F Cuneiform Numbers and Punctuation 楔形文字數字及標點 
+1D000-1D0FF Byzantine Musical Symbols 東正教音樂符號 
+1D100-1D1FF Musical Symbols 音樂符號 
+1D200-1D24F Ancient Greek Musical Notation 古希臘音樂譜記號 
+1D300-1D35F Tai Xuan Jing Symbols 太玄經符號 
+1D360-1D37F Counting Rod Numerals 算籌記數式 
+1D400-1D7FF Mathematical Alphanumeric Symbols 數學用字母數字符號 
+20000-2A6DF CJK Unified Ideographs Extension B 中日韓統一表意文字擴充B 
+2F800-2FA1F CJK Compatibility Ideographs Supplement 中日韓相容表意文字補充 
+E0000-E007F Tags 語言編碼標籤 
+E0100-E01EF Variation Selectors Supplement 字型變換選取器補充 
+FFF80-FFFFF Supplementary Private Use Area-A 補充專用區-A 
+10FF80-10FFFF Supplementary Private Use Area-B 補充專用區-B 

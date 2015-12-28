@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{89CEF089-5A9F-4DED-A1BC-D14C3347281D}</ProjectGuid>
+    <Keyword>MakeFileProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <NMakeOutput>CFLCommImpl.exe</NMakeOutput>
+    <NMakePreprocessorDefinitions>ANDROID;__ANDROID__;__arm__;__GNUC__;__LINUX_COMPILER_H;_NEW;__ASM_GENERIC_SIGNAL_H;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath>../../GLES;../../CFLComm/src;D:\Android\android-sdk\android-ndk-r10d\sources\cxx-stl\gnu-libstdc++\4.8\libs\x86\include;D:\Android\android-sdk\android-ndk-r10d\sources\cxx-stl\gnu-libstdc++\4.8\include;D:\Android\android-sdk\android-ndk-r10d\sources\android\native_app_glue;D:\Android\android-sdk\android-ndk-r10d\platforms\android-12\arch-arm\usr\include;D:\Android\android-sdk\android-ndk-r10d\toolchains\aarch64-linux-android-4.9\prebuilt\windows-x86_64\lib\gcc\aarch64-linux-android\4.9\include;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeBuildCommandLine>@set path=%path%;E:\Cocos\tools\ant\bin
+@set path=%path%;D:\Android\android-sdk\tools
+@set path=%path%;D:\Android\android-sdk\platform-tools
+@set path=%path%;D:\crystaxndk\crystax-ndk-10.2.1
+
+cmd /C ndk-build</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>@set path=%path%;E:\Cocos\tools\ant\bin
+@set path=%path%;D:\Android\android-sdk\tools
+@set path=%path%;D:\Android\android-sdk\platform-tools
+@set path=%path%;D:\crystaxndk\crystax-ndk-10.2.1
+
+cmd /C ndk-build  -B</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>@set path=%path%;E:\Cocos\tools\ant\bin
+@set path=%path%;D:\Android\android-sdk\tools
+@set path=%path%;D:\Android\android-sdk\platform-tools
+@set path=%path%;D:\crystaxndk\crystax-ndk-10.2.1
+
+cmd /C ndk-build clean</NMakeCleanCommandLine>
+    <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
+    <IncludePath />
+    <ReferencePath />
+    <LibraryPath />
+    <LibraryWPath />
+    <SourcePath />
+    <ExcludePath />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <NMakeOutput>CFLCommImpl.exe</NMakeOutput>
+    <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="jni\Android.mk" />
+    <None Include="jni\Application.mk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\CommSrc\CFLBinaryCache.cpp" />
+    <ClCompile Include="..\CommSrc\CFLDrawCommand.cpp" />
+    <ClCompile Include="..\CommSrc\CFLGLObj.cpp" />
+    <ClCompile Include="..\CommSrc\CFLGLObjCollection.cpp" />
+    <ClCompile Include="..\CommSrc\CFLGLProgram.cpp" />
+    <ClCompile Include="..\CommSrc\CFLGraphic.cpp" />
+    <ClCompile Include="..\CommSrc\CFLShader.cpp" />
+    <ClCompile Include="..\CommSrc\CFLString.cpp" />
+    <ClCompile Include="..\CommSrc\CFLThreadTasks.cpp" />
+    <ClCompile Include="CFLAndroidMainLoopThread.cpp" />
+    <ClCompile Include="CFLEntry.cpp" />
+    <ClCompile Include="CFLFile.cpp" />
+    <ClCompile Include="jnitool.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\CommSrc\xxhash\xxhash.h" />
+    <ClInclude Include="CFLAndroidMainLoopThread.h" />
+    <ClInclude Include="jnitool.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

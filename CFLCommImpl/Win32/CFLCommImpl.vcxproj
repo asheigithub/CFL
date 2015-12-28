@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{88D97251-A88B-45E1-8695-936F9DC25210}</ProjectGuid>
+    <RootNamespace>CFLCommImpl</RootNamespace>
+    <ProjectName>CFLCommImpl</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../GLES;../../CFLComm/src;</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CallingConvention>Cdecl</CallingConvention>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../GLES;../../CFLComm/src;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\CommSrc\CFLBinaryCache.cpp" />
+    <ClCompile Include="..\CommSrc\CFLBinaryReader.cpp" />
+    <ClCompile Include="..\CommSrc\CFLBuildInData.cpp" />
+    <ClCompile Include="..\CommSrc\CFLCapability.cpp" />
+    <ClCompile Include="..\CommSrc\CFLContent.cpp" />
+    <ClCompile Include="..\CommSrc\CFLCTF.cpp" />
+    <ClCompile Include="..\CommSrc\CFLDrawCommand.cpp" />
+    <ClCompile Include="..\CommSrc\CFLEncoding.cpp" />
+    <ClCompile Include="..\CommSrc\CFLFileDataResource.cpp" />
+    <ClCompile Include="..\CommSrc\CFLGameImage.cpp" />
+    <ClCompile Include="..\CommSrc\CFLGeom_Quaternion.cpp" />
+    <ClCompile Include="..\CommSrc\CFLGeom_Vector.cpp" />
+    <ClCompile Include="..\CommSrc\CFLGLObj.cpp" />
+    <ClCompile Include="..\CommSrc\CFLGLProgram.cpp" />
+    <ClCompile Include="..\CommSrc\CFLGLProxy.cpp" />
+    <ClCompile Include="..\CommSrc\CFLGLTex2D.cpp" />
+    <ClCompile Include="..\CommSrc\CFLGLVBO.cpp" />
+    <ClCompile Include="..\CommSrc\CFLGraphic.cpp" />
+    <ClCompile Include="..\CommSrc\CFLHALF_FLOAT.cpp" />
+    <ClCompile Include="..\CommSrc\CFLKTX.cpp" />
+    <ClCompile Include="..\CommSrc\CFLMath.cpp" />
+    <ClCompile Include="..\CommSrc\CFLShader.cpp" />
+    <ClCompile Include="..\CommSrc\CFLStage.cpp" />
+    <ClCompile Include="..\CommSrc\CFLString.cpp" />
+    <ClCompile Include="..\CommSrc\CFLTexture.cpp" />
+    <ClCompile Include="..\CommSrc\CFLThreadTasks.cpp" />
+    <ClCompile Include="..\CommSrc\CFLGLObjCollection.cpp" />
+    <ClCompile Include="..\CommSrc\CFLVertexPointer.cpp" />
+    <ClCompile Include="..\CommSrc\CFLGameImageRender.cpp" />
+    <ClCompile Include="..\CommSrc\GLLineRender.cpp" />
+    <ClCompile Include="..\CommSrc\HalfFloatGLLineRender.cpp" />
+    <ClCompile Include="..\CommSrc\Texture2DRef.cpp" />
+    <ClCompile Include="..\CommSrc\xxhash\xxhash.c" />
+    <ClCompile Include="src\CFLEntry.cpp" />
+    <ClCompile Include="src\CFLFile.cpp" />
+    <ClCompile Include="src\CFLMainLoopThread.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\CommSrc\buildinshaders\GameImage_Atlas_TinyColor.h" />
+    <ClInclude Include="..\CommSrc\buildinshaders\GameImage_Separate_TinyColor_Shader.h" />
+    <ClInclude Include="..\CommSrc\buildinshaders\GameImage_TinyColor_Shader.h" />
+    <ClInclude Include="..\CommSrc\buildinshaders\GLLineShader.h" />
+    <ClInclude Include="..\CommSrc\headers\CFLConvertUTF.h" />
+    <ClInclude Include="..\CommSrc\headers\CFLGameImageRender.h" />
+    <ClInclude Include="..\CommSrc\headers\CFLGameImageRender_DrawElement.h" />
+    <ClInclude Include="..\CommSrc\headers\CFLVertBufferTemplate.h" />
+    <ClInclude Include="..\CommSrc\headers\CFLLineRender.h" />
+    <ClInclude Include="..\CommSrc\headers\GBKTable.h" />
+    <ClInclude Include="..\CommSrc\headers\GraphicRenders.h" />
+    <ClInclude Include="..\CommSrc\xxhash\xxhash.h" />
+    <ClInclude Include="src\CFLMainLoopThread.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,19 @@
+﻿生成启动时间为 2015/11/19 20:05:10。
+     1>项目“E:\CFL\Test\Win32\TestEntry\TestEntry.vcxproj”在节点 2 上(Build 个目标)。
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../../../GLES /I../../../CFLComm/src /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /AI"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral" /Zi /clr /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _MBCS /D _USING_V110_SDK71_ /D _MBCS /Gm- /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"CLR\\" /Fd"CLR\vc120.pdb" /TP /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\mscorlib.dll" /analyze- /errorReport:prompt /clr:nostdlib ..\..\TestEntry.cpp
+         TestEntry.cpp
+     1>项目“E:\CFL\Test\Win32\TestEntry\TestEntry.vcxproj”(1)正在节点 2 上生成“E:\CFL\CFLCommImpl\Win32\CFLCommImpl.vcxproj”(2:3) (GetResolvedLinkLibs 个目标)。
+     2>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Win32.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     2>已完成生成项目“E:\CFL\CFLCommImpl\Win32\CFLCommImpl.vcxproj”(GetResolvedLinkLibs 个目标)的操作。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(1197,5): warning MSB8030: The linker switch "Minimum Required Version" requires "SubSystem" to be set.  Without "SubSystem", the "Minimum Required Version" would not be passed to linker and could prevent to the output binary from running on older Operating Systems.
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\CFL\CLR\TestEntry.exe" /INCREMENTAL /NOLOGO /LIBPATH:"../../../Libs/Mali OpenGL ES Emulator 2.2.1" libEGL.lib libGLESv2.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\CFL\CLR\TestEntry.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\CFL\CLR\TestEntry.lib" /MACHINE:X86 CLR\TestEntry.obj
+         E:\CFL\Debug\CFLCommImpl.lib
+     1>CFLCommImpl.lib(CFLFile.obj) : warning LNK4075: 忽略“/EDITANDCONTINUE”(由于“/OPT:LBR”规范)
+         TestEntry.vcxproj -> E:\CFL\CLR\TestEntry.exe
+     1>已完成生成项目“E:\CFL\Test\Win32\TestEntry\TestEntry.vcxproj”(Build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:01.78

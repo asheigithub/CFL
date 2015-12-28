@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{558939CB-1B96-43BA-8DEC-66ABA700FC7E}</ProjectGuid>
+    <Keyword>MakeFileProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath>../GLES;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\CFLAsyncFunc.h" />
+    <ClInclude Include="src\CFLCapability.h" />
+    <ClInclude Include="src\CFLDrawCommand.h" />
+    <ClInclude Include="src\CFLEntry.h" />
+    <ClInclude Include="src\CFLFile.h" />
+    <ClInclude Include="src\CFLHALF_FLOAT.h" />
+    <ClInclude Include="src\CFLMath.h" />
+    <ClInclude Include="src\CFLStage.h" />
+    <ClInclude Include="src\CFLString.h" />
+    <ClInclude Include="src\CFLThreadTasks.h" />
+    <ClInclude Include="src\clearwindows.h" />
+    <ClInclude Include="src\Content\CFLBinaryCache.h" />
+    <ClInclude Include="src\Content\CFLBinaryReader.h" />
+    <ClInclude Include="src\Content\CFLBuildInData.h" />
+    <ClInclude Include="src\Content\CFLContent.h" />
+    <ClInclude Include="src\Content\CFLCTF.h" />
+    <ClInclude Include="src\Content\CFLEndian.h" />
+    <ClInclude Include="src\Content\CFLFileDataResource.h" />
+    <ClInclude Include="src\Content\CFLKTX.h" />
+    <ClInclude Include="src\Geom\CFLGeom.h" />
+    <ClInclude Include="src\Geom\CFLRectangle.h" />
+    <ClInclude Include="src\Graphic\CFLColor.h" />
+    <ClInclude Include="src\Graphic\CFLGameImage.h" />
+    <ClInclude Include="src\Graphic\CFLGLObj.h" />
+    <ClInclude Include="src\Graphic\CFLGLObjCollection.h" />
+    <ClInclude Include="src\Graphic\CFLGLProxy.h" />
+    <ClInclude Include="src\Graphic\CFLGLTex2D.h" />
+    <ClInclude Include="src\Graphic\CFLGLVBO.h" />
+    <ClInclude Include="src\Graphic\CFLGraphic.h" />
+    <ClInclude Include="src\Graphic\CFLProgram.h" />
+    <ClInclude Include="src\Graphic\CFLShader.h" />
+    <ClInclude Include="src\Graphic\CFLTexture.h" />
+    <ClInclude Include="src\Graphic\CFLVertexPointer.h" />
+    <ClInclude Include="src\Graphic\IGLDataResouce.h" />
+    <ClInclude Include="src\Graphic\CFLTextureBase.h" />
+    <ClInclude Include="src\Text\CFLEncoding.h" />
+    <ClInclude Include="src\Text\CFLEncodingEnum.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

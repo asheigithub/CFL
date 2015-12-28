@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="源文件\xxhash">
+      <UniqueIdentifier>{c9cffd25-a407-49c6-9ad9-7f293018be84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\render">
+      <UniqueIdentifier>{9971dd1b-3427-4ea4-9682-42c7a72f2fe6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\content">
+      <UniqueIdentifier>{595b2811-8b9a-471a-ae51-b6c691ff53c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\buildinshaders">
+      <UniqueIdentifier>{20669b71-e8e1-4016-930f-53a7a4a2b5be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\graphic">
+      <UniqueIdentifier>{3c6fed9d-e2bc-4249-9a75-78370262ec6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\text">
+      <UniqueIdentifier>{137e7e61-c7c9-4cd7-84be-e1c4374e82c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\exernal">
+      <UniqueIdentifier>{82d0dad4-891c-40c5-9ee9-406736821771}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\buildinshaders">
+      <UniqueIdentifier>{d6ebf187-ea7f-427f-953f-33aaed5fa7fd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\CFLEntry.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CFLFile.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CFLMainLoopThread.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLThreadTasks.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLString.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\xxhash\xxhash.c">
+      <Filter>源文件\xxhash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLDrawCommand.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLGLObj.cpp">
+      <Filter>源文件\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLGLObjCollection.cpp">
+      <Filter>源文件\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLShader.cpp">
+      <Filter>源文件\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLGLProgram.cpp">
+      <Filter>源文件\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLBinaryCache.cpp">
+      <Filter>源文件\content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLBuildInData.cpp">
+      <Filter>源文件\content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLVertexPointer.cpp">
+      <Filter>源文件\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLMath.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLGeom_Vector.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLGeom_Quaternion.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLGLTex2D.cpp">
+      <Filter>源文件\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLFileDataResource.cpp">
+      <Filter>源文件\content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLTexture.cpp">
+      <Filter>源文件\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLGLVBO.cpp">
+      <Filter>源文件\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLCapability.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLHALF_FLOAT.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLContent.cpp">
+      <Filter>源文件\content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLBinaryReader.cpp">
+      <Filter>源文件\content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\HalfFloatGLLineRender.cpp">
+      <Filter>源文件\graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\Texture2DRef.cpp">
+      <Filter>源文件\graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLEncoding.cpp">
+      <Filter>源文件\text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLGameImage.cpp">
+      <Filter>源文件\graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLGraphic.cpp">
+      <Filter>源文件\graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\GLLineRender.cpp">
+      <Filter>源文件\graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLGameImageRender.cpp">
+      <Filter>源文件\graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLStage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLGLProxy.cpp">
+      <Filter>源文件\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLCTF.cpp">
+      <Filter>源文件\content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLKTX.cpp">
+      <Filter>源文件\content</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\CFLMainLoopThread.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\xxhash\xxhash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\headers\GraphicRenders.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\headers\GBKTable.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\headers\CFLConvertUTF.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\headers\CFLLineRender.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\headers\CFLGameImageRender.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\headers\CFLGameImageRender_DrawElement.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\buildinshaders\GLLineShader.h">
+      <Filter>头文件\buildinshaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\buildinshaders\GameImage_TinyColor_Shader.h">
+      <Filter>头文件\buildinshaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\headers\CFLVertBufferTemplate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\buildinshaders\GameImage_Separate_TinyColor_Shader.h">
+      <Filter>头文件\buildinshaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\buildinshaders\GameImage_Atlas_TinyColor.h">
+      <Filter>头文件\buildinshaders</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
