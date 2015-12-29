@@ -65,7 +65,7 @@ Public Class Form1
 
                 Dim catage = Char.GetUnicodeCategory(ch)
 
-                
+
 
                 '32位不需要考虑Surrogate
                 'If catage = UnicodeCategory.Surrogate _
@@ -509,4 +509,125 @@ Public Class Form1
     End Function
 
 
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        '建立unicode数据库
+        Dim ucd = My.Computer.FileSystem.ReadAllText("E:\CFL\Tools\TextElement\UCD\UnicodeData.txt")
+
+        Dim lines = ucd.Split(vbLf)
+
+        Dim cinfo As New List(Of Tuple(Of String, String, Integer, Integer))(&HFFFF)
+        For index = 1 To (&HFFFF)
+            cinfo.Add(Nothing)
+        Next
+
+        For Each l In lines
+            Dim cols = l.Split(";")
+            If cols.Length > 1 Then
+
+                Dim code = Convert.ToInt32(cols(0), 16)
+                If Not code <= 65535 Then
+                    Continue For
+
+                End If
+
+                Dim combing = cols(3)
+                Dim bidi = cols(4)
+
+                If code >= &HD800 And code <= &HDFFF Then
+                    Continue For
+                End If
+
+
+                Dim str = Char.ConvertFromUtf32(code)
+
+                Dim uppercode = AscW(Char.ToUpper(str))
+                Dim lowwercode = AscW(Char.ToLower(str))
+
+
+                Dim idx = code
+               
+                cinfo(idx) = New Tuple(Of String, String, Integer, Integer)(bidi, combing, uppercode, lowwercode)
+
+            End If
+        Next
+
+        Dim csb As New Text.StringBuilder
+
+
+        Dim sb As New Text.StringBuilder
+        For index = 0 To cinfo.Count - 1
+
+            Dim info = cinfo(index)
+
+            If Not info Is Nothing Then
+
+                Dim str = Char.ConvertFromUtf32(index)
+                Dim cat = Char.GetUnicodeCategory(str)
+
+                csb.AppendFormat("static const unsigned int uc{0}[5]= {{unicodeCategory::{1}, bidiClass::{2} , {3},{4},{5}}};", _
+                                index, cat.ToString(), info.Item1, info.Item2, info.Item3, info.Item4)
+                csb.AppendLine()
+
+                sb.AppendFormat("uc{0},", index)
+                sb.AppendLine()
+            Else
+                sb.AppendLine("blank,")
+            End If
+
+            
+
+        Next
+
+
+        Dim sb2 As New Text.StringBuilder
+
+        csb.Clear()
+        '***超过65535部分
+        For Each l In lines
+            Dim cols = l.Split(";")
+            If cols.Length > 1 Then
+
+                Dim code = Convert.ToInt32(cols(0), 16)
+                If code < 65535 Then
+                    Continue For
+
+                End If
+
+                Dim combing = cols(3)
+                Dim bidi = cols(4)
+
+                If code >= &HD800 And code <= &HDFFF Then
+                    Continue For
+                End If
+
+
+                Dim str = Char.ConvertFromUtf32(code)
+
+                Dim uppercode = AscW(Char.ToUpper(str))
+                Dim lowwercode = AscW(Char.ToLower(str))
+
+
+                Dim idx = code
+
+                'cinfo(idx) = New Tuple(Of String, String, Integer, Integer)(bidi, combing, uppercode, lowwercode)
+
+                Dim cat = Char.GetUnicodeCategory(str)
+
+                csb.AppendFormat("static const unsigned int uc{0}[5]= {{unicodeCategory::{1}, bidiClass::{2} , {3},{4},{5}}};", _
+                                code, cat.ToString(), bidi, combing, code, code)
+                csb.AppendLine()
+
+                sb2.AppendFormat("{{{0},uc{1}}},", _
+                                code, code)
+                sb2.AppendLine()
+
+            End If
+        Next
+
+
+
+
+
+
+    End Sub
 End Class

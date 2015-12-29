@@ -326,7 +326,40 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 	auto iimg=content::Content::loadGameImage("testreadfile/commimage1/icon_Ô¤ÀÀ.png");
 	iimg->refTexture->upload(true);
 	
+	UChar c('A');
+	auto cat = UChar::getUnicodeCategory(c);
+
+	auto cc = UChar::toLower(c);
+
+	if (c ==  UChar::toUpper( cc))
+	{
+		LOGI(" %c==%c\n", c.charCode, cc.charCode);
+	}
+
+	LOGI(" %s,len: %d\n", img.log_str(), img.length());
+
+	CFLString unichar = CFLString(c);
 	
+	auto len = unichar.length();
+	auto acc= unichar.log_str();
+
+	auto ucc2 = unichar + unichar;
+
+	unsigned int  ucs4code[4] = { 0x0627, 0x0655, 0x0650, 0 };
+	CFLString uni2(ucs4code);
+
+	auto tick = cfl::getTimer();
+
+	CFLString add("abcd¹þ¹þ");
+	for (size_t i = 0; i < 100; i++)
+	{
+		uni2 += add;
+	}
+	len = uni2.length();
+
+	auto t = cfl::getTimer() - tick;
+
+	LOGI("timer: %d,%s\n",t,(uni2+c).log_str());
 
 	//
 	//render::textures::Texture2D texture;

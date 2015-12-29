@@ -1,6 +1,7 @@
 #ifndef _CFL_STRING_
 #define _CFL_STRING_
 
+#include "CFLUChar.h"
 #include "Text/CFLEncodingEnum.h"
 #include <memory>
 #include <unordered_map>
@@ -12,6 +13,8 @@ namespace cfl
 		class GBKEncoding;
 	}
 
+
+
 	class CFLString;
 
 	struct atomicdata;
@@ -20,12 +23,15 @@ namespace cfl
 	{
 	public:
 		
-
+		string_data(const UChar uchar);
+		string_data(const unsigned int* ucs4);
 		string_data(const char* chars,const text::Encoding encode );
 		~string_data();
 
 		void prepare_ansi_str(const CFLString&);
 		void prepare_utf8_str(const CFLString&);
+		void prepare_ucs4(const CFLString&);
+
 
 		atomicdata* a_data;
 
@@ -58,15 +64,21 @@ namespace cfl
 
 
 		CFLString() :CFLString(""){}
+
+		CFLString(const UChar uchar);
+		CFLString(const unsigned int* ucs4);
 		CFLString(const char* chars) : CFLString(chars, text::Encoding::gbk){}
 		CFLString(const char*, const text::Encoding);
-
-		
 
 		~CFLString();
 
 		inline bool operator==(const CFLString& rhs) const { return equals(rhs); }
 		inline bool operator!=(const CFLString& rhs) const { return !equals(rhs); }
+		inline CFLString& operator +=(const CFLString& rhs) { 
+			strdata = (*this + rhs).strdata;
+			return *this;
+		}
+
 
 		bool equals(const CFLString& rhs) const;
 		
@@ -91,6 +103,18 @@ namespace cfl
 
 		inline size_t getHashCode() const;
 		
+
+
+		//获取字符串的长度。注意，调用此方法将执行ucs4编码。返回的是ucs4编码后的字符串长。
+		size_t length() const;
+
+
+
+
+
+
+
+
 
 	private:
 
@@ -148,6 +172,7 @@ namespace cfl
 	};
 	
 
+	
 
 }
 

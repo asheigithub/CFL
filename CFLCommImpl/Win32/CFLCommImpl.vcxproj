@@ -97,6 +97,7 @@
     <ClCompile Include="..\CommSrc\CFLTexture.cpp" />
     <ClCompile Include="..\CommSrc\CFLThreadTasks.cpp" />
     <ClCompile Include="..\CommSrc\CFLGLObjCollection.cpp" />
+    <ClCompile Include="..\CommSrc\CFLUChar.cpp" />
     <ClCompile Include="..\CommSrc\CFLVertexPointer.cpp" />
     <ClCompile Include="..\CommSrc\CFLGameImageRender.cpp" />
     <ClCompile Include="..\CommSrc\GLLineRender.cpp" />
@@ -119,6 +120,7 @@
     <ClInclude Include="..\CommSrc\headers\CFLLineRender.h" />
     <ClInclude Include="..\CommSrc\headers\GBKTable.h" />
     <ClInclude Include="..\CommSrc\headers\GraphicRenders.h" />
+    <ClInclude Include="..\CommSrc\headers\UnicodeTable.h" />
     <ClInclude Include="..\CommSrc\xxhash\xxhash.h" />
     <ClInclude Include="src\CFLMainLoopThread.h" />
   </ItemGroup>

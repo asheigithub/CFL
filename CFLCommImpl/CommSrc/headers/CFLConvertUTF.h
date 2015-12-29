@@ -105,6 +105,84 @@ static size_t UTF8ToUCS4(const unsigned char* UTF8,unsigned int* UCS4Target)
 
 }
 
+/// <summary>  
+/// 转换UCS4编码到UTF8编码  
+/// </summary>   
+static size_t UCS4TOUTF8(const unsigned int ucs4code, unsigned char* utf8)
+{
+
+
+	unsigned int CodeUp[6] = {
+		                0x80,           // U+00000000 ～ U+0000007F  
+		                0x800,          // U+00000080 ～ U+000007FF  
+		                0x10000,        // U+00000800 ～ U+0000FFFF  
+		                0x200000,       // U+00010000 ～ U+001FFFFF  
+		                0x4000000,      // U+00200000 ～ U+03FFFFFF  
+		                0x80000000      // U+04000000 ～ U+7FFFFFFF  
+		 };
+	
+		 // 根据UCS4编码范围确定对应的UTF8编码字节数  
+		int Len = -1;
+		for (size_t i = 0; i <6; i++)
+		{
+		    if (ucs4code < CodeUp[i])
+			{
+			    Len = i + 1;
+			    break;
+			}
+		}
+	
+		if (Len == -1) return 0;   // 无效的UCS4编码  
+	
+		// 转换为UTF8编码  
+		//Byte[] UTF8 = new Byte[Len];
+
+		unsigned char Prefix[6] = { 0, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC };
+
+		unsigned int ucs = ucs4code;
+
+		for (size_t i = Len - 1; i > 0; i--)
+		{
+			utf8[i] = static_cast<unsigned char>((ucs & 0x3F) | 0x80);
+			ucs >>= 6;
+		}
+	
+		utf8[0] = static_cast<unsigned char>(ucs | Prefix[Len - 1]);
+	
+		return  static_cast<size_t>( Len);
+
+}
+
+
+static size_t UCS4TOUTF8(const unsigned int* ucs4, unsigned char* UTF8,size_t ucs4len)
+{
+	auto pos = UTF8;
+	auto size = 0;
+	size_t idx = 0;
+
+	while (idx < ucs4len)
+	{
+		
+		unsigned char utf8temp[6];
+
+		auto add = UCS4TOUTF8( ucs4[idx], utf8temp);
+
+		if (add > 0)
+		{
+			memcpy(pos, utf8temp, add);
+
+			pos += add;
+			size += add;
+		}
+		
+
+		idx++;
+	}
+	return size;
+
+}
+
+
 static size_t GBKTOUTF8(const char* gbk, char* UTF8,size_t gbklen)
 {
 	auto len = gbklen;

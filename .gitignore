@@ -68,3 +68,7 @@ Release/
 Network Trash Folder
 Temporary Items
 .apdisk
+CFL.opensdf
+*.suo
+*.log
+Test/Win32/TestEntry/CLR/TestEntry.log

@@ -147,6 +147,9 @@
     <ClCompile Include="..\CommSrc\CFLKTX.cpp">
       <Filter>源文件\content</Filter>
     </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLUChar.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CFLMainLoopThread.h">
@@ -187,6 +190,9 @@
     </ClInclude>
     <ClInclude Include="..\CommSrc\buildinshaders\GameImage_Atlas_TinyColor.h">
       <Filter>头文件\buildinshaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\headers\UnicodeTable.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

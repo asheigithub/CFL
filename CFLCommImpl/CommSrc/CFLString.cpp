@@ -73,6 +73,49 @@ namespace cfl
 		return a_data->ucs4.load(std::memory_order_relaxed);
 	}
 
+	string_data::string_data(const UChar uchar)
+		:a_data( new atomicdata())
+	{
+		a_data->hashcode.store(0, std::memory_order_relaxed);
+		
+		a_data->ansi_chars.store(nullptr, std::memory_order_relaxed);
+		ansi_len = 0;
+		
+		a_data->utf8_chars.store(nullptr, std::memory_order_relaxed);
+		utf8_len = 0;
+
+
+		auto temp = new unsigned int[1];
+		temp[0] = uchar.charCode;
+		a_data->ucs4.store(temp, std::memory_order_relaxed);
+		ucs4_len = 1;
+	}
+
+	string_data::string_data(const unsigned int* ucs4)
+		:a_data(new atomicdata())
+	{
+		a_data->hashcode.store(0, std::memory_order_relaxed);
+
+		a_data->ansi_chars.store(nullptr, std::memory_order_relaxed);
+		ansi_len = 0;
+
+		a_data->utf8_chars.store(nullptr, std::memory_order_relaxed);
+		utf8_len = 0;
+
+		size_t len = 0;
+		while (ucs4[len] !=0)
+		{
+			len++;
+		}
+
+		auto temp = new unsigned int[len];
+		memcpy(temp, ucs4, sizeof(unsigned int)*len);
+		a_data->ucs4.store(temp, std::memory_order_relaxed);
+		ucs4_len = len;
+
+
+	}
+
 	string_data::string_data(const char* chars,const text::Encoding encode)
 		:a_data( new atomicdata() )
 	{
@@ -146,8 +189,39 @@ namespace cfl
 		}
 	}
 
+	void string_data::prepare_ucs4(const CFLString& str)
+	{
+		
+		const unsigned int* tmp = a_data->ucs4.load(std::memory_order_relaxed);
+		std::atomic_thread_fence(std::memory_order_acquire);
+		if (tmp == nullptr)
+		{
+			prepare_utf8_str(str); //编码UCS4,首先需要utf8编码
+
+			std::unique_lock<std::mutex> lock((a_data->mtx));
+			tmp = a_data->ucs4.load(std::memory_order_relaxed);
+			if (tmp == nullptr)
+			{
+				
+				unsigned int* ucs4 = new unsigned int[utf8_len];
+				ucs4_len = UTF8ToUCS4( reinterpret_cast<unsigned char*>( a_data->utf8_chars.load(std::memory_order_relaxed)), ucs4);
+			
+				a_data->ucs4.store(ucs4, std::memory_order_relaxed);
+			}
+		}
+
+
+	}
+
 	void string_data::prepare_ansi_str(const CFLString& str)
 	{
+		//先检查是否存在utf8编码
+		auto utf8 = a_data->utf8_chars.load(std::memory_order_relaxed);
+		if (utf8 == nullptr)
+		{
+			//需要先准备UTF8编码，这时必然是从ucs4转换
+			prepare_utf8_str(str);
+		}
 
 		const char* tmp = a_data->ansi_chars.load(std::memory_order_relaxed);
 		std::atomic_thread_fence(std::memory_order_acquire);
@@ -187,20 +261,45 @@ namespace cfl
 
 			if (pt == nullptr)
 			{
-				auto len = strlen(a_data->ansi_chars);
+				auto ucs4 = a_data->ucs4.load(std::memory_order_relaxed);
+				if (ucs4 != nullptr) //从ucs4编码
+				{
+					auto len = ucs4_len;
+					unsigned char* temp = new unsigned char[len * 6 + 1];
+					memset(temp, 0, len * 6 + 1);
 
-				char* temp = new char[len * 4 + 1];
-				memset( temp, 0, len * 4 + 1);
+					utf8_len = UCS4TOUTF8(a_data->ucs4.load(std::memory_order_relaxed), temp, len );
+					std::atomic_thread_fence(std::memory_order_release);
+					a_data->utf8_chars.store( reinterpret_cast<char *>( temp), std::memory_order_relaxed);
 
-				utf8_len = GBKTOUTF8(a_data->ansi_chars.load(std::memory_order_relaxed), temp, len);
+				}
+				else
+				{
+					//从ansi转过来
+					auto len = strlen(a_data->ansi_chars);
+					char* temp = new char[len * 4 + 1];
+					memset(temp, 0, len * 4 + 1);
 
-				std::atomic_thread_fence(std::memory_order_release);
+					utf8_len = GBKTOUTF8(a_data->ansi_chars.load(std::memory_order_relaxed), temp, len);
 
-				a_data->utf8_chars.store(temp, std::memory_order_relaxed);
+					std::atomic_thread_fence(std::memory_order_release);
+
+					a_data->utf8_chars.store(temp, std::memory_order_relaxed);
+				}
 			}
 		}
 	}
+	CFLString::CFLString(const unsigned int* ucs4):
+		strdata(new string_data(ucs4))
+	{
 
+	}
+
+	CFLString::CFLString(const UChar uchar):
+		strdata(new string_data(uchar))
+	{
+		
+	}
 	
 	CFLString::CFLString(const char* chars,const Encoding encoding):
 		strdata(new string_data(chars,encoding))
@@ -233,7 +332,25 @@ namespace cfl
 
 		text::Encoding encoding;
 
-		if (lhs.strdata->a_data->ansi_chars.load(std::memory_order_relaxed) != nullptr 
+		if (lhs.strdata->a_data->ucs4.load(std::memory_order_relaxed) != nullptr
+			&& rhs.strdata->a_data->ucs4.load(std::memory_order_relaxed) != nullptr
+			)
+		{
+			c1l = lhs.strdata->ucs4_len;
+			c2l = rhs.strdata->ucs4_len;
+
+			unsigned int* copy = new unsigned int[c1l + c2l + 1];
+
+			memcpy(copy, lhs.strdata->a_data->ucs4.load(std::memory_order_relaxed), c1l * sizeof(unsigned int) );
+			memcpy(copy + c1l, rhs.strdata->a_data->ucs4.load(std::memory_order_relaxed), c2l * sizeof(unsigned int) + 1);
+
+			CFLString ret = CFLString(copy);
+
+			delete copy;
+
+			return ret;
+		}
+		else if (lhs.strdata->a_data->ansi_chars.load(std::memory_order_relaxed) != nullptr 
 			&& rhs.strdata->a_data->ansi_chars.load(std::memory_order_relaxed) != nullptr)
 		{
 			encoding = Encoding::gbk;
@@ -276,6 +393,15 @@ namespace cfl
 		delete copy;
 
 		return ret;
+	}
+
+
+	size_t CFLString::length() const
+	{
+		strdata->prepare_ucs4(std::move(*this));
+
+		return strdata->ucs4_len;
+
 	}
 
 	CFLString cfl::CFLString::empty;

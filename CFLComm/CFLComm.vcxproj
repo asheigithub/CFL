@@ -58,6 +58,7 @@
     <ClInclude Include="src\CFLStage.h" />
     <ClInclude Include="src\CFLString.h" />
     <ClInclude Include="src\CFLThreadTasks.h" />
+    <ClInclude Include="src\CFLUChar.h" />
     <ClInclude Include="src\clearwindows.h" />
     <ClInclude Include="src\Content\CFLBinaryCache.h" />
     <ClInclude Include="src\Content\CFLBinaryReader.h" />

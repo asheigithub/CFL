@@ -55,11 +55,6 @@ namespace cfl
 				*(gbkchars + gbksize) = '\0';
 
 
-				//更新源的ucs4
-				/*str.strdata->ucs4_len = ucs4length;
-				str.strdata->ucs4 = new unsigned int[ucs4length];
-				memcpy( const_cast<unsigned int*>(str.strdata->ucs4), ucs4, ucs4length * sizeof(unsigned int));
-				*/
 				delete ucs4;
 
 				return std::shared_ptr<char>(gbkchars);

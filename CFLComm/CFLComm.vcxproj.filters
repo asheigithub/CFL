@@ -144,6 +144,9 @@
     <ClInclude Include="src\Content\CFLKTX.h">
       <Filter>头文件\Content</Filter>
     </ClInclude>
+    <ClInclude Include="src\CFLUChar.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
