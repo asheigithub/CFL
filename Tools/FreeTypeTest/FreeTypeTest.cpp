@@ -32,6 +32,7 @@ void testhuffman();
 int _tmain(int argc, _TCHAR* argv[])
 {
 	
+
 	// Initialize GDI+.
 	GdiplusStartupInput gdiplusStartupInput;
 	ULONG_PTR gdiplusToken;
@@ -46,6 +47,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
 	const wchar_t* fontname = L"msyh";
+
+	
 
 	error = FT_New_Face(library,
 		"C:/Windows/Fonts/msyh.ttc", //'ARIALN.TTF'
@@ -315,8 +318,6 @@ void MakeImage(FT_Face face, FT_ULong charcode,const wchar_t* fontname )
 		std::cout << slot->advance.x;
 	}
 
-
-	
 	
 	
 	auto bitmap = slot->bitmap;
@@ -361,7 +362,7 @@ void MakeImage(FT_Face face, FT_ULong charcode,const wchar_t* fontname )
 
 			}
 		}
-
+		
 
 		CLSID  encoderClsid;
 		INT    result;

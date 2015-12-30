@@ -119,6 +119,12 @@
   <ItemGroup>
     <Content Include="unicodeGroup.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FreeTypeWapperLib\FreeTypeWapperLib.vcxproj">
+      <Project>{9793aa75-7e2c-4981-8f46-b4123aefd50a}</Project>
+      <Name>FreeTypeWapperLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

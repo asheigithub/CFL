@@ -6,8 +6,37 @@ Imports Microsoft.VisualBasic
 Public Class Form1
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         'testTEE()
+        Dim ft As New cfl.tools.freetypewapper.FreeTypeWapperLib()
 
-        groupunicode()
+        Dim bytes = My.Computer.FileSystem.ReadAllBytes("C:/Windows/Fonts/msyh.ttc")
+
+        Dim inited = ft.init(bytes, 0)
+
+        Dim finfo = ft.getInfo()
+
+        Dim codes = ft.getAllCharCodes()
+
+        Dim k = ft.queryKerning(codes(0), codes(1))
+
+        Dim glpyh = ft.getGlyph(32, &H4E80 + 4)
+
+        Dim bitmap As New Bitmap(glpyh.imageheight, glpyh.imagewidth)
+
+        For j = 0 To bitmap.Height - 1
+            For i = 0 To bitmap.Width - 1
+
+                Dim color = glpyh.bitmap(j * bitmap.Width + i)
+
+                bitmap.SetPixel(i, j, System.Drawing.Color.FromArgb(color, 0, 0, 0))
+            Next
+
+
+        Next
+
+        Me.PictureBox1.Image = bitmap
+
+
+        'groupunicode()
 
     End Sub
 
