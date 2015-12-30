@@ -37,6 +37,8 @@
 #include "Graphic/CFLGLObjCollection.h"
 #include "CFLCapability.h"
 #include "CFLStage.h"
+#include "Text/CFLTextElementEnumerator.h"
+#include "CFLString.h"
 
 namespace cfl
 {

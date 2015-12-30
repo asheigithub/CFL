@@ -37,7 +37,7 @@ namespace cfl
 			~VertBuffer()
 			{
 				datasource = nullptr;
-				delete data;
+				delete[] data;
 			}
 
 			void reset()
@@ -59,7 +59,7 @@ namespace cfl
 					V* temp = new V[nsize];
 					memcpy(temp, data, used * sizeof(V));
 
-					delete data;
+					delete[] data;
 
 					data = temp;
 

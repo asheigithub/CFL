@@ -23,19 +23,19 @@ namespace cfl
 			auto at = ansi_chars.load(std::memory_order_relaxed);
 			if (at !=nullptr)
 			{
-				delete at;
+				delete[] at;
 				ansi_chars.store(nullptr, std::memory_order_relaxed );
 			}
 			auto ut = utf8_chars.load(std::memory_order_relaxed);
 			if ( ut !=nullptr)
 			{
-				delete ut;
+				delete[] ut;
 				utf8_chars.store(nullptr, std::memory_order_relaxed);
 			}
 			auto uct = ucs4.load(std::memory_order_relaxed);
 			if ( uct != nullptr)
 			{
-				delete uct;
+				delete[] uct;
 				ucs4.store(nullptr, std::memory_order_relaxed);
 			}
 		}
@@ -340,14 +340,17 @@ namespace cfl
 			c2l = rhs.strdata->ucs4_len;
 
 			unsigned int* copy = new unsigned int[c1l + c2l + 1];
+			copy[c1l + c2l] = 0;
 
 			memcpy(copy, lhs.strdata->a_data->ucs4.load(std::memory_order_relaxed), c1l * sizeof(unsigned int) );
-			memcpy(copy + c1l, rhs.strdata->a_data->ucs4.load(std::memory_order_relaxed), c2l * sizeof(unsigned int) + 1);
+			memcpy(reinterpret_cast<char*>(copy) + c1l* sizeof(unsigned int),
+				rhs.strdata->a_data->ucs4.load(std::memory_order_relaxed), c2l * sizeof(unsigned int));
 
 			CFLString ret = CFLString(copy);
 
-			delete copy;
+			delete[] copy;
 
+			
 			return ret;
 		}
 		else if (lhs.strdata->a_data->ansi_chars.load(std::memory_order_relaxed) != nullptr 
@@ -383,23 +386,24 @@ namespace cfl
 			c2l = rhs.strdata->utf8_len;
 		}
 
-		char* copy = new char[c1l + c2l + 1];
+		{
+			char* copy = new char[c1l + c2l + 1];
 
-		memcpy(copy, c1, c1l);
-		memcpy(copy + c1l, c2, c2l + 1);
+			memcpy(copy, c1, c1l);
+			memcpy(copy + c1l, c2, c2l + 1);
 
-		CFLString ret = CFLString(copy, encoding);
+			CFLString ret = CFLString(copy, encoding);
 
-		delete copy;
+			delete[] copy;
 
-		return ret;
+			return ret;
+		}
 	}
 
 
 	size_t CFLString::length() const
 	{
-		strdata->prepare_ucs4(std::move(*this));
-
+		init_ucs4();
 		return strdata->ucs4_len;
 
 	}

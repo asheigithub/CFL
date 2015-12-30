@@ -86,6 +86,7 @@
     <ClInclude Include="src\Graphic\CFLTextureBase.h" />
     <ClInclude Include="src\Text\CFLEncoding.h" />
     <ClInclude Include="src\Text\CFLEncodingEnum.h" />
+    <ClInclude Include="src\Text\CFLTextElementEnumerator.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

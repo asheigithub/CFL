@@ -147,6 +147,9 @@
     <ClInclude Include="src\CFLUChar.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\Text\CFLTextElementEnumerator.h">
+      <Filter>头文件\Text</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

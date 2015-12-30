@@ -361,6 +361,28 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 
 	LOGI("timer: %d,%s\n",t,(uni2+c).log_str());
 
+
+
+	unsigned int  u4code[7] = { 0x0627, 0x0655, 0x0650, 0x064A, 0x0647, 0x064E, 0 };
+
+	unsigned int u4code2[4] = { 0x0627,0x0628,0x064C,0 };
+
+	CFLString myString(u4code);
+
+	text::TextElementEnumerator tee(myString + CFLString(u4code2) );
+	tee.reset();
+	while (tee.moveNext())
+	{
+		auto te = tee.getCurrent();
+		LOGI("st:%d,len:%d ", te->index,te->len );
+		for (size_t i = te->index; i < te->index + te->len; i++)
+		{
+			LOGI("hex: %04X ", te->uchars[i]);
+		}
+		LOGI("\n");
+	}
+
+
 	//
 	//render::textures::Texture2D texture;
 	//texture.initFromFile(file::DirType::asset, "testreadfile/ktx888.ktx",false);

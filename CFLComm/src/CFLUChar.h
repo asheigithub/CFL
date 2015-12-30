@@ -132,9 +132,15 @@ namespace cfl
 
 		static bool isWhiteSpace(const UChar c);
 
+		
+
+
 		static UChar toUpper(const UChar c);
 
 		static UChar toLower(const UChar c);
+
+
+
 	};
 }
 

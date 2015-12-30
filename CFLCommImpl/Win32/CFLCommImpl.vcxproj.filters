@@ -150,6 +150,9 @@
     <ClCompile Include="..\CommSrc\CFLUChar.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLTextElementEnumerator.cpp">
+      <Filter>源文件\text</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CFLMainLoopThread.h">

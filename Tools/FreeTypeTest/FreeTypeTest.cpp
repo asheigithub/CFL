@@ -27,77 +27,11 @@ int GetEncoderClsid(const WCHAR* format, CLSID* pClsid);
 
 void MakeImage(FT_Face face,FT_ULong charcode,const wchar_t* fontname);
 
+void testhuffman();
+
 int _tmain(int argc, _TCHAR* argv[])
 {
-	//≤‚ ‘huffman
-
-	auto teststr = "cfl::content::unHuffmanCompress(hfile.data.get(), hfile.getTotalFileLength())";
-
-	//cfl::content::test(teststr, strlen(teststr));
-
-	//auto hfile = cfl::content::huffmanCompress(teststr, strlen(teststr));
-
-	//auto un = cfl::content::unHuffmanCompress(hfile.data.get(), hfile.getTotalFileLength());
-
-	//—πÀı≤‚ ‘
-	std::ifstream fstm;
-	{
-		fstm.open("E:/CFL/Debug/testreadfile/ktx888.ktx", std::ios::binary);
-		fstm.seekg(0, std::ios::end);
-		auto end_pos = fstm.tellg();
-
-		fstm.seekg(0, std::ios::beg);
-		auto size = end_pos.seekpos();
-
-		char* filebuff = new char[size];
-		fstm.read(filebuff, size);
-		fstm.close();
-
-		auto compressed = cfl::content::huffmanCompress(filebuff, size);
-		delete[] filebuff;
 	
-		std::ofstream fsave;
-		fsave.open("E:/CFL/Debug/testreadfile/hufftex.dat", std::ios::binary);
-		fsave.write(compressed.data.get(), compressed.getTotalFileLength());
-		fsave.close();
-	}
-	//Ω‚—π≤‚ ‘
-	fstm.open("E:/CFL/Debug/testreadfile/hufftex.dat", std::ios::binary);
-	{
-		fstm.seekg(0, std::ios::end);
-		auto end_pos = fstm.tellg();
-
-		fstm.seekg(0, std::ios::beg);
-		auto size = end_pos.seekpos();
-
-		char* filebuff = new char[size];
-		fstm.read(filebuff, size);
-		fstm.close();
-
-		auto tick = GetTickCount();
-		/*for (size_t i = 0; i < 20; i++)
-		{*/
-		auto uncompress = cfl::content::unHuffmanCompress(filebuff, size);
-
-		//}
-		
-		auto use = GetTickCount() - tick;
-		std::cout << " use tick " << use << std::endl;
-
-		delete[] filebuff;
-
-		std::ofstream fsave;
-		fsave.open("E:/CFL/Debug/testreadfile/hufftex.ktx", std::ios::binary);
-		fsave.write(uncompress.data.get(), uncompress.dataSize);
-		fsave.close();
-
-	}
-	
-	char key;
-	std::cin >> key;
-
-	return 0;
-
 	// Initialize GDI+.
 	GdiplusStartupInput gdiplusStartupInput;
 	ULONG_PTR gdiplusToken;
@@ -451,3 +385,79 @@ void MakeImage(FT_Face face, FT_ULong charcode,const wchar_t* fontname )
 
 
 }
+
+
+void testhumman()
+{
+	//≤‚ ‘huffman
+
+	auto teststr = "cfl::content::unHuffmanCompress(hfile.data.get(), hfile.getTotalFileLength())";
+
+	//cfl::content::test(teststr, strlen(teststr));
+
+	//auto hfile = cfl::content::huffmanCompress(teststr, strlen(teststr));
+
+	//auto un = cfl::content::unHuffmanCompress(hfile.data.get(), hfile.getTotalFileLength());
+
+	//—πÀı≤‚ ‘
+	std::ifstream fstm;
+	{
+		fstm.open("E:/CFL/Debug/testreadfile/ktx888.ktx", std::ios::binary);
+		fstm.seekg(0, std::ios::end);
+		auto end_pos = fstm.tellg();
+
+		fstm.seekg(0, std::ios::beg);
+		auto size = end_pos.seekpos();
+
+		char* filebuff = new char[size];
+		fstm.read(filebuff, size);
+		fstm.close();
+
+		auto compressed = cfl::content::huffmanCompress(filebuff, size);
+		delete[] filebuff;
+
+		std::ofstream fsave;
+		fsave.open("E:/CFL/Debug/testreadfile/hufftex.dat", std::ios::binary);
+		fsave.write(compressed.data.get(), compressed.getTotalFileLength());
+		fsave.close();
+	}
+	//Ω‚—π≤‚ ‘
+	fstm.open("E:/CFL/Debug/testreadfile/hufftex.dat", std::ios::binary);
+	{
+		fstm.seekg(0, std::ios::end);
+		auto end_pos = fstm.tellg();
+
+		fstm.seekg(0, std::ios::beg);
+		auto size = end_pos.seekpos();
+
+		char* filebuff = new char[size];
+		fstm.read(filebuff, size);
+		fstm.close();
+
+		auto tick = GetTickCount();
+		/*for (size_t i = 0; i < 20; i++)
+		{*/
+		auto uncompress = cfl::content::unHuffmanCompress(filebuff, size);
+
+		//}
+
+		auto use = GetTickCount() - tick;
+		std::cout << " use tick " << use << std::endl;
+
+		delete[] filebuff;
+
+		std::ofstream fsave;
+		fsave.open("E:/CFL/Debug/testreadfile/hufftex.ktx", std::ios::binary);
+		fsave.write(uncompress.data.get(), uncompress.dataSize);
+		fsave.close();
+
+	}
+
+	char key;
+	std::cin >> key;
+
+	exit(0);
+	return;
+
+}
+

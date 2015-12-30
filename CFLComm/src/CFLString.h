@@ -11,6 +11,7 @@ namespace cfl
 	namespace text
 	{
 		class GBKEncoding;
+		class TextElementEnumerator;
 	}
 
 
@@ -55,7 +56,7 @@ namespace cfl
 	class CFLString
 	{
 		friend class string_data;
-
+		friend class text::TextElementEnumerator;
 		friend class text::GBKEncoding;
 		friend CFLString operator+(const CFLString& lhs, const CFLString& rhs);
 	public:
@@ -101,6 +102,9 @@ namespace cfl
 			return strdata->get_ansi_chars();
 		};
 
+		
+
+
 		inline size_t getHashCode() const;
 		
 
@@ -125,6 +129,11 @@ namespace cfl
 			return strdata->get_utf8_chars();
 		}
 
+		//³õÊ¼»¯UCS4×Ö·û´®
+		inline void init_ucs4() const
+		{
+			strdata->prepare_ucs4(*this);
+		}
 
 		static int compare(const CFLString& lhs, const CFLString& rhs);
 

@@ -94,6 +94,7 @@
     <ClCompile Include="..\CommSrc\CFLShader.cpp" />
     <ClCompile Include="..\CommSrc\CFLStage.cpp" />
     <ClCompile Include="..\CommSrc\CFLString.cpp" />
+    <ClCompile Include="..\CommSrc\CFLTextElementEnumerator.cpp" />
     <ClCompile Include="..\CommSrc\CFLTexture.cpp" />
     <ClCompile Include="..\CommSrc\CFLThreadTasks.cpp" />
     <ClCompile Include="..\CommSrc\CFLGLObjCollection.cpp" />
