@@ -27,12 +27,13 @@ int GetEncoderClsid(const WCHAR* format, CLSID* pClsid);
 
 void MakeImage(FT_Face face,FT_ULong charcode,const wchar_t* fontname);
 
-void testhuffman();
-
+void testhumman();
 int _tmain(int argc, _TCHAR* argv[])
 {
 	
+	testhumman();
 
+	return 0;
 	// Initialize GDI+.
 	GdiplusStartupInput gdiplusStartupInput;
 	ULONG_PTR gdiplusToken;

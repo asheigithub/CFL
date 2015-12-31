@@ -87,7 +87,7 @@
     End Class
 
 
-    Public Sub MakeAnSDF(code As ULong)
+    Public Function MakeAnSDF(code As ULong) As SDFImage
 
         Dim glpyh = freetype.getGlyph(4096, code)
 
@@ -156,7 +156,7 @@ lblexitfor:
 
         'bitmap.Save("e:\sdf.png")
 
-        Dim signeddata(32, 32) As Double
+        Dim signeddata(31, 31) As Double
 
 
         Dim col = 0
@@ -172,6 +172,7 @@ lblexitfor:
 
                 Dim mindis As Double = 4096 * Math.Sqrt(2)
                 For Each p In outline
+                    'Dim len = Math.Abs(p.X - px) + Math.Abs(p.Y - py)  ' 
                     Dim len = Math.Sqrt((p.X - px) * (p.X - px) + (p.Y - py) * (p.Y - py))
                     If len < mindis Then
                         mindis = len
@@ -212,66 +213,99 @@ lblexitfor:
         '即得到了一个取值在[0,1]间的signed distance field,其轮廓阈值为(0-min)/(max-min)。
 
 
-        Dim signedoutlin As Byte = (0 - min) / (max - min) * 255
-        Dim out As New Bitmap(32, 32)
+        'Dim signedoutlin As Byte = Math.Min(255, Math.Max(0, (0 - min) / (max - min) * 255))
+        'Dim out As New Bitmap(32, 32)
+
+        'For i = 0 To 32 - 1
+        '    For j = 0 To 32 - 1
+
+        '        If glpyh.bitmap.Length > 0 Then
+        '            Dim signed As Byte = Math.Max(0, Math.Min(255, (signeddata(j, i) - min) / (max - min) * 255))
+        '            out.SetPixel(i, j, Drawing.Color.FromArgb(255, signed, signed, signed))
+        '        Else
+        '            out.SetPixel(i, j, Drawing.Color.FromArgb(255, 0, 0, 0))
+        '        End If
+
+
+        '    Next
+        'Next
+
+        Dim resut As New SDFImage
+        resut.maxDis = max
+        resut.minDis = min
+        resut.outlineSigned = (0 - min) / (max - min)
+        resut.glyph = glpyh
+        resut.code = code
+
+        glpyh.bitmap = Nothing
 
         For i = 0 To 32 - 1
             For j = 0 To 32 - 1
-                Dim signed As Byte = (signeddata(j, i) - min) / (max - min) * 255
-                out.SetPixel(i, j, Drawing.Color.FromArgb(255, signed, signed, signed))
-            Next
-        Next
-        Me.PictureBox2.Image = out
 
-
-
-        '***还原测试
-        Dim rrr As New Bitmap(17, 17)
-
-        For r = 0 To rrr.Height - 1
-            For c = 0 To rrr.Width - 1
-                Dim u As Single = r * 1.0 / (rrr.Width - 1)
-                Dim v As Single = c * 1.0 / (rrr.Height - 1)
-
-                Dim tx As Integer = u * 31
-                Dim ty As Integer = v * 31
-
-                Dim dist = sampler(u, v, out).R / 255.0 'out.GetPixel(tx, ty).R / 255.0
-
-
-
-                Dim alpha As Byte = smoothstep((0 - min - (4096.0 / 2 / 17)) / (max - min), (0 - min + (4096.0 / 2 / 17)) / (max - min), dist) * 255
-
-                'alpha = 0
-                'If dist > (-100 - min) / (max - min) Then
-                '    alpha = 255
-                'End If
-
-                Dim fontcolor = Color.Black
-
-                'Dim outlinedis = (0 - min) / (max - min)
-                'If Math.Abs(dist - outlinedis) * 256 < 5 Then
-                '    fontcolor = Drawing.Color.FromArgb(alpha, 255, 0, 0)
-                'End If
-
-
-                rrr.SetPixel(r, c, Drawing.Color.FromArgb(alpha, fontcolor))
+                If max > 0 Then
+                    Dim signed As Byte = Math.Max(0, Math.Min(255, (signeddata(j, i) - min) / (max - min) * 255))
+                    resut.data(i, j) = signed
+                Else
+                    resut.data(i, j) = 0
+                End If
 
 
             Next
         Next
 
 
-        PictureBox3.Image = rrr
+        Return resut
+
+        'Me.PictureBox2.Image = out
+
+
+        'Dim outsize As Short = 16
+        ''***还原测试
+        'Dim rrr As New Bitmap(outsize, outsize)
+
+        'For r = 0 To rrr.Height - 1
+        '    For c = 0 To rrr.Width - 1
+        '        Dim u As Single = r * 1.0 / (rrr.Width - 1)
+        '        Dim v As Single = c * 1.0 / (rrr.Height - 1)
+
+
+        '        Dim dist = sampler(u, v, out).R / 255.0 'out.GetPixel(tx, ty).R / 255.0
 
 
 
-    End Sub
+        '        Dim a As Double = smoothstep((0 - min - (4096.0 / 2 / outsize)) / (max - min), (0 - min + (4096.0 / 2 / outsize)) / (max - min), dist)
+
+        '        a = Math.Pow(a, 1.0 / 2)
+        '        'a = a * 1.414
+
+        '        Dim alpha As Byte = Math.Max(0, Math.Min(255, a * 255))
+
+        '        Dim fontcolor = Color.Black
+
+        '        'Dim outlinedis = (0 - min) / (max - min)
+        '        'If (dist - outlinedis) * 4096 > -256 * 8 And dist - outlinedis < 0 Then
+        '        '    alpha = (1 - (dist - outlinedis) * 4096 / -256 / 8) * 255
+        '        '    fontcolor = Drawing.Color.FromArgb(alpha, 255, 0, 0)
+        '        'End If
+
+
+        '        rrr.SetPixel(r, c, Drawing.Color.FromArgb(alpha, fontcolor))
+
+
+        '    Next
+        'Next
+
+
+        'PictureBox3.Image = rrr
+
+
+
+    End Function
 
 
 
 
-    Private Function sampler(u As Double, v As Double, tex As Bitmap) As Color
+    Private Function sampler(u As Double, v As Double, tex As Byte(,)) As Color
 
         '//double uu = tex.Width  * u;
         '// double vv = tex.Height * v;
@@ -280,8 +314,8 @@ lblexitfor:
         v = Math.Min(Math.Max(0, v), 1)
 
 
-        u *= tex.Width - 1
-        v *= tex.Height - 1
+        u *= 32 - 1
+        v *= 32 - 1
         Dim x As Integer = Math.Floor(u)
         Dim y As Integer = Math.Floor(v)
         Dim u_ratio = u - x
@@ -289,41 +323,41 @@ lblexitfor:
         Dim u_opposite = 1 - u_ratio
         Dim v_opposite = 1 - v_ratio
 
-        Dim c = tex.GetPixel(x, y)
+        Dim c = tex(x, y)
 
         Dim cx1 = c
-        If (x + 1 < tex.Width) Then
+        If (x + 1 < 32) Then
 
-            cx1 = tex.GetPixel(x + 1, y)
+            cx1 = tex(x + 1, y)
 
         End If
 
         Dim cy1 = c
-        If (y + 1 < tex.Height) Then
+        If (y + 1 < 32) Then
 
-            cy1 = tex.GetPixel(x, y + 1)
+            cy1 = tex(x, y + 1)
 
         End If
 
 
         Dim cx1y1 = c
-        If (x + 1 < tex.Width And y + 1 < tex.Height) Then
+        If (x + 1 < 32 And y + 1 < 32) Then
 
-            cx1y1 = tex.GetPixel(x + 1, y + 1)
+            cx1y1 = tex(x + 1, y + 1)
 
         End If
 
         '//double r = (tex[x][y] * u_opposite + tex[x + 1][y] * u_ratio) * v_opposite +
         '//                (tex[x][y + 1] * u_opposite + tex[x + 1][y + 1] * u_ratio) * v_ratio;
 
-        Dim r = (c.R * u_opposite + cx1.R * u_ratio) * v_opposite +
-                        (cy1.R * u_opposite + cx1y1.R * u_ratio) * v_ratio
-        Dim g = (c.R * u_opposite + cx1.R * u_ratio) * v_opposite +
-                        (cy1.R * u_opposite + cx1y1.R * u_ratio) * v_ratio
-        Dim b = (c.R * u_opposite + cx1.R * u_ratio) * v_opposite +
-                        (cy1.R * u_opposite + cx1y1.R * u_ratio) * v_ratio
-        Dim a = (c.R * u_opposite + cx1.R * u_ratio) * v_opposite +
-                        (cy1.R * u_opposite + cx1y1.R * u_ratio) * v_ratio
+        Dim r = (c * u_opposite + cx1 * u_ratio) * v_opposite +
+                        (cy1 * u_opposite + cx1y1 * u_ratio) * v_ratio
+        Dim g = (c * u_opposite + cx1 * u_ratio) * v_opposite +
+                        (cy1 * u_opposite + cx1y1 * u_ratio) * v_ratio
+        Dim b = (c * u_opposite + cx1 * u_ratio) * v_opposite +
+                        (cy1 * u_opposite + cx1y1 * u_ratio) * v_ratio
+        Dim a = (c * u_opposite + cx1 * u_ratio) * v_opposite +
+                        (cy1 * u_opposite + cx1y1 * u_ratio) * v_ratio
 
         Return Color.FromArgb(a, r, g, b)
 
@@ -343,10 +377,249 @@ lblexitfor:
     End Function
 
 
+    ''' <summary>
+    ''' 等距图形信息
+    ''' </summary>
+    ''' <remarks></remarks>
+    Class SDFImage
+        Public glyph As cfl.tools.freetypewapper.GlyphWapper
+
+        Public code As UInteger
+
+        Public maxDis As Double
+        Public minDis As Double
+        Public outlineSigned As Double
+
+        Public data(31, 31) As Byte
+
+    End Class
+
+
+
+
+
     Private Sub btnExport_Click(sender As Object, e As EventArgs) Handles btnExport.Click
+        ExportAll()
+        Return
+
+
         If lstCharCodes.SelectedIndex >= 0 Then
-            MakeAnSDF(CType(lstCharCodes.SelectedItem, item).code)
+            Dim signed = MakeAnSDF(CType(lstCharCodes.SelectedItem, item).code)
+
+
+
+            Dim outsize As Short = 128
+            '***还原测试
+            Dim rrr As New Bitmap(outsize, outsize)
+
+            For r = 0 To rrr.Height - 1
+                For c = 0 To rrr.Width - 1
+                    Dim u As Single = r * 1.0 / (rrr.Width - 1)
+                    Dim v As Single = c * 1.0 / (rrr.Height - 1)
+
+
+                    Dim dist = sampler(u, v, signed.data).R / 255.0 'out.GetPixel(tx, ty).R / 255.0
+
+
+
+                    Dim a As Double = smoothstep((0 - signed.minDis - (4096.0 / 2 / outsize)) / (signed.maxDis - signed.minDis), (0 - signed.minDis + (4096.0 / 2 / outsize)) / (signed.maxDis - signed.minDis), dist)
+
+                    a = Math.Pow(a, 1.0 / 1.5)
+                    'a = a * 1.414
+
+                    a = smoothstep(0.1, 0.9, a)
+
+
+                    Dim alpha As Byte = Math.Max(0, Math.Min(255, a * 255))
+
+                    Dim fontcolor = Color.Black
+
+                    'Dim outlinedis = (0 - min) / (max - min)
+                    'If (dist - outlinedis) * 4096 > -256 * 8 And dist - outlinedis < 0 Then
+                    '    alpha = (1 - (dist - outlinedis) * 4096 / -256 / 8) * 255
+                    '    fontcolor = Drawing.Color.FromArgb(alpha, 255, 0, 0)
+                    'End If
+
+
+                    rrr.SetPixel(r, c, Drawing.Color.FromArgb(alpha, fontcolor))
+
+
+                Next
+            Next
+
+
+            PictureBox3.Image = rrr
+
+
 
         End If
     End Sub
+
+    Private Sub ExportAll()
+        If lstCharCodes.Items.Count > 0 Then
+            Dim trd As New System.Threading.Thread(AddressOf _doExport)
+
+            SaveFileDialog1.Filter = "*.ff|*.ff"
+            If SaveFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+
+
+                trd.IsBackground = True
+
+                trd.Start(SaveFileDialog1.FileName)
+
+                Me.btnExport.Enabled = False
+                Me.btnOpenFont.Enabled = False
+
+                Me.ProgressBar1.Value = 0
+
+
+            End If
+
+        End If
+    End Sub
+
+    Private Sub updatePorgress(v As Integer)
+
+        If InvokeRequired Then
+            Me.BeginInvoke(New Action(Of Integer)(AddressOf updatePorgress), v)
+        Else
+            Me.ProgressBar1.Value = v
+        End If
+
+    End Sub
+
+    Private Sub _exportEnd()
+
+        If InvokeRequired Then
+            Me.BeginInvoke(New Action(AddressOf _exportEnd))
+        Else
+
+            Me.btnExport.Enabled = True
+            Me.btnOpenFont.Enabled = True
+
+
+        End If
+
+
+    End Sub
+
+    Private Sub _doExport(fn As String)
+        Dim info = freetype.getInfo()
+        Dim codes = freetype.getAllCharCodes()
+
+        Dim sdflist As New List(Of SDFImage)
+        Dim count = 0
+
+        For Each c In codes
+            Dim sdf = MakeAnSDF(c)
+            sdflist.Add(sdf)
+            updatePorgress(count * 100.0 / codes.Count)
+            count += 1
+
+        Next
+
+
+
+        Dim sdffontdatalist As New List(Of Byte())
+        For index = 0 To sdflist.Count - 1
+
+            Dim fstm As New System.IO.MemoryStream()
+            Dim fbw As New System.IO.BinaryWriter(fstm)
+
+            Dim sdf = sdflist(index)
+
+            fbw.Write(sdf.glyph.advance_x)
+            fbw.Write(sdf.glyph.advance_y)
+            fbw.Write(sdf.glyph.padleft)
+            fbw.Write(sdf.glyph.padtop)
+            fbw.Write(sdf.glyph.pen_x)
+            fbw.Write(sdf.glyph.pen_y)
+            fbw.Write(sdf.glyph.clipwidth)
+            fbw.Write(sdf.glyph.clipheight)
+            fbw.Write(sdf.glyph.imagewidth)
+            fbw.Write(sdf.glyph.imageheight)
+
+            fbw.Write(CType(sdf.minDis, Single))
+            fbw.Write(CType(sdf.maxDis, Single))
+
+            For row = 0 To 31
+                For col = 0 To 31
+                    fbw.Write(sdf.data(col, row))
+                Next
+            Next
+
+            Dim sdfbyte = fstm.ToArray()
+
+            fbw.Dispose()
+            fstm.Dispose()
+
+            sdffontdatalist.Add(sdfbyte)
+        Next
+
+        Dim kernlist As New List(Of Tuple(Of UInteger, UInteger, Integer, Integer))
+        If info.use_kerning Then
+            For l = 0 To codes.Count - 1
+                For r = 0 To codes.Count - 1
+                    Dim kern = freetype.queryKerning(codes(l), codes(r))
+                    If kern.det_x <> 0 Or kern.det_y <> 0 Then
+                        kernlist.Add(New Tuple(Of UInteger, UInteger, Integer, Integer)(codes(l), codes(r), kern.det_x, kern.det_y))
+                    End If
+
+                Next
+            Next
+
+
+        End If
+
+        Dim fontdata As New System.IO.MemoryStream()
+        Dim bw As New System.IO.BinaryWriter(fontdata)
+        bw.Write(info.ascender)
+        bw.Write(info.descender)
+        bw.Write(info.bbox_xMax)
+        bw.Write(info.bbox_xMin)
+        bw.Write(info.bbox_yMax)
+        bw.Write(info.bbox_yMin)
+        bw.Write(info.height)
+        bw.Write(info.units_per_EM)
+
+        bw.Write(sdflist.Count)
+
+        '**写入kern表
+        bw.Write(kernlist.Count)
+        For index = 0 To kernlist.Count - 1
+            bw.Write(kernlist(index).Item1)
+            bw.Write(kernlist(index).Item2)
+            bw.Write(kernlist(index).Item3)
+            bw.Write(kernlist(index).Item4)
+        Next
+
+
+
+        '**写入每个字符的位置***
+        Dim poslist As New List(Of Integer)
+        Dim pos As Integer = fontdata.Position + sdffontdatalist.Count * 4 + sdffontdatalist.Count * 4 '每条记录占8个字节,前int是charcode,后int是位置
+        For index = 0 To sdffontdatalist.Count - 1
+            poslist.Add(pos)
+            pos += sdffontdatalist(index).Length
+        Next
+
+        For index = 0 To poslist.Count - 1
+            bw.Write(sdflist(index).code)
+            bw.Write(poslist(index))
+        Next
+
+        For index = 0 To sdffontdatalist.Count - 1
+            bw.Write(sdffontdatalist(index))
+        Next
+
+        Dim bytes = fontdata.ToArray()
+        fontdata.Dispose()
+
+        My.Computer.FileSystem.WriteAllBytes(fn, bytes, False)
+
+        _exportEnd()
+    End Sub
+
+
+
 End Class
