@@ -91,9 +91,12 @@
 
     Public Function MakeAnSDF(code As ULong) As SDFImage
 
+        Dim div As Integer = 4
+
+
         Dim glpyh As cfl.tools.freetypewapper.GlyphWapper
         SyncLock freetype
-            glpyh = freetype.getGlyph(4096, code)
+            glpyh = freetype.getGlyph(4096 / div, code)
         End SyncLock
 
 
@@ -201,24 +204,24 @@
         Dim col = 0
         Dim row = 0
 
-        For py = 64 To 4096 Step 128
+        For py = 64 / div To 4096 / div Step 128 / div
             col = 0
 
-            For px = 64 To 4096 Step 128
+            For px = 64 / div To 4096 / div Step 128 / div
 
 
                 Dim c = glpyh.bitmap(py * glpyh.imagewidth + px)
 
-                Dim mindis As Double = 4096 * Math.Sqrt(2)
+                Dim mindis As Double = Integer.MaxValue  '4096 / div * Math.Sqrt(2)
                 For Each p In outline
                     'Dim len = Math.Abs(p.X - px) + Math.Abs(p.Y - py)  ' 
-                    Dim len = Math.Sqrt((p.X - px) * (p.X - px) + (p.Y - py) * (p.Y - py))
+                    Dim len = ((p.X - px) * (p.X - px) + (p.Y - py) * (p.Y - py))
                     If len < mindis Then
                         mindis = len
                     End If
                 Next
 
-
+                mindis = Math.Sqrt(mindis)
                 If c > 0 Then
                     '内部
 
@@ -227,7 +230,7 @@
                     mindis = -mindis
                 End If
 
-                signeddata(row, col) = mindis
+                signeddata(row, col) = (mindis)
 
                 col += 1
 
@@ -286,6 +289,9 @@
                     resut.data(i, j) = signed
                 Else
                     resut.data(i, j) = 0
+                    resut.maxDis = 1024
+                    resut.minDis = -1024
+                    resut.outlineSigned = 0
                 End If
 
 
@@ -438,9 +444,9 @@
 
 
     Private Sub btnExport_Click(sender As Object, e As EventArgs) Handles btnExport.Click
-        ExportAll()
-        Return
-
+        'ExportAll()
+        'Return
+        Dim sdfwidth As Double = 1024.0 * 2
 
         If lstCharCodes.SelectedIndex >= 0 Then
             Dim signed = MakeAnSDF(CType(lstCharCodes.SelectedItem, item).code)
@@ -461,7 +467,7 @@
 
 
 
-                    Dim a As Double = smoothstep((0 - signed.minDis - (4096.0 / 2 / outsize)) / (signed.maxDis - signed.minDis), (0 - signed.minDis + (4096.0 / 2 / outsize)) / (signed.maxDis - signed.minDis), dist)
+                    Dim a As Double = smoothstep((0 - signed.minDis - (sdfwidth / 2 / outsize)) / (signed.maxDis - signed.minDis), (0 - signed.minDis + (sdfwidth / 2 / outsize)) / (signed.maxDis - signed.minDis), dist)
 
                     a = Math.Pow(a, 1.0 / 1.5)
                     'a = a * 1.414
