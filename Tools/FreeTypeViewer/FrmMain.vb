@@ -42,9 +42,10 @@
 
     Private Sub lstCharCodes_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lstCharCodes.SelectedIndexChanged
         Dim item As item = Me.lstCharCodes.SelectedItem
-
-
-        Dim glpyh = freetype.getGlyph(128, item.code)
+        Dim glpyh As cfl.tools.freetypewapper.GlyphWapper
+        SyncLock freetype
+            glpyh = freetype.getGlyph(128, item.code)
+        End SyncLock
 
         Dim bitmap As New Bitmap(glpyh.imageheight, glpyh.imagewidth)
 
@@ -76,6 +77,7 @@
 
         g.Dispose()
         bitmap.Dispose()
+
     End Sub
 
     Class item
@@ -89,7 +91,12 @@
 
     Public Function MakeAnSDF(code As ULong) As SDFImage
 
-        Dim glpyh = freetype.getGlyph(4096, code)
+        Dim glpyh As cfl.tools.freetypewapper.GlyphWapper
+        SyncLock freetype
+            glpyh = freetype.getGlyph(4096, code)
+        End SyncLock
+
+
 
         'Dim data(glpyh.imageheight - 1)() As Byte
         'For i = 0 To glpyh.imageheight - 1
