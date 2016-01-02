@@ -106,7 +106,7 @@ namespace cfl
 				auto pos = priority->begin();
 				for (; pos != priority->end() && *pos; pos++)
 				{
-					if ((*pos)->weight >= root->weight)
+					if ((*pos)->weight > root->weight)
 					{
 						break;
 					}
@@ -236,10 +236,10 @@ namespace cfl
 			for (size_t i = 0; i < 256 && prioritylist[i] != nullptr; i++)
 			{
 				ret.push_back(*prioritylist[i]);
-
+				std::cout << "'" << prioritylist[i]->datavalue << "' weight: " << prioritylist[i]->weight << std::endl;
 				delete prioritylist[i];
 
-				std::cout << "'" << prioritylist[i]->datavalue << "' weight: " << prioritylist[i]->weight << std::endl;
+				
 			}
 
 			
