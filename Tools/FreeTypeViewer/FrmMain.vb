@@ -91,52 +91,84 @@
 
         Dim glpyh = freetype.getGlyph(4096, code)
 
-        Dim data(glpyh.imageheight - 1)() As Byte
-        For i = 0 To glpyh.imageheight - 1
-            data(i) = New Byte(glpyh.imagewidth) {}
-        Next
+        'Dim data(glpyh.imageheight - 1)() As Byte
+        'For i = 0 To glpyh.imageheight - 1
+        '    data(i) = New Byte(glpyh.imagewidth) {}
+        'Next
 
         Dim outline As New List(Of Point)
 
-        '***先查找轮廓***
+        Dim outlinehashset As New HashSet(Of Point)
+
+        '横向
         For j = 0 To glpyh.imageheight - 1
+            Dim lastcolor As Byte = 0
             For i = 0 To glpyh.imagewidth - 1
                 Dim oc = glpyh.bitmap(j * glpyh.imagewidth + i)
 
-                If oc > 0 Then
-                    For x = -1 To 1
-                        For y = -1 To 1
-                            Dim ii = i + x
-                            Dim jj = j + y
+                If oc <> lastcolor Then
+                    outlinehashset.Add(New Point(i, j))
+                    lastcolor = oc
 
-                            If ii >= 0 And ii < glpyh.imagewidth And jj >= 0 And jj < glpyh.imageheight Then
-
-                                Dim nc = glpyh.bitmap(jj * glpyh.imagewidth + ii)
-
-                                If nc = 0 Then
-
-                                    data(j)(i) = 255
-
-                                    outline.Add(New Point(i, j))
-
-                                    GoTo lblexitfor
-                                End If
-
-                            End If
-
-                        Next
-                    Next
-lblexitfor:
-
-
-                Else
-                    data(j)(i) = 0
+                    'data(j)(i) = 255
                 End If
-
-
-
             Next
         Next
+        '纵向
+        For j = 0 To glpyh.imagewidth - 1
+            Dim lastcolor As Byte = 0
+            For i = 0 To glpyh.imageheight - 1
+                Dim oc = glpyh.bitmap(i * glpyh.imagewidth + j)
+
+                If oc <> lastcolor Then
+                    outlinehashset.Add(New Point(j, i))
+                    lastcolor = oc
+
+                    'data(i)(j) = 255
+                End If
+            Next
+        Next
+        outline = outlinehashset.ToList()
+
+        '***先查找轮廓***
+'        For j = 0 To glpyh.imageheight - 1
+'            For i = 0 To glpyh.imagewidth - 1
+'                Dim oc = glpyh.bitmap(j * glpyh.imagewidth + i)
+
+'                If oc > 0 Then
+'                    For x = -1 To 1
+'                        For y = -1 To 1
+'                            Dim ii = i + x
+'                            Dim jj = j + y
+
+'                            If ii >= 0 And ii < glpyh.imagewidth And jj >= 0 And jj < glpyh.imageheight Then
+
+'                                Dim nc = glpyh.bitmap(jj * glpyh.imagewidth + ii)
+
+'                                If nc = 0 Then
+
+'                                    data(j)(i) = 255
+
+'                                    outline.Add(New Point(i, j))
+
+'                                    GoTo lblexitfor
+'                                End If
+
+'                            End If
+
+'                        Next
+'                    Next
+'lblexitfor:
+
+
+'                Else
+'                    data(j)(i) = 0
+'                End If
+
+
+
+'            Next
+'        Next
 
         '查看轮廓
         'Dim bitmap = New Bitmap(glpyh.imagewidth, glpyh.imageheight)
