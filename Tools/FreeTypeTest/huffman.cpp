@@ -106,7 +106,7 @@ namespace cfl
 				auto pos = priority->begin();
 				for (; pos != priority->end() && *pos; pos++)
 				{
-					if ((*pos)->weight > root->weight)
+					if ((*pos)->weight >= root->weight)
 					{
 						break;
 					}
@@ -749,7 +749,7 @@ namespace cfl
 			const unsigned char* pos = reinterpret_cast<const unsigned char*>(bytes)+sizeof(HuffmanHeader);
 			//ÖØ½¨huffmanÊ÷
 			
-			size_t offset = 0;
+			size_t offset = sizeof(HuffmanHeader);
 
 			for (size_t i = 0; i < header.symbolsCount; i++)
 			{
