@@ -46,7 +46,7 @@ Partial Class FrmMain
         Me.PictureBox1.Location = New System.Drawing.Point(203, 54)
         Me.PictureBox1.Margin = New System.Windows.Forms.Padding(2)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(204, 206)
+        Me.PictureBox1.Size = New System.Drawing.Size(192, 205)
         Me.PictureBox1.TabIndex = 0
         Me.PictureBox1.TabStop = False
         '

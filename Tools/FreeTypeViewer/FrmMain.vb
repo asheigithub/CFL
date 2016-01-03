@@ -861,7 +861,7 @@
 
 
                     Dim signed As Byte = Math.Max(0, Math.Min(255, (signeddata(j, i) - min) / (max - min) * 255))
-                    signed = Math.Min(255, signed * 1)
+                    signed = Math.Min(255, signed)
                     resut.data(i, j) = signed
                 Else
                     resut.data(i, j) = 0
