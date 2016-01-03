@@ -106,7 +106,7 @@ namespace cfl
 				auto pos = priority->begin();
 				for (; pos != priority->end() && *pos; pos++)
 				{
-					if ((*pos)->weight >= root->weight)
+					if ((*pos)->weight > root->weight)
 					{
 						break;
 					}
