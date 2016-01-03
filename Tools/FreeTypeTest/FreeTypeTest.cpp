@@ -404,7 +404,7 @@ void testhumman()
 	//—πÀı≤‚ ‘
 	std::ifstream fstm;
 	{
-		fstm.open("E:/CFL/Debug/testreadfile/ktx888.ktx", std::ios::binary);
+		fstm.open("E:/CFL/Tools/FreeTypeViewer/ARIAL.ff", std::ios::binary);
 		fstm.seekg(0, std::ios::end);
 		auto end_pos = fstm.tellg();
 
@@ -419,12 +419,12 @@ void testhumman()
 		delete[] filebuff;
 
 		std::ofstream fsave;
-		fsave.open("E:/CFL/Debug/testreadfile/hufftex.dat", std::ios::binary);
+		fsave.open("E:/CFL/Tools/FreeTypeViewer/hufftex.dat", std::ios::binary);
 		fsave.write(compressed.data.get(), compressed.getTotalFileLength());
 		fsave.close();
 	}
 	//Ω‚—π≤‚ ‘
-	fstm.open("E:/CFL/Debug/testreadfile/hufftex.dat", std::ios::binary);
+	fstm.open("E:/CFL/Tools/FreeTypeViewer/hufftex.dat", std::ios::binary);
 	{
 		fstm.seekg(0, std::ios::end);
 		auto end_pos = fstm.tellg();
@@ -449,7 +449,7 @@ void testhumman()
 		delete[] filebuff;
 
 		std::ofstream fsave;
-		fsave.open("E:/CFL/Debug/testreadfile/hufftex.ktx", std::ios::binary);
+		fsave.open("E:/CFL/Tools/FreeTypeViewer/hufftex.hff", std::ios::binary);
 		fsave.write(uncompress.data.get(), uncompress.dataSize);
 		fsave.close();
 
