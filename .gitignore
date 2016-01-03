@@ -74,3 +74,5 @@ CFL.opensdf
 Test/Win32/TestEntry/CLR/TestEntry.log
 *.a
 *.ttf
+Tools/FreeTypeViewer/HIMALAYA.ff
+*.ff
