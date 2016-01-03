@@ -28,38 +28,44 @@ Partial Class FrmMain
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.btnExport = New System.Windows.Forms.Button()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        Me.btnPerView = New System.Windows.Forms.Button()
+        Me.TrackBar1 = New System.Windows.Forms.TrackBar()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'PictureBox1
         '
         Me.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PictureBox1.Location = New System.Drawing.Point(271, 68)
+        Me.PictureBox1.Location = New System.Drawing.Point(203, 54)
+        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(2)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(256, 256)
+        Me.PictureBox1.Size = New System.Drawing.Size(192, 205)
         Me.PictureBox1.TabIndex = 0
         Me.PictureBox1.TabStop = False
         '
         'lstCharCodes
         '
         Me.lstCharCodes.FormattingEnabled = True
-        Me.lstCharCodes.ItemHeight = 15
-        Me.lstCharCodes.Location = New System.Drawing.Point(26, 65)
+        Me.lstCharCodes.ItemHeight = 12
+        Me.lstCharCodes.Location = New System.Drawing.Point(20, 52)
+        Me.lstCharCodes.Margin = New System.Windows.Forms.Padding(2)
         Me.lstCharCodes.Name = "lstCharCodes"
-        Me.lstCharCodes.Size = New System.Drawing.Size(199, 259)
+        Me.lstCharCodes.Size = New System.Drawing.Size(150, 208)
         Me.lstCharCodes.TabIndex = 1
         '
         'btnOpenFont
         '
-        Me.btnOpenFont.Location = New System.Drawing.Point(26, 24)
+        Me.btnOpenFont.Location = New System.Drawing.Point(20, 19)
+        Me.btnOpenFont.Margin = New System.Windows.Forms.Padding(2)
         Me.btnOpenFont.Name = "btnOpenFont"
-        Me.btnOpenFont.Size = New System.Drawing.Size(75, 23)
+        Me.btnOpenFont.Size = New System.Drawing.Size(56, 18)
         Me.btnOpenFont.TabIndex = 2
         Me.btnOpenFont.Text = "打开字体"
         Me.btnOpenFont.UseVisualStyleBackColor = True
@@ -71,62 +77,90 @@ Partial Class FrmMain
         'StatusStrip1
         '
         Me.StatusStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 426)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 336)
         Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Size = New System.Drawing.Size(1021, 22)
+        Me.StatusStrip1.Padding = New System.Windows.Forms.Padding(1, 0, 10, 0)
+        Me.StatusStrip1.Size = New System.Drawing.Size(766, 22)
         Me.StatusStrip1.TabIndex = 3
         Me.StatusStrip1.Text = "StatusStrip1"
         '
         'btnExport
         '
-        Me.btnExport.Location = New System.Drawing.Point(271, 23)
+        Me.btnExport.Location = New System.Drawing.Point(203, 18)
+        Me.btnExport.Margin = New System.Windows.Forms.Padding(2)
         Me.btnExport.Name = "btnExport"
-        Me.btnExport.Size = New System.Drawing.Size(75, 23)
+        Me.btnExport.Size = New System.Drawing.Size(56, 18)
         Me.btnExport.TabIndex = 4
         Me.btnExport.Text = "输出"
         Me.btnExport.UseVisualStyleBackColor = True
         '
-        'PictureBox2
-        '
-        Me.PictureBox2.Location = New System.Drawing.Point(401, 12)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(100, 50)
-        Me.PictureBox2.TabIndex = 5
-        Me.PictureBox2.TabStop = False
-        '
         'PictureBox3
         '
-        Me.PictureBox3.Location = New System.Drawing.Point(654, 23)
+        Me.PictureBox3.Location = New System.Drawing.Point(490, 18)
+        Me.PictureBox3.Margin = New System.Windows.Forms.Padding(2)
         Me.PictureBox3.Name = "PictureBox3"
-        Me.PictureBox3.Size = New System.Drawing.Size(352, 338)
+        Me.PictureBox3.Size = New System.Drawing.Size(264, 270)
         Me.PictureBox3.TabIndex = 6
         Me.PictureBox3.TabStop = False
         '
         'ProgressBar1
         '
-        Me.ProgressBar1.Location = New System.Drawing.Point(0, 400)
+        Me.ProgressBar1.Location = New System.Drawing.Point(0, 320)
+        Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(2)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(527, 23)
+        Me.ProgressBar1.Size = New System.Drawing.Size(395, 18)
         Me.ProgressBar1.TabIndex = 7
+        '
+        'btnPerView
+        '
+        Me.btnPerView.Location = New System.Drawing.Point(410, 16)
+        Me.btnPerView.Name = "btnPerView"
+        Me.btnPerView.Size = New System.Drawing.Size(75, 23)
+        Me.btnPerView.TabIndex = 8
+        Me.btnPerView.Text = "渲染预览"
+        Me.btnPerView.UseVisualStyleBackColor = True
+        '
+        'TrackBar1
+        '
+        Me.TrackBar1.Location = New System.Drawing.Point(426, 54)
+        Me.TrackBar1.Maximum = 128
+        Me.TrackBar1.Minimum = 16
+        Me.TrackBar1.Name = "TrackBar1"
+        Me.TrackBar1.Orientation = System.Windows.Forms.Orientation.Vertical
+        Me.TrackBar1.Size = New System.Drawing.Size(45, 104)
+        Me.TrackBar1.TabIndex = 9
+        Me.TrackBar1.Value = 16
+        '
+        'PictureBox2
+        '
+        Me.PictureBox2.Location = New System.Drawing.Point(412, 176)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(59, 50)
+        Me.PictureBox2.TabIndex = 10
+        Me.PictureBox2.TabStop = False
         '
         'FrmMain
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1021, 448)
+        Me.ClientSize = New System.Drawing.Size(766, 358)
+        Me.Controls.Add(Me.PictureBox2)
+        Me.Controls.Add(Me.TrackBar1)
+        Me.Controls.Add(Me.btnPerView)
         Me.Controls.Add(Me.ProgressBar1)
         Me.Controls.Add(Me.PictureBox3)
-        Me.Controls.Add(Me.PictureBox2)
         Me.Controls.Add(Me.btnExport)
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.btnOpenFont)
         Me.Controls.Add(Me.lstCharCodes)
         Me.Controls.Add(Me.PictureBox1)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "FrmMain"
         Me.Text = "字体查看器"
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -137,9 +171,11 @@ Partial Class FrmMain
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents StatusStrip1 As System.Windows.Forms.StatusStrip
     Friend WithEvents btnExport As System.Windows.Forms.Button
-    Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
     Friend WithEvents PictureBox3 As System.Windows.Forms.PictureBox
     Friend WithEvents ProgressBar1 As System.Windows.Forms.ProgressBar
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents btnPerView As System.Windows.Forms.Button
+    Friend WithEvents TrackBar1 As System.Windows.Forms.TrackBar
+    Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
 
 End Class

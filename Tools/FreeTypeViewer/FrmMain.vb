@@ -89,7 +89,7 @@
     End Class
 
 
-    Public Function MakeAnSDF(code As ULong) As SDFImage
+    Public Function MakeAnSDF_old(code As ULong) As SDFImage
 
         Dim div As Integer = 4
 
@@ -110,6 +110,7 @@
 
         Dim outlinehashset As New HashSet(Of Point)
 
+        '***先查找轮廓***
         '横向
         For j = 0 To glpyh.imageheight - 1
             Dim lastcolor As Byte = 0
@@ -140,63 +141,7 @@
         Next
         outline = outlinehashset.ToList()
 
-        '***先查找轮廓***
-'        For j = 0 To glpyh.imageheight - 1
-'            For i = 0 To glpyh.imagewidth - 1
-'                Dim oc = glpyh.bitmap(j * glpyh.imagewidth + i)
 
-'                If oc > 0 Then
-'                    For x = -1 To 1
-'                        For y = -1 To 1
-'                            Dim ii = i + x
-'                            Dim jj = j + y
-
-'                            If ii >= 0 And ii < glpyh.imagewidth And jj >= 0 And jj < glpyh.imageheight Then
-
-'                                Dim nc = glpyh.bitmap(jj * glpyh.imagewidth + ii)
-
-'                                If nc = 0 Then
-
-'                                    data(j)(i) = 255
-
-'                                    outline.Add(New Point(i, j))
-
-'                                    GoTo lblexitfor
-'                                End If
-
-'                            End If
-
-'                        Next
-'                    Next
-'lblexitfor:
-
-
-'                Else
-'                    data(j)(i) = 0
-'                End If
-
-
-
-'            Next
-'        Next
-
-        '查看轮廓
-        'Dim bitmap = New Bitmap(glpyh.imagewidth, glpyh.imageheight)
-        'For j = 0 To glpyh.imageheight - 1
-        '    For i = 0 To glpyh.imagewidth - 1
-        '        If data(j)(i) > 0 Then
-
-        '            bitmap.SetPixel(i, j, Color.Red)
-
-        '        End If
-
-
-        '    Next
-
-
-        'Next
-
-        'bitmap.Save("e:\sdf.png")
 
         Dim signeddata(31, 31) As Double
 
@@ -210,12 +155,14 @@
             For px = 64 / div To 4096 / div Step 128 / div
 
 
-                Dim c = glpyh.bitmap(py * glpyh.imagewidth + px)
+                Dim fx = px + 0
+                Dim fy = py + 0
+                Dim c = glpyh.bitmap(fy * glpyh.imagewidth + fx)
 
-                Dim mindis As Double = Integer.MaxValue  '4096 / div * Math.Sqrt(2)
+                Dim mindis As Double = Integer.MaxValue
                 For Each p In outline
-                    'Dim len = Math.Abs(p.X - px) + Math.Abs(p.Y - py)  ' 
-                    Dim len = ((p.X - px) * (p.X - px) + (p.Y - py) * (p.Y - py))
+
+                    Dim len = ((p.X - fx) * (p.X - fx) + (p.Y - fy) * (p.Y - fy))
                     If len < mindis Then
                         mindis = len
                     End If
@@ -230,13 +177,19 @@
                     mindis = -mindis
                 End If
 
-                signeddata(row, col) = (mindis)
+
+
+                signeddata(row, col) = mindis
+
+
 
                 col += 1
 
             Next
             row += 1
         Next
+
+
 
 
         Dim min As Double = 65535
@@ -248,6 +201,18 @@
                 max = Math.Max(max, signeddata(j, i))
             Next
         Next
+
+        'If min < -max * 8 Then
+        '    min = -max * 8
+        '    For i = 0 To 32 - 1
+        '        For j = 0 To 32 - 1
+        '            If signeddata(j, i) < min Then
+        '                signeddata(j, i) = min
+        '            End If
+        '        Next
+        '    Next
+        'End If
+
 
         '实际存储的时候我是求了一下signed distance field中的最大值max和最小值min，
         '然后通过(signedDis-min)/(max-min)将signedDis映射到[0,1]，
@@ -285,7 +250,11 @@
             For j = 0 To 32 - 1
 
                 If max > 0 Then
+                    'Dim signed As Byte = Math.Max(0, Math.Min(255, (signeddata(j, i) - min) / (max - min) * 255))
+
+
                     Dim signed As Byte = Math.Max(0, Math.Min(255, (signeddata(j, i) - min) / (max - min) * 255))
+                    signed = Math.Min(255, signed)
                     resut.data(i, j) = signed
                 Else
                     resut.data(i, j) = 0
@@ -297,6 +266,8 @@
 
             Next
         Next
+
+
 
 
         Return resut
@@ -444,60 +415,9 @@
 
 
     Private Sub btnExport_Click(sender As Object, e As EventArgs) Handles btnExport.Click
-        'ExportAll()
-        'Return
-        Dim sdfwidth As Double = 1024.0 * 2
-
-        If lstCharCodes.SelectedIndex >= 0 Then
-            Dim signed = MakeAnSDF(CType(lstCharCodes.SelectedItem, item).code)
-
-
-
-            Dim outsize As Short = 128
-            '***还原测试
-            Dim rrr As New Bitmap(outsize, outsize)
-
-            For r = 0 To rrr.Height - 1
-                For c = 0 To rrr.Width - 1
-                    Dim u As Single = r * 1.0 / (rrr.Width - 1)
-                    Dim v As Single = c * 1.0 / (rrr.Height - 1)
-
-
-                    Dim dist = sampler(u, v, signed.data).R / 255.0 'out.GetPixel(tx, ty).R / 255.0
-
-
-
-                    Dim a As Double = smoothstep((0 - signed.minDis - (sdfwidth / 2 / outsize)) / (signed.maxDis - signed.minDis), (0 - signed.minDis + (sdfwidth / 2 / outsize)) / (signed.maxDis - signed.minDis), dist)
-
-                    a = Math.Pow(a, 1.0 / 1.5)
-                    'a = a * 1.414
-
-                    a = smoothstep(0.1, 0.9, a)
-
-
-                    Dim alpha As Byte = Math.Max(0, Math.Min(255, a * 255))
-
-                    Dim fontcolor = Color.Black
-
-                    'Dim outlinedis = (0 - min) / (max - min)
-                    'If (dist - outlinedis) * 4096 > -256 * 8 And dist - outlinedis < 0 Then
-                    '    alpha = (1 - (dist - outlinedis) * 4096 / -256 / 8) * 255
-                    '    fontcolor = Drawing.Color.FromArgb(alpha, 255, 0, 0)
-                    'End If
-
-
-                    rrr.SetPixel(r, c, Drawing.Color.FromArgb(alpha, fontcolor))
-
-
-                Next
-            Next
-
-
-            PictureBox3.Image = rrr
-
-
-
-        End If
+        ExportAll()
+        Return
+       
     End Sub
 
     Private Sub ExportAll()
@@ -627,6 +547,7 @@
         bw.Write(info.height)
         bw.Write(info.units_per_EM)
 
+
         bw.Write(sdflist.Count)
 
         '**写入kern表
@@ -664,6 +585,304 @@
 
         _exportEnd()
     End Sub
+
+
+
+    Private Sub btnPerView_Click(sender As Object, e As EventArgs) Handles btnPerView.Click
+        Dim sdfwidth As Double = 1024.0
+
+        If lstCharCodes.SelectedIndex >= 0 Then
+            Dim signed = MakeAnSDF(CType(lstCharCodes.SelectedItem, item).code)
+
+            Dim sdfimage As New Bitmap(32, 32)
+            For j = 0 To 31
+                For i = 0 To 31
+                    Dim c = signed.data(i, j)
+                    sdfimage.SetPixel(i, j, Color.FromArgb(255, c, c, c))
+                Next
+            Next
+            PictureBox2.Image = sdfimage
+
+
+
+
+            Dim outsize As Short = Me.TrackBar1.Value
+            '***还原测试
+            Dim rrr As New Bitmap(outsize, outsize)
+
+            For r = 0 To rrr.Height - 1
+                For c = 0 To rrr.Width - 1
+                    Dim u As Single = r * 1.0 / (rrr.Width - 1)
+                    Dim v As Single = c * 1.0 / (rrr.Height - 1)
+
+
+                    Dim dist = sampler(u, v, signed.data).R / 255.0 'out.GetPixel(tx, ty).R / 255.0
+
+
+
+                    Dim a As Double = smoothstep((0 - signed.minDis - (sdfwidth / 2 / outsize)) / (signed.maxDis - signed.minDis), (0 - signed.minDis + (sdfwidth / 2 / outsize)) / (signed.maxDis - signed.minDis), dist)
+
+                    a = Math.Pow(a, 1.0 / 1.5)
+                    'a = a * 1.414
+
+                    a = smoothstep(0.1, 0.9, a)
+
+
+                    Dim alpha As Byte = Math.Max(0, Math.Min(255, a * 255))
+
+                    Dim fontcolor = Color.Black
+
+                    'Dim outlinedis = (0 - signed.minDis) / (signed.maxDis - signed.minDis)
+                    'If (dist - outlinedis) * 1024 > -16 And dist - outlinedis < 0 Then
+                    '    alpha = (1 - (dist - outlinedis) * 1024 / -16) * 255
+                    '    fontcolor = Drawing.Color.FromArgb(alpha, 255, 0, 0)
+                    'End If
+
+
+                    rrr.SetPixel(r, c, Drawing.Color.FromArgb(alpha, fontcolor))
+
+
+                Next
+            Next
+
+
+            PictureBox3.Image = rrr
+
+
+
+        End If
+    End Sub
+
+
+
+
+    Public Function MakeAnSDF(code As ULong) As SDFImage
+
+        Dim div As Integer = 4
+
+
+        Dim glpyh As cfl.tools.freetypewapper.GlyphWapper
+        SyncLock freetype
+            glpyh = freetype.getGlyph(4096 / div, code)
+        End SyncLock
+
+
+
+        'Dim data(glpyh.imageheight - 1)() As Byte
+        'For i = 0 To glpyh.imageheight - 1
+        '    data(i) = New Byte(glpyh.imagewidth) {}
+        'Next
+
+        Dim outline As New List(Of Point)
+
+        Dim outlinehashset As New HashSet(Of Point)
+
+        Dim innerpoints As New List(Of Point)
+
+        '***先查找轮廓***
+        '横向
+        For j = 0 To glpyh.imageheight - 1
+            Dim lastcolor As Byte = 0
+            For i = 0 To glpyh.imagewidth - 1
+                Dim oc = glpyh.bitmap(j * glpyh.imagewidth + i)
+                If oc > 128 Then
+                    oc = 255
+                Else
+                    oc = 0
+                End If
+
+                If oc <> lastcolor Then
+                    outlinehashset.Add(New Point(i, j))
+                    lastcolor = oc
+
+                    'data(j)(i) = 255
+                End If
+
+                If oc > 0 Then
+                    innerpoints.Add(New Point(i, j))
+                End If
+
+            Next
+        Next
+        '纵向
+        For j = 0 To glpyh.imagewidth - 1
+            Dim lastcolor As Byte = 0
+            For i = 0 To glpyh.imageheight - 1
+                Dim oc = glpyh.bitmap(i * glpyh.imagewidth + j)
+
+                If oc <> lastcolor Then
+                    outlinehashset.Add(New Point(j, i))
+                    lastcolor = oc
+
+                    'data(i)(j) = 255
+                End If
+            Next
+        Next
+        outline = outlinehashset.ToList()
+
+
+
+        Dim signeddata(31, 31) As Double
+
+
+        Dim col = 0
+        Dim row = 0
+
+        For py = 64 / div To 4096 / div Step 128 / div
+            col = 0
+
+            For px = 64 / div To 4096 / div Step 128 / div
+
+
+                Dim fx = px + 0
+                Dim fy = py + 0
+                Dim c = glpyh.bitmap(fy * glpyh.imagewidth + fx)
+
+                Dim mindis As Double = Integer.MaxValue
+                For Each p In outline
+
+                    Dim len = ((p.X - fx) * (p.X - fx) + (p.Y - fy) * (p.Y - fy))
+                    If len < mindis Then
+                        mindis = len
+                    End If
+                Next
+
+                mindis = Math.Sqrt(mindis)
+                If c > 0 Then
+                    '内部
+
+                Else
+                    '外部
+                    mindis = -mindis
+                End If
+
+
+
+                signeddata(row, col) = mindis
+
+
+
+                col += 1
+
+            Next
+            row += 1
+        Next
+
+
+
+
+        Dim min As Double = 65535
+        Dim max As Double = -65535
+
+        For i = 0 To 32 - 1
+            For j = 0 To 32 - 1
+                min = Math.Min(min, signeddata(j, i))
+                max = Math.Max(max, signeddata(j, i))
+            Next
+        Next
+
+
+        '**更新max值**
+        For i = 0 To innerpoints.Count - 1 Step 1000
+            Dim inn = innerpoints(i)
+            Dim fx = inn.X
+            Dim fy = inn.Y
+            Dim c = glpyh.bitmap(fy * glpyh.imagewidth + fx)
+
+            Dim mindis As Double = Integer.MaxValue
+            For Each p In outline
+
+                Dim len = ((p.X - fx) * (p.X - fx) + (p.Y - fy) * (p.Y - fy))
+                If len < mindis Then
+                    mindis = len
+                End If
+            Next
+
+            mindis = Math.Sqrt(mindis)
+            If mindis > max Then
+                max = mindis
+            End If
+
+        Next
+
+
+
+
+
+        'If min < -max * 8 Then
+        '    min = -max * 8
+        '    For i = 0 To 32 - 1
+        '        For j = 0 To 32 - 1
+        '            If signeddata(j, i) < min Then
+        '                signeddata(j, i) = min
+        '            End If
+        '        Next
+        '    Next
+        'End If
+
+
+        '实际存储的时候我是求了一下signed distance field中的最大值max和最小值min，
+        '然后通过(signedDis-min)/(max-min)将signedDis映射到[0,1]，
+        '并且将轮廓阈值0映射为(0-min)/(max-min)，
+        '即得到了一个取值在[0,1]间的signed distance field,其轮廓阈值为(0-min)/(max-min)。
+
+
+        'Dim signedoutlin As Byte = Math.Min(255, Math.Max(0, (0 - min) / (max - min) * 255))
+        'Dim out As New Bitmap(32, 32)
+
+        'For i = 0 To 32 - 1
+        '    For j = 0 To 32 - 1
+
+        '        If glpyh.bitmap.Length > 0 Then
+        '            Dim signed As Byte = Math.Max(0, Math.Min(255, (signeddata(j, i) - min) / (max - min) * 255))
+        '            out.SetPixel(i, j, Drawing.Color.FromArgb(255, signed, signed, signed))
+        '        Else
+        '            out.SetPixel(i, j, Drawing.Color.FromArgb(255, 0, 0, 0))
+        '        End If
+
+
+        '    Next
+        'Next
+
+        Dim resut As New SDFImage
+        resut.maxDis = max
+        resut.minDis = min
+        resut.outlineSigned = (0 - min) / (max - min)
+        resut.glyph = glpyh
+        resut.code = code
+
+        glpyh.bitmap = Nothing
+
+        For i = 0 To 32 - 1
+            For j = 0 To 32 - 1
+
+                If max > 0 Then
+                    'Dim signed As Byte = Math.Max(0, Math.Min(255, (signeddata(j, i) - min) / (max - min) * 255))
+
+
+                    Dim signed As Byte = Math.Max(0, Math.Min(255, (signeddata(j, i) - min) / (max - min) * 255))
+                    signed = Math.Min(255, signed)
+                    resut.data(i, j) = signed
+                Else
+                    resut.data(i, j) = 0
+                    resut.maxDis = 1024
+                    resut.minDis = -1024
+                    resut.outlineSigned = 0
+                End If
+
+
+            Next
+        Next
+
+
+
+
+        Return resut
+
+
+
+
+    End Function
 
 
 
