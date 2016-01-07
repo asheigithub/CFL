@@ -153,6 +153,15 @@
     <ClCompile Include="..\CommSrc\CFLTextElementEnumerator.cpp">
       <Filter>源文件\text</Filter>
     </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLFont.cpp">
+      <Filter>源文件\graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLMemoryDataSource.cpp">
+      <Filter>源文件\content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\FontTexture.cpp">
+      <Filter>源文件\graphic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CFLMainLoopThread.h">
@@ -195,6 +204,12 @@
       <Filter>头文件\buildinshaders</Filter>
     </ClInclude>
     <ClInclude Include="..\CommSrc\headers\UnicodeTable.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\headers\FontTexture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\headers\IGameImageEffect.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

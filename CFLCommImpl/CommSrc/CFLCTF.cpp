@@ -28,22 +28,22 @@ namespace cfl
 
 			unsigned int endiness = br.readUnsignedInt();
 
-			bool mathEndian;
+			bool matchEndian;
 
 			if (endiness == 0x04030201)
 			{
-				mathEndian = true;
+				matchEndian = true;
 			}
 			else if (endiness == 0x01020304)
 			{
-				mathEndian = false;
+				matchEndian = false;
 			}
 			else
 			{
 				return false;
 			}
 
-			if (!mathEndian)
+			if (!matchEndian)
 			{
 				if (CFLContext::getCurrentInstance()->capability->getEndian() == content::Endian::little_endian)
 				{

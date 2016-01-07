@@ -118,6 +118,16 @@ namespace cfl
 			//执行纹理创建工作。可指定是否自动创建纹理级别。必须指定了0级，才能自动创建其余所有级别。
 			void texImage2d(bool autoGenMipmap=false);
 
+			//更新纹理数据
+			void texUpdateImage2d(GLint level,
+				GLsizei width,GLsizei height,
+				tex2d_inputformat::InputFormat format,
+				tex2d_pixeltype::PixelType type,
+				std::shared_ptr<content::IGLDataResource> pixelSource,
+				size_t offset,
+				size_t stride);
+
+
 			inline bool isValid() override final{ return _isvalid; };
 			inline bool isFaild() const { return _isfaild; }
 
@@ -140,6 +150,7 @@ namespace cfl
 
 			void doTexImage2d();
 
+			void doTexUpdateImage2d(GLint level);
 
 			void onLostEGLContext(CFLContext* context) override final;
 

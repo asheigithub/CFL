@@ -3,7 +3,7 @@
 #include "headers/CFLGameImageRender.h"
 
 #include "CFLEntry.h"
-
+#include "headers/FontTexture.h"
 
 
 
@@ -99,6 +99,9 @@ namespace cfl
 
 			_g->gllinerender->swapRenderQueue(ctx);
 			_g->gameimagerender->swapRenderQueue(ctx);
+
+			font::updateFontTexture();
+
 		}
 
 		//每帧渲染队列交换后被调用。

@@ -2,6 +2,8 @@
 #define CFL_GAMEIMAGERENDER_DRAWELEMENT_H
 
 #include "CFLGameImageRender.h"
+#include "IGameImageEffect.h"
+
 #include <vector>
 
 namespace cfl
@@ -25,7 +27,8 @@ namespace cfl
 				backclip(geom::Rectangle()),
 				p1(geom::Vector4()), p2(geom::Vector4()), p3(geom::Vector4()), p4(geom::Vector4()),
 				_leftu(0), _rightu(0), _topv(0), _bottomv(0),
-				_screenleft(0), _screentop(0), _screenright(0), _screenbottom(0)
+				_screenleft(0), _screentop(0), _screenright(0), _screenbottom(0),
+				effectData()
 			{
 				
 			}
@@ -74,6 +77,9 @@ namespace cfl
 			float  _screenbottom ;
 
 
+			GameImageEffectData effectData;
+
+
 			//绘图指令调用不能多线程！
 			static drawElement* getDrawElement();
 			static void reset();
@@ -117,6 +123,7 @@ namespace cfl
 			while ( poolidx< elementPool.size() && !elementPool[poolidx]->image.isNull()  )
 			{
 				elementPool[poolidx]->image = empty;
+				elementPool[poolidx]->effectData.reset();
 				poolidx++;
 			}
 

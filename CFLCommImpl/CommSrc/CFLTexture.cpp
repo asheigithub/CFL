@@ -504,7 +504,26 @@ namespace cfl
 
 
 
+			void Texture2D::updateImageData(GLint level,
+				GLsizei width, GLsizei height,
+				tex2d_inputformat::InputFormat format,
+				tex2d_pixeltype::PixelType type,
+				std::shared_ptr<content::IGLDataResource> pixelSource,
+				size_t offset,
+				size_t stride)
+			{
+				CHECK_ISNOTDISPOSE;
+				GLTex2D* tex2d = reinterpret_cast<GLTex2D*>(_indata->tex2dobj);
 
+				CFL_ASSERT(tex2d);
+				if (!pixelSource->isDone())
+				{
+					pixelSource->load();
+				}
+
+				tex2d->texUpdateImage2d(level,width,height,format,type,pixelSource,offset,stride);
+
+			}
 
 
 			void Texture2D::uploadFromImageData(

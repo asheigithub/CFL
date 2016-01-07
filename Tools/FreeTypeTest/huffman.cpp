@@ -82,6 +82,7 @@ namespace cfl
 
 		HuffmanNode* makeHuffmanTree(std::list<HuffmanNode*>* priority)
 		{
+			
 			HuffmanNode* root = nullptr;
 
 			HuffmanNode* n1 = nullptr;

@@ -10,6 +10,7 @@
 #include <thread>
 #include <sstream>
 #include "Content/CFLContent.h"
+#include "Graphic/CFLFont.h"
 
 static int targetFPS=60;
 static int realFps=0;
@@ -255,6 +256,10 @@ bool _winMsg(MSG& msg, bool& done)
 			notify_exit();
 
 			content::Content::clearData();
+
+			cfl::graphic::font::Font::clearFonts();
+
+
 		}
 		else
 		{

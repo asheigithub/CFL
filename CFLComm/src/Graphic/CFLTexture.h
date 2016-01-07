@@ -60,6 +60,15 @@ namespace cfl
 					bool autoGenMipmap
 					);
 
+				//更新指定miplevel的图像
+				void updateImageData(GLint level,
+					GLsizei width, GLsizei height,
+					tex2d_inputformat::InputFormat format,
+					tex2d_pixeltype::PixelType type,
+					std::shared_ptr<content::IGLDataResource> pixelSource,
+					size_t offset,
+					size_t stride);
+
 
 				//获取内部纹理格式
 				tex2d_internalformat::InternalFormat getInternalformat() const;

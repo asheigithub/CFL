@@ -79,6 +79,7 @@
     <ClCompile Include="..\CommSrc\CFLDrawCommand.cpp" />
     <ClCompile Include="..\CommSrc\CFLEncoding.cpp" />
     <ClCompile Include="..\CommSrc\CFLFileDataResource.cpp" />
+    <ClCompile Include="..\CommSrc\CFLFont.cpp" />
     <ClCompile Include="..\CommSrc\CFLGameImage.cpp" />
     <ClCompile Include="..\CommSrc\CFLGeom_Quaternion.cpp" />
     <ClCompile Include="..\CommSrc\CFLGeom_Vector.cpp" />
@@ -91,6 +92,7 @@
     <ClCompile Include="..\CommSrc\CFLHALF_FLOAT.cpp" />
     <ClCompile Include="..\CommSrc\CFLKTX.cpp" />
     <ClCompile Include="..\CommSrc\CFLMath.cpp" />
+    <ClCompile Include="..\CommSrc\CFLMemoryDataSource.cpp" />
     <ClCompile Include="..\CommSrc\CFLShader.cpp" />
     <ClCompile Include="..\CommSrc\CFLStage.cpp" />
     <ClCompile Include="..\CommSrc\CFLString.cpp" />
@@ -101,6 +103,7 @@
     <ClCompile Include="..\CommSrc\CFLUChar.cpp" />
     <ClCompile Include="..\CommSrc\CFLVertexPointer.cpp" />
     <ClCompile Include="..\CommSrc\CFLGameImageRender.cpp" />
+    <ClCompile Include="..\CommSrc\FontTexture.cpp" />
     <ClCompile Include="..\CommSrc\GLLineRender.cpp" />
     <ClCompile Include="..\CommSrc\HalfFloatGLLineRender.cpp" />
     <ClCompile Include="..\CommSrc\Texture2DRef.cpp" />
@@ -119,8 +122,10 @@
     <ClInclude Include="..\CommSrc\headers\CFLGameImageRender_DrawElement.h" />
     <ClInclude Include="..\CommSrc\headers\CFLVertBufferTemplate.h" />
     <ClInclude Include="..\CommSrc\headers\CFLLineRender.h" />
+    <ClInclude Include="..\CommSrc\headers\FontTexture.h" />
     <ClInclude Include="..\CommSrc\headers\GBKTable.h" />
     <ClInclude Include="..\CommSrc\headers\GraphicRenders.h" />
+    <ClInclude Include="..\CommSrc\headers\IGameImageEffect.h" />
     <ClInclude Include="..\CommSrc\headers\UnicodeTable.h" />
     <ClInclude Include="..\CommSrc\xxhash\xxhash.h" />
     <ClInclude Include="src\CFLMainLoopThread.h" />

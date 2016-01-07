@@ -1,5 +1,7 @@
 ﻿Public Class FrmMain
 
+    Const SDFIMAGESIZE As Integer = 1024
+
     Dim freetype As cfl.tools.freetypewapper.FreeTypeWapperLib
     Private Sub btnOpenFont_Click(sender As Object, e As EventArgs) Handles btnOpenFont.Click
         'Me.OpenFileDialog1.InitialDirectory = System.Environment.GetEnvironmentVariable("windir") + "\fonts"
@@ -23,7 +25,7 @@
 
             End If
 
-
+           
             Dim codes = freetype.getAllCharCodes()
             Me.lstCharCodes.Items.Clear()
             For Each c In codes
@@ -91,7 +93,7 @@
 
     Public Function MakeAnSDF_old(code As ULong) As SDFImage
 
-        Dim div As Integer = 4
+        Dim div As Integer = 4096 / SDFIMAGESIZE
 
 
         Dim glpyh As cfl.tools.freetypewapper.GlyphWapper
@@ -485,42 +487,6 @@
 
 
 
-        Dim sdffontdatalist As New List(Of Byte())
-        For index = 0 To sdflist.Count - 1
-
-            Dim fstm As New System.IO.MemoryStream()
-            Dim fbw As New System.IO.BinaryWriter(fstm)
-
-            Dim sdf = sdflist(index)
-
-            fbw.Write(sdf.glyph.advance_x)
-            fbw.Write(sdf.glyph.advance_y)
-            fbw.Write(sdf.glyph.padleft)
-            fbw.Write(sdf.glyph.padtop)
-            fbw.Write(sdf.glyph.pen_x)
-            fbw.Write(sdf.glyph.pen_y)
-            fbw.Write(sdf.glyph.clipwidth)
-            fbw.Write(sdf.glyph.clipheight)
-            fbw.Write(sdf.glyph.imagewidth)
-            fbw.Write(sdf.glyph.imageheight)
-
-            fbw.Write(CType(sdf.minDis, Single))
-            fbw.Write(CType(sdf.maxDis, Single))
-
-            For row = 0 To 31
-                For col = 0 To 31
-                    fbw.Write(sdf.data(col, row))
-                Next
-            Next
-
-            Dim sdfbyte = fstm.ToArray()
-
-            fbw.Dispose()
-            fstm.Dispose()
-
-            sdffontdatalist.Add(sdfbyte)
-        Next
-
         Dim kernlist As New List(Of Tuple(Of UInteger, UInteger, Integer, Integer))
         If info.use_kerning Then
             For l = 0 To codes.Count - 1
@@ -546,7 +512,7 @@
         bw.Write(info.bbox_yMin)
         bw.Write(info.height)
         bw.Write(info.units_per_EM)
-
+        bw.Write(SDFIMAGESIZE)
 
         bw.Write(sdflist.Count)
 
@@ -559,23 +525,38 @@
             bw.Write(kernlist(index).Item4)
         Next
 
+        '**写入每个字符的信息***
+        For index = 0 To sdflist.Count - 1
 
+            Dim sdf = sdflist(index)
+            bw.Write(sdf.code)
+            bw.Write(sdf.glyph.advance_x)
+            bw.Write(sdf.glyph.advance_y)
+            bw.Write(sdf.glyph.padleft)
+            bw.Write(sdf.glyph.padtop)
+            bw.Write(sdf.glyph.pen_x)
+            bw.Write(sdf.glyph.pen_y)
+            bw.Write(sdf.glyph.clipwidth)
+            bw.Write(sdf.glyph.clipheight)
+            bw.Write(sdf.glyph.imagewidth)
+            bw.Write(sdf.glyph.imageheight)
 
-        '**写入每个字符的位置***
-        Dim poslist As New List(Of Integer)
-        Dim pos As Integer = fontdata.Position + sdffontdatalist.Count * 4 + sdffontdatalist.Count * 4 '每条记录占8个字节,前int是charcode,后int是位置
-        For index = 0 To sdffontdatalist.Count - 1
-            poslist.Add(pos)
-            pos += sdffontdatalist(index).Length
+            bw.Write(CType(sdf.minDis, Single))
+            bw.Write(CType(sdf.maxDis, Single))
+
         Next
 
-        For index = 0 To poslist.Count - 1
-            bw.Write(sdflist(index).code)
-            bw.Write(poslist(index))
-        Next
 
-        For index = 0 To sdffontdatalist.Count - 1
-            bw.Write(sdffontdatalist(index))
+
+        '**写入每个字符的图像***
+        For index = 0 To sdflist.Count - 1
+
+            Dim sdf = sdflist(index)
+            For row = 0 To 31
+                For col = 0 To 31
+                    bw.Write(sdf.data(col, row))
+                Next
+            Next
         Next
 
         Dim bytes = fontdata.ToArray()
@@ -589,7 +570,7 @@
 
 
     Private Sub btnPerView_Click(sender As Object, e As EventArgs) Handles btnPerView.Click
-        Dim sdfwidth As Double = 1024.0
+        Dim sdfwidth As Double = SDFIMAGESIZE
 
         If lstCharCodes.SelectedIndex >= 0 Then
             Dim signed = MakeAnSDF(CType(lstCharCodes.SelectedItem, item).code)
@@ -622,10 +603,10 @@
 
                     Dim a As Double = smoothstep((0 - signed.minDis - (sdfwidth / 2 / outsize)) / (signed.maxDis - signed.minDis), (0 - signed.minDis + (sdfwidth / 2 / outsize)) / (signed.maxDis - signed.minDis), dist)
 
-                    a = Math.Pow(a, 1.0 / 1.5)
+                    'a = Math.Pow(a, 1.0 / 1.5)
                     'a = a * 1.414
 
-                    a = smoothstep(0.1, 0.9, a)
+                    'a = smoothstep(0.1, 0.9, a)
 
 
                     Dim alpha As Byte = Math.Max(0, Math.Min(255, a * 255))
@@ -805,7 +786,7 @@
 
         Next
 
-
+       
 
 
 

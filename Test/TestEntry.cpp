@@ -34,7 +34,7 @@
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/foreach.hpp>
 
-
+#include "Graphic/CFLFont.h"
 
 //adb shell top -m 10
 //adb shell dumpsys meminfo com.app.TestEntry
@@ -145,19 +145,33 @@ void up(CFLContext* context,float dettime)
 				, toRadians( i*5 + context->totalframes )
 				);
 
-			context->graphic->drawGameImage(iimg2, 505.0f + i * 3, 167.0f, 1.0f, nullptr, i/10.0f * 0.5, toRadians( i*context->totalframes/2) );
+			context->graphic->drawGameImage(iimg2, 505.0f + i * 3, 167.0f, 1.0f, nullptr, i/10.0f * 0.5f, toRadians( i*context->totalframes/2) );
 
 
 			context->graphic->drawGameImage(iimg3, 570.0f +i*20 , 426.0f + i * 10, 
 				&geom::Matrix3D().appendRotation( toRadians(i*i+context->totalframes),geom::Y_AXIS ) ,1.0f, nullptr, i/100.0f+0.2f);
 		}
+		
+		
+		auto font = graphic::font::Font::getFont("arial");
+
+		auto gimg = font.getGlyph('S')->glyphImage;
+
+		auto g = font.getGlyph((context->totalframes / 5) % 1000);
+		if (g)
+		{ 
+			auto ggimg = g->glyphImage;
+			context->graphic->drawGameImage(ggimg, 0, 0, 1.0f, nullptr, 0.5f);
+
+		}
+		else
+		{
+			context->graphic->drawGameImage(gimg, 0, 0, 1.0f, nullptr, 0.5f);
+
+		}
+		
 
 		
-		
-		
-
-		
-
 		/*if (tex2d != nullptr )
 		{
 			delete tex2d;
@@ -381,7 +395,28 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 		}
 		LOGI("\n");
 	}
+	tick = cfl::getTimer();
+	auto afont = cfl::graphic::font::Font::init(cfl::file::DirType::asset, "fonts/ARIAL.ff");
+	t = cfl::getTimer() - tick;
+	LOGI("font init timer: %d\n", t);
 
+	tick = cfl::getTimer();
+	for (size_t i = 0; i < 1000; i++)
+	{
+		auto k = afont.queryKerning(32, 932);
+
+		afont.getGlyphForRending(i);
+	}
+	
+	t = cfl::getTimer() - tick;
+	LOGI("query timer: %d\n", t);
+
+	afont.getGlyphForRending('R');
+	afont.getGlyphForRending('S');
+
+	
+
+	cfl::graphic::font::Font::regFont(afont, "arial");
 
 	//
 	//render::textures::Texture2D texture;

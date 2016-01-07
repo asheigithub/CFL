@@ -68,9 +68,11 @@
     <ClInclude Include="src\Content\CFLEndian.h" />
     <ClInclude Include="src\Content\CFLFileDataResource.h" />
     <ClInclude Include="src\Content\CFLKTX.h" />
+    <ClInclude Include="src\Content\CFLMemoryDataSource.h" />
     <ClInclude Include="src\Geom\CFLGeom.h" />
     <ClInclude Include="src\Geom\CFLRectangle.h" />
     <ClInclude Include="src\Graphic\CFLColor.h" />
+    <ClInclude Include="src\Graphic\CFLFont.h" />
     <ClInclude Include="src\Graphic\CFLGameImage.h" />
     <ClInclude Include="src\Graphic\CFLGLObj.h" />
     <ClInclude Include="src\Graphic\CFLGLObjCollection.h" />

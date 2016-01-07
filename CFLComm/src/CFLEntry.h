@@ -104,7 +104,7 @@ namespace cfl
 	private:
 		~CFLContext()
 		{
-
+			
 			delete graphic;
 			delete renderLooper;
 			delete glObjCollection;

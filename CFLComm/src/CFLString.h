@@ -62,8 +62,7 @@ namespace cfl
 	public:
 
 		static CFLString empty;
-
-
+		
 		CFLString() :CFLString(""){}
 
 		CFLString(const UChar uchar);

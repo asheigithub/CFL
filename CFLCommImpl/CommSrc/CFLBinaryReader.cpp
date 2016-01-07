@@ -198,6 +198,40 @@ namespace cfl
 			return ret;
 		}
 
+
+		float BinaryReader::readFloat() const
+		{
+			if (indata->offset + 4 > indata->length)
+			{
+				throw new EOFException();
+			}
+
+			float ret;
+			memcpy(&ret, indata->getptr(), 4);
+
+			indata->offset += 4;
+
+			if (indata->endian != indata->machineEndian)
+			{
+				//·´×ª×Ö½ÚÐò
+				union {
+					float i;
+					char c[4];
+				} u, r;
+
+				u.i = ret;
+				r.c[0] = u.c[3];
+				r.c[1] = u.c[2];
+				r.c[2] = u.c[1];
+				r.c[3] = u.c[0];
+				
+				return r.i;
+			}
+
+
+			return ret;
+		}
+
 		double BinaryReader::readDouble() const
 		{
 			if (indata->offset + 8 > indata->length)

@@ -23,6 +23,7 @@
 #include "CFLAndroidMainLoopThread.h"
 
 #include "Content/CFLContent.h"
+#include "Graphic/CFLFont.h"
 
 static int targetFPS = 60;
 static int realFps = 0;
@@ -604,6 +605,8 @@ void android_main(struct android_app* state) {
 				notify_exit();
 
 				content::Content::clearData();
+				cfl::graphic::font::Font::clearFonts();
+
 
 				context->taskPool->dispose();
 				LOGI("app exit");

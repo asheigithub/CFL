@@ -226,6 +226,121 @@ namespace cfl
 		}
 
 
+		void GLTex2D::doTexUpdateImage2d(GLint level)
+		{
+			glBindTexture(GL_TEXTURE_2D, glhandle);
+			CFL_CHECKGLERROR;
+
+			for (auto i = mipmaps->begin(); i != mipmaps->end(); i++)
+			{
+				auto p = *i;
+				if (level == std::get<0>(p))
+				{
+					GLsizei width = std::get<2>(p);
+					GLsizei height = std::get<3>(p);
+					tex2d_inputformat::InputFormat format = std::get<4>(p);
+					tex2d_pixeltype::PixelType type = std::get<5>(p);
+					std::shared_ptr<IGLDataResource> pixelSource = std::get<6>(p);
+					size_t offset = std::get<7>(p);
+					size_t stride = std::get<8>(p);
+
+					//LOGI("pixelSource");
+
+					if (!pixelSource->isDone())
+					{
+						//LOGI("pixelSource doload (%d)\n",objId);
+						pixelSource->load();
+						//LOGI("pixelSource loaded (%d)\n", objId);
+					}
+					//CFL_ASSERT(pixelSource->isValid());
+
+					//LOGI("pixelSource loaded");
+
+					if (!pixelSource->isValid())
+					{
+						LOGE("do update texture error, datasource error: %s\n", pixelSource->getError());
+						return;
+					}
+
+					//LOGI("pixelSource valided");
+
+					if (format != tex2d_inputformat::glcompressed)
+					{
+						if (stride % 4 == 0)
+						{
+							glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+						}
+						else if (stride % 2 == 0)
+						{
+							glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
+						}
+						else
+						{
+							glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+						}
+						CFL_CHECKGLERROR;
+
+						auto data = reinterpret_cast<unsigned char*>(pixelSource->getData()) + offset;
+
+						glTexSubImage2D(GL_TEXTURE_2D, level,0,0, width, height,  format, type,data);
+					}
+					else
+					{
+						auto data = reinterpret_cast<unsigned char*>(pixelSource->getData()) + offset;
+
+						auto imageSize = stride; //—πÀıŒ∆¿Ì£¨ΩË”√strideŒ™imageSize°£
+
+						glCompressedTexSubImage2D(GL_TEXTURE_2D, level,0,0, width, height,
+							std::get<1>(p), imageSize, data);
+
+					}
+
+
+					pixelSource->close();
+
+					CFL_CHECKGLERROR;
+
+					break;
+				}
+			}
+
+		}
+
+
+		void GLTex2D::texUpdateImage2d(GLint level,
+			GLsizei width, GLsizei height,
+			tex2d_inputformat::InputFormat format,
+			tex2d_pixeltype::PixelType type,
+			std::shared_ptr<content::IGLDataResource> pixelSource,
+			size_t offset,
+			size_t stride)
+		{
+			for (auto i = mipmaps->begin(); i != mipmaps->end(); i++)
+			{
+				auto mip = *i;
+				if (level == std::get<0>(mip))
+				{
+					auto iformat = std::get<1>(mip);
+					*i = std::make_tuple(level, iformat, width, height, format, type, pixelSource, offset, stride);
+					
+					auto fun = [this,level](){
+						//LOGI("befor build tex %d\n", objId);
+						doTexUpdateImage2d(level);
+						//LOGI("end build tex %d\n", objId);
+					};
+
+					auto command = new funcDrawCommand< decltype(fun)>(fun, "doTexUpdateImage2d");
+					pushMainLooperCommand(command);
+					
+					return;
+				}
+			}
+
+			LOGE("subimage error,miplevel %d not found", level);
+			//mipmaps->push_back(std::make_tuple(level, internalformat, width, height, format, type, pixelSource, offset, stride));
+		}
+
+
 		void GLTex2D::texImage2d(bool autoGenMipmap )
 		{
 			_autogenmipmap = autoGenMipmap;
