@@ -24,6 +24,7 @@ $RECYCLE.BIN/
 
 *.Cache
 
+*.a
 *.o
 *.o.d
 *.zip
