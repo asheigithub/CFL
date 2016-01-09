@@ -162,6 +162,12 @@
     <ClCompile Include="..\CommSrc\FontTexture.cpp">
       <Filter>源文件\graphic</Filter>
     </ClCompile>
+    <ClCompile Include="..\CommSrc\GameImageEffectNormal.cpp">
+      <Filter>源文件\graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\GameImageEffectSDF.cpp">
+      <Filter>源文件\graphic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CFLMainLoopThread.h">
@@ -211,6 +217,15 @@
     </ClInclude>
     <ClInclude Include="..\CommSrc\headers\IGameImageEffect.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\headers\GameImageEffectNormal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\headers\GameImageEffectSDF.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\buildinshaders\GameImage_SDF_Shader.h">
+      <Filter>头文件\buildinshaders</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

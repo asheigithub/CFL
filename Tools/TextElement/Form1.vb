@@ -629,4 +629,33 @@ Public Class Form1
 
 
     End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+
+        Dim str = "hahaha我擦你妹eeee真见鬼了蛋疼无比汗"
+
+        Dim bytes = System.Text.Encoding.Default.GetBytes(str)
+
+        Dim huffman As New HuffmanWapperLib.Huffman()
+
+        Dim c = huffman.huffmanCompress(bytes)
+
+        Dim up = huffman.unHuffmanCompress(c.data)
+
+        Dim de = System.Text.Encoding.Default.GetString(up)
+
+
+        Dim priority = huffman.getPriority(bytes)
+
+        Dim c2 = huffman.huffmanCompress(bytes, priority, True)
+
+        
+        Dim decodeinfo = huffman.loadDecodeInfo(c.data)
+
+        Dim u2 = huffman.unHuffmanCompress(c2.data, decodeinfo)
+        Dim de2 = System.Text.Encoding.Default.GetString(u2)
+
+
+
+    End Sub
 End Class

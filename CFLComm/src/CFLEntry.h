@@ -102,15 +102,12 @@ namespace cfl
 		friend class render::IGLObj;
 		friend class render::GLObjCollection;
 	private:
+
+		bool _isdisposed=false;
+
 		~CFLContext()
 		{
-			
-			delete graphic;
-			delete renderLooper;
-			delete glObjCollection;
-			delete capability;
-			delete taskPool;
-			delete stage;
+			__dispose();
 		}
 		CFLContext(CFLContext& rhs) = delete;
 
@@ -206,8 +203,22 @@ namespace cfl
 		/// EGL surface
 		EGLSurface  eglSurface;
 #endif
-	
+		//不要再代码里调用这个方法!!
+		void __dispose()
+		{
+			if (!_isdisposed)
+			{
+				_isdisposed = true;
 
+				delete graphic;
+				delete renderLooper;
+				delete glObjCollection;
+				delete capability;
+				delete taskPool;
+				delete stage;
+
+			}
+		}
 
 	};
 

@@ -133,9 +133,13 @@ namespace cfl
 
 
 
+			void drawString(const GameImage& image,float tx,float ty,float size);
+
+
 			//绘制一条直线
 			void drawLine(const geom::Vector2& stpos,const geom::Vector2& edpos,const Color& color ,float linewidth=1.0f );
 
+			struct g;
 		private:
 			//每帧渲染队列交换前被调用
 			void onBeforRenderQueueSwap(CFLContext* ctx);
@@ -145,7 +149,7 @@ namespace cfl
 
 			void _onCapabilityInited( cfl::Capability* capablilty );
 
-			struct g;
+			
 			g* _g;
 			
 		};

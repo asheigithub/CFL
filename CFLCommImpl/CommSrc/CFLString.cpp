@@ -408,6 +408,17 @@ namespace cfl
 
 	}
 
+	unsigned int CFLString::charCodeAt(size_t index) const
+	{
+		if (index >= length())
+		{
+			throw new std::out_of_range("Ë÷Òý³¬³ö·¶Î§");
+		}
+
+		return *(strdata->get_ucs4() + index);
+	}
+
+
 	CFLString cfl::CFLString::empty;
 
 }

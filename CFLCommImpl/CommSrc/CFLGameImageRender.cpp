@@ -104,69 +104,70 @@ namespace cfl
 			return progloc;
 		}
 
-		static render::GLProgram* build_tinycolor(GameImageRender* grender)
-		{
-			return build(grender, gameimage_tinycolor_vert, gameimage_tinycolor_frag, 
-				(grender->gameimage_tinycolor));
-		}
+		//static render::GLProgram* build_tinycolor(GameImageRender* grender)
+		//{
+		//	return build(grender, gameimage_tinycolor_vert, gameimage_tinycolor_frag, 
+		//		(grender->gameimage_tinycolor));
+		//}
 
-		static render::GLProgram* build_atlas_tinycolor(GameImageRender* grender)
-		{
-			return build(grender, gameimage_atlas_tinycolor_vert, gameimage_atlas_tinycolor_frag,
-				(grender->gameimage_tinycolor_atlas));
-		}
+		//static render::GLProgram* build_atlas_tinycolor(GameImageRender* grender)
+		//{
+		//	return build(grender, gameimage_atlas_tinycolor_vert, gameimage_atlas_tinycolor_frag,
+		//		(grender->gameimage_tinycolor_atlas));
+		//}
 
-		static render::GLProgram* build_separate_tinycolor(GameImageRender* grender)
-		{
-			return build(grender, gameimage_separate_tinycolor_vert, gameimage_separate_tinycolor_frag,
-				(grender->gameimage_tinycolor_separate));
+		//static render::GLProgram* build_separate_tinycolor(GameImageRender* grender)
+		//{
+		//	return build(grender, gameimage_separate_tinycolor_vert, gameimage_separate_tinycolor_frag,
+		//		(grender->gameimage_tinycolor_separate));
 
-		}
+		//}
 
 
-		//选择着色器
-		static render::GLProgram* selectProgram(GameImageRender* grender, Texture2DRef* refTex2D )
-		{
-			auto alphatype = refTex2D->getAlphaType();
+		////选择着色器
+		//static render::GLProgram* selectProgram(GameImageRender* grender, Texture2DRef* refTex2D )
+		//{
+		//	auto alphatype = refTex2D->getAlphaType();
 
-			switch (alphatype)
-			{
-			case cfl::content::alphachannal:
-				return build_tinycolor(grender); //grender->gameimage_tinycolor;
-				break;
-			case cfl::content::atlas:
-				return build_atlas_tinycolor(grender); //grender->gameimage_tinycolor_atlas;
-				break;
-			case cfl::content::separate:
-				return build_separate_tinycolor(grender); //grender->gameimage_tinycolor_separate;
-				break;
-			default:
-				return build_tinycolor(grender);  //grender->gameimage_tinycolor;
-				break;
-			}
-		}
-		static void setProgramArgSp(const Graphic* graphic, 
-			render::GLProgram* program,
-			GameImageRender* grender, Texture2DRef* refTex2D,const GameImage* image)
-		{
-			if (program == grender->gameimage_tinycolor_separate)
-			{
-				auto alphaLoc = program->getUniform("a_texture")->location;
-				//绑alpha纹理//
-				glActiveTexture(GL_TEXTURE1);
-				glBindTexture(GL_TEXTURE_2D, refTex2D->getSeparateTexture()->getHandle());
-				glUniform1i(alphaLoc, 1);
-			}
-		}
+		//	switch (alphatype)
+		//	{
+		//	case cfl::content::alphachannal:
+		//		return build_tinycolor(grender); //grender->gameimage_tinycolor;
+		//		break;
+		//	case cfl::content::atlas:
+		//		return build_atlas_tinycolor(grender); //grender->gameimage_tinycolor_atlas;
+		//		break;
+		//	case cfl::content::separate:
+		//		return build_separate_tinycolor(grender); //grender->gameimage_tinycolor_separate;
+		//		break;
+		//	default:
+		//		return build_tinycolor(grender);  //grender->gameimage_tinycolor;
+		//		break;
+		//	}
+		//}
+		//static void setProgramArgSp(const Graphic* graphic, 
+		//	render::GLProgram* program,
+		//	GameImageRender* grender, Texture2DRef* refTex2D,const GameImage* image)
+		//{
+		//	if (program == grender->gameimage_tinycolor_separate)
+		//	{
+		//		auto alphaLoc = program->getUniform("a_texture")->location;
+		//		//绑alpha纹理//
+		//		glActiveTexture(GL_TEXTURE1);
+		//		glBindTexture(GL_TEXTURE_2D, refTex2D->getSeparateTexture()->getHandle());
+		//		glUniform1i(alphaLoc, 1);
+		//	}
+		//}
 
 
 		GameImageRender::GameImageRender(render::RenderThreadLooper* looper, Graphic* g)
 			:IGameImageRender(RenderType::gameimage,looper,g),
-			gameimage_tinycolor(nullptr), 
+			/*gameimage_tinycolor(nullptr), 
 			gameimage_tinycolor_atlas(nullptr),
-			gameimage_tinycolor_separate(nullptr),
+			gameimage_tinycolor_separate(nullptr),*/
 			indexVbo(nullptr), 
-			vertVbo(nullptr)
+			vertVbo(nullptr),
+			createdPrograms()
 		{
 			vertBuffer = new VertBuffer<gameimagevert>();
 			vertBuffer->datasource = std::make_shared< VecDataSource<gameimagevert> >();
@@ -180,7 +181,7 @@ namespace cfl
 
 		GameImageRender::~GameImageRender()
 		{
-			if (gameimage_tinycolor)
+			/*if (gameimage_tinycolor)
 			{
 				CFLContext::getCurrentInstance()->glObjCollection->deleteProgram(gameimage_tinycolor);
 			}
@@ -191,7 +192,14 @@ namespace cfl
 			if (gameimage_tinycolor_atlas)
 			{
 				CFLContext::getCurrentInstance()->glObjCollection->deleteProgram(gameimage_tinycolor_atlas);
+			}*/
+
+			for (auto i = createdPrograms.begin(); i != createdPrograms.end(); i++)
+			{
+				auto prog = *i;
+				CFLContext::getCurrentInstance()->glObjCollection->deleteProgram(*prog);
 			}
+			
 
 			if (vertVbo)
 			{
@@ -360,11 +368,19 @@ namespace cfl
 			auto num = ed - st;
 			auto image = draws[st]->image;
 			
-			auto program= selectProgram(this, image->refTexture.get());
+			auto effect = draws[st]->effectData.effect;
+			auto dx = draws[st]->effectData.dx;
+			
+
+
+			auto program = effect->getProgram(
+				image->refTexture.get(),
+				createdPrograms
+				); //selectProgram(this, image->refTexture.get());
 			
 			auto voffset = vertAlloc.offset;
 			
-			auto fun = [this,num,voffset,image,program]()
+			auto fun = [this, num, voffset, image, program, effect,dx]()
 			{
 				
 				//混合模式
@@ -391,24 +407,31 @@ namespace cfl
 				
 				graphic->getGLProxy()->useProgram(program);
 				//glUseProgram(gameimage_tinycolor->getHandle());
-
+				
 				//各个着色器都有的属性
 				auto color = program->getAttribute("color")->location;
+				
+
 				auto positon = program->getAttribute("vPosition")->location;
 				auto uv = program->getAttribute("uv")->location;
-
+				
 				auto matrixidx = program->getUniform("vp_matrix")->location;
 				
 				auto samplerLoc = program->getUniform("s_texture")->location;
+				
 				//绑纹理//
 				glActiveTexture(GL_TEXTURE0);
+
+				
 				glBindTexture(GL_TEXTURE_2D, image->refTexture->getTexture2D()->getHandle());
+				
+				
 				glUniform1i(samplerLoc, 0);
 				
 				//各着色器特殊参数
-				setProgramArgSp(graphic,program, this, image->refTexture.get(),&image);
-
-
+				//setProgramArgSp(graphic,program, this, image->refTexture.get(),&image);
+				effect->setProgramArgs(graphic, program, image->refTexture.get(), &image);
+				
 
 				glBindBuffer(vertVbo->getTarget(), vertVbo->getHandle());
 
@@ -440,6 +463,13 @@ namespace cfl
 
 				glBindBuffer(vertVbo->getTarget(), 0);
 				glBindBuffer(indexVbo->getTarget(), 0);
+
+				if (dx)
+				{
+					dx(effect);
+				}
+
+				
 			};
 			
 
@@ -499,7 +529,10 @@ namespace cfl
 			float roation ,
 			const Color* color ,
 			FilterMode filter ,
-			BlendMode blendmode )
+			BlendMode blendmode,
+			IGameImageEffect* effect,
+			GameImageEffectDX effectDX
+			)
 		{
 
 			
@@ -546,6 +579,9 @@ namespace cfl
 			d->ty = ty;
 			d->filtermode = filter;
 			
+
+			d->effectData.dx = effectDX;
+			d->effectData.effect = effect;
 
 			if (!isAppend)
 			{
@@ -824,7 +860,7 @@ namespace cfl
 
 		}
 
-		//检查两个draw信息之间是否兼容
+		//检查两个draw信息之间是否不兼容
 		static bool checkchange(drawElement* d1, drawElement* d2)
 		{
 			if (d1->image.isNull() || d2->image.isNull())
@@ -839,6 +875,12 @@ namespace cfl
 			{
 				return true;
 			}
+			
+			if (!(d1->effectData.effect->checkCompatible(d2->effectData.effect)))
+			{
+				return true;
+			}
+			
 
 			auto ref1 = d1->image->refTexture;
 			auto ref2 = d2->image->refTexture;

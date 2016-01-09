@@ -70,6 +70,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compress.vb" />
+    <Compile Include="DCT.vb" />
     <Compile Include="FrmMain.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -120,6 +122,10 @@
     <ProjectReference Include="..\FreeTypeWapperLib\FreeTypeWapperLib.vcxproj">
       <Project>{9793aa75-7e2c-4981-8f46-b4123aefd50a}</Project>
       <Name>FreeTypeWapperLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HuffmanWapperLib\HuffmanWapperLib.vcxproj">
+      <Project>{1f91afc8-524c-4e01-99ab-c813f78764f7}</Project>
+      <Name>HuffmanWapperLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

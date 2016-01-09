@@ -2,7 +2,7 @@
 #define CFL_GAMEIMAGERENDER_H
 
 #include "GraphicRenders.h"
-
+#include "GameImageEffectNormal.h"
 
 namespace cfl
 {
@@ -29,7 +29,10 @@ namespace cfl
 				float roation = 0,
 				const Color* color = nullptr,
 				FilterMode filter = FilterMode::linear,
-				BlendMode blendmode = BlendMode::alphablend)=0;
+				BlendMode blendmode = BlendMode::alphablend,
+				IGameImageEffect* effect = GameImageEffectNormal::getInstance(),
+				GameImageEffectDX effectDX =nullptr
+				)=0;
 
 		};
 
@@ -67,19 +70,25 @@ namespace cfl
 				float roation = 0,
 				const Color* color = nullptr,
 				FilterMode filter = FilterMode::linear,
-				BlendMode blendmode = BlendMode::alphablend) override final;
+				BlendMode blendmode = BlendMode::alphablend,
+				IGameImageEffect* effect = GameImageEffectNormal::getInstance(),
+				GameImageEffectDX effectDX = nullptr
+				) override final;
 
 
-			//着色器(rgba+tinycolor)
-			render::GLProgram* gameimage_tinycolor;
-			//着色器(另一张透明纹理图+tinycolor)
-			render::GLProgram* gameimage_tinycolor_separate;
-			//着色器(atlas透明纹理)
-			render::GLProgram* gameimage_tinycolor_atlas;
+			////着色器(rgba+tinycolor)
+			//render::GLProgram* gameimage_tinycolor;
+			////着色器(另一张透明纹理图+tinycolor)
+			//render::GLProgram* gameimage_tinycolor_separate;
+			////着色器(atlas透明纹理)
+			//render::GLProgram* gameimage_tinycolor_atlas;
 
 
 			render::GLVBO* vertVbo;
 			render::GLVBO* indexVbo;
+
+
+			std::vector<render::GLProgram**> createdPrograms;
 
 		};
 

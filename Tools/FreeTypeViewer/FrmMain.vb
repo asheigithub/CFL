@@ -601,7 +601,11 @@
 
 
 
-                    Dim a As Double = smoothstep((0 - signed.minDis - (sdfwidth / 2 / outsize)) / (signed.maxDis - signed.minDis), (0 - signed.minDis + (sdfwidth / 2 / outsize)) / (signed.maxDis - signed.minDis), dist)
+                    'Dim a As Double = smoothstep((0 - signed.minDis - (sdfwidth / 2 / outsize)) / (signed.maxDis - signed.minDis), (0 - signed.minDis + (sdfwidth / 2 / outsize)) / (signed.maxDis - signed.minDis), dist)
+
+                    Dim a As Double = smoothstep((0.8 - (3 / outsize)),
+                                                 (0.8 + (3 / outsize)), dist)
+
 
                     'a = Math.Pow(a, 1.0 / 1.5)
                     'a = a * 1.414
@@ -786,7 +790,15 @@
 
         Next
 
-       
+        '**重调整min,max
+        min = -max * 4
+        'For i = 0 To 32 - 1
+        '    For j = 0 To 32 - 1
+        '        If signeddata(j, i) < min Then
+        '            signeddata(j, i) = min
+        '        End If
+        '    Next
+        'Next
 
 
 
@@ -843,6 +855,10 @@
 
                     Dim signed As Byte = Math.Max(0, Math.Min(255, (signeddata(j, i) - min) / (max - min) * 255))
                     signed = Math.Min(255, signed)
+
+                    'signed = signed >> 2
+                    'signed = signed << 2
+
                     resut.data(i, j) = signed
                 Else
                     resut.data(i, j) = 0
@@ -850,12 +866,28 @@
                     resut.minDis = -1024
                     resut.outlineSigned = 0
                 End If
-
-
             Next
         Next
 
 
+        Dim odata(1023) As Byte
+        For i = 0 To 32 - 1
+            For j = 0 To 32 - 1
+                odata(j * 32 + i) = resut.data(i, j)
+            Next
+        Next
+
+        'Dim huffman As New HuffmanWapperLib.Huffman()
+        'Dim cc = huffman.huffmanCompress(odata)
+
+
+        'Dim compressed = Compress.dxt1compress(resut.data)
+
+        'resut.data = Compress.uncompress(compressed)
+        'Dim undata = Compress.uncompress(compressed)
+
+
+        DCT.dctcovt(resut.data)
 
 
         Return resut
@@ -865,6 +897,7 @@
 
     End Function
 
+    
 
-
+    
 End Class

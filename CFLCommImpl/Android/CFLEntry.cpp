@@ -610,6 +610,9 @@ void android_main(struct android_app* state) {
 
 				context->taskPool->dispose();
 				LOGI("app exit");
+
+				__instance->__dispose();
+				__instance = nullptr;
 				return;
 			}
 		}

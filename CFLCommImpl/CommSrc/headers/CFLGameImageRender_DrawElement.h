@@ -104,6 +104,9 @@ namespace cfl
 			d->matrix = nullptr;
 			d->clip = nullptr;
 
+			d->effectData.dx = nullptr;
+			d->effectData.effect = nullptr;
+
 			++poolidx;
 			return d;
 		}
@@ -123,7 +126,6 @@ namespace cfl
 			while ( poolidx< elementPool.size() && !elementPool[poolidx]->image.isNull()  )
 			{
 				elementPool[poolidx]->image = empty;
-				elementPool[poolidx]->effectData.reset();
 				poolidx++;
 			}
 

@@ -150,7 +150,7 @@ namespace cfl
 			glGetProgramiv(progObj, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxUniformlen);
 
 			uniformName = new char[maxUniformlen];
-
+			
 			for (GLint i = 0; i < numUniforms; i++)
 			{
 				GLint size;
@@ -170,7 +170,7 @@ namespace cfl
 
 
 
-			delete uniformName;
+			delete[] uniformName;
 
 		}
 
@@ -187,6 +187,7 @@ namespace cfl
 
 			attribName = new char[maxAttribslen];
 
+			
 			for (GLint i = 0; i < numAttribs; i++)
 			{
 				GLint size;
@@ -206,7 +207,7 @@ namespace cfl
 
 
 
-			delete attribName;
+			delete[] attribName;
 
 		}
 	}

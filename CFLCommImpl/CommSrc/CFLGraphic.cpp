@@ -4,7 +4,8 @@
 
 #include "CFLEntry.h"
 #include "headers/FontTexture.h"
-
+#include "headers/GameImageEffectNormal.h"
+#include "headers/GameImageEffectSDF.h"
 
 
 namespace cfl
@@ -216,9 +217,7 @@ namespace cfl
 
 		}
 
-
-
-		void Graphic::drawGameImage(const GameImage& image,
+		static void doDrawGameImage(const GameImage& image,
 			float tx,
 			float ty,
 			const cfl::geom::Matrix3D* matrix,
@@ -228,7 +227,11 @@ namespace cfl
 			float roation,
 			const Color* color,
 			FilterMode filter,
-			BlendMode blendmode)
+			BlendMode blendmode,
+			Graphic::g* _g,
+			IGameImageEffect* effect = GameImageEffectNormal::getInstance(),
+			GameImageEffectDX effectDx = nullptr
+			)
 		{
 			if (scale <= 0)
 			{
@@ -258,7 +261,7 @@ namespace cfl
 
 			}
 
-			
+
 
 			if (image->clipWidth == 0 || image->clipHeight == 0)
 			{
@@ -277,12 +280,10 @@ namespace cfl
 			else if (!image->refTexture->isDone())
 			{
 				image->refTexture->upload();// true);
-				
+
 				//return;
 			}
 
-
-			
 
 			auto isappend = !(_g->activeRender(_g->gameimagerender));
 
@@ -291,12 +292,39 @@ namespace cfl
 				tx, ty,
 				matrix, opacity, clip,
 				scale, roation, color,
-				filter, blendmode
+				filter, blendmode, effect,effectDx
 				);
 
 
+		}
+
+
+		void Graphic::drawGameImage(const GameImage& image,
+			float tx,
+			float ty,
+			const cfl::geom::Matrix3D* matrix,
+			float opacity,
+			const cfl::geom::Rectangle* clip,
+			float scale,
+			float roation,
+			const Color* color,
+			FilterMode filter,
+			BlendMode blendmode)
+		{
+			doDrawGameImage(image, tx, ty, matrix, opacity, clip, scale, roation, color, filter, blendmode,_g);
+		}
+
+		void Graphic::drawString(const GameImage& image, float tx, float ty, float size)
+		{
 			
 
+			doDrawGameImage(image, tx, ty, nullptr, 1, nullptr, size/1024, 0, nullptr,
+				FilterMode::linear, BlendMode::alphablend, _g, GameImageEffectSDF::getInstance(size), EffectSDFDX);
+
+
+
 		}
+
+
 	}
 }

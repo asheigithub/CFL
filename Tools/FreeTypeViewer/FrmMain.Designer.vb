@@ -43,29 +43,29 @@ Partial Class FrmMain
         'PictureBox1
         '
         Me.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PictureBox1.Location = New System.Drawing.Point(203, 54)
-        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(2)
+        Me.PictureBox1.Location = New System.Drawing.Point(271, 68)
+        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(192, 205)
+        Me.PictureBox1.Size = New System.Drawing.Size(255, 256)
         Me.PictureBox1.TabIndex = 0
         Me.PictureBox1.TabStop = False
         '
         'lstCharCodes
         '
         Me.lstCharCodes.FormattingEnabled = True
-        Me.lstCharCodes.ItemHeight = 12
-        Me.lstCharCodes.Location = New System.Drawing.Point(20, 52)
-        Me.lstCharCodes.Margin = New System.Windows.Forms.Padding(2)
+        Me.lstCharCodes.ItemHeight = 15
+        Me.lstCharCodes.Location = New System.Drawing.Point(27, 65)
+        Me.lstCharCodes.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.lstCharCodes.Name = "lstCharCodes"
-        Me.lstCharCodes.Size = New System.Drawing.Size(150, 208)
+        Me.lstCharCodes.Size = New System.Drawing.Size(199, 259)
         Me.lstCharCodes.TabIndex = 1
         '
         'btnOpenFont
         '
-        Me.btnOpenFont.Location = New System.Drawing.Point(20, 19)
-        Me.btnOpenFont.Margin = New System.Windows.Forms.Padding(2)
+        Me.btnOpenFont.Location = New System.Drawing.Point(27, 24)
+        Me.btnOpenFont.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.btnOpenFont.Name = "btnOpenFont"
-        Me.btnOpenFont.Size = New System.Drawing.Size(56, 18)
+        Me.btnOpenFont.Size = New System.Drawing.Size(75, 22)
         Me.btnOpenFont.TabIndex = 2
         Me.btnOpenFont.Text = "打开字体"
         Me.btnOpenFont.UseVisualStyleBackColor = True
@@ -77,73 +77,76 @@ Partial Class FrmMain
         'StatusStrip1
         '
         Me.StatusStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 336)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 426)
         Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Padding = New System.Windows.Forms.Padding(1, 0, 10, 0)
-        Me.StatusStrip1.Size = New System.Drawing.Size(766, 22)
+        Me.StatusStrip1.Padding = New System.Windows.Forms.Padding(1, 0, 13, 0)
+        Me.StatusStrip1.Size = New System.Drawing.Size(1021, 22)
         Me.StatusStrip1.TabIndex = 3
         Me.StatusStrip1.Text = "StatusStrip1"
         '
         'btnExport
         '
-        Me.btnExport.Location = New System.Drawing.Point(203, 18)
-        Me.btnExport.Margin = New System.Windows.Forms.Padding(2)
+        Me.btnExport.Location = New System.Drawing.Point(271, 22)
+        Me.btnExport.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.btnExport.Name = "btnExport"
-        Me.btnExport.Size = New System.Drawing.Size(56, 18)
+        Me.btnExport.Size = New System.Drawing.Size(75, 22)
         Me.btnExport.TabIndex = 4
         Me.btnExport.Text = "输出"
         Me.btnExport.UseVisualStyleBackColor = True
         '
         'PictureBox3
         '
-        Me.PictureBox3.Location = New System.Drawing.Point(490, 18)
-        Me.PictureBox3.Margin = New System.Windows.Forms.Padding(2)
+        Me.PictureBox3.Location = New System.Drawing.Point(653, 22)
+        Me.PictureBox3.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.PictureBox3.Name = "PictureBox3"
-        Me.PictureBox3.Size = New System.Drawing.Size(264, 270)
+        Me.PictureBox3.Size = New System.Drawing.Size(352, 338)
         Me.PictureBox3.TabIndex = 6
         Me.PictureBox3.TabStop = False
         '
         'ProgressBar1
         '
-        Me.ProgressBar1.Location = New System.Drawing.Point(0, 320)
-        Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(2)
+        Me.ProgressBar1.Location = New System.Drawing.Point(0, 400)
+        Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(395, 18)
+        Me.ProgressBar1.Size = New System.Drawing.Size(527, 22)
         Me.ProgressBar1.TabIndex = 7
         '
         'btnPerView
         '
-        Me.btnPerView.Location = New System.Drawing.Point(410, 16)
+        Me.btnPerView.Location = New System.Drawing.Point(547, 20)
+        Me.btnPerView.Margin = New System.Windows.Forms.Padding(4)
         Me.btnPerView.Name = "btnPerView"
-        Me.btnPerView.Size = New System.Drawing.Size(75, 23)
+        Me.btnPerView.Size = New System.Drawing.Size(100, 29)
         Me.btnPerView.TabIndex = 8
         Me.btnPerView.Text = "渲染预览"
         Me.btnPerView.UseVisualStyleBackColor = True
         '
         'TrackBar1
         '
-        Me.TrackBar1.Location = New System.Drawing.Point(426, 54)
+        Me.TrackBar1.Location = New System.Drawing.Point(568, 68)
+        Me.TrackBar1.Margin = New System.Windows.Forms.Padding(4)
         Me.TrackBar1.Maximum = 128
         Me.TrackBar1.Minimum = 16
         Me.TrackBar1.Name = "TrackBar1"
         Me.TrackBar1.Orientation = System.Windows.Forms.Orientation.Vertical
-        Me.TrackBar1.Size = New System.Drawing.Size(45, 104)
+        Me.TrackBar1.Size = New System.Drawing.Size(56, 130)
         Me.TrackBar1.TabIndex = 9
         Me.TrackBar1.Value = 16
         '
         'PictureBox2
         '
-        Me.PictureBox2.Location = New System.Drawing.Point(412, 176)
+        Me.PictureBox2.Location = New System.Drawing.Point(549, 220)
+        Me.PictureBox2.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(59, 50)
+        Me.PictureBox2.Size = New System.Drawing.Size(79, 62)
         Me.PictureBox2.TabIndex = 10
         Me.PictureBox2.TabStop = False
         '
         'FrmMain
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(766, 358)
+        Me.ClientSize = New System.Drawing.Size(1021, 448)
         Me.Controls.Add(Me.PictureBox2)
         Me.Controls.Add(Me.TrackBar1)
         Me.Controls.Add(Me.btnPerView)
@@ -154,7 +157,7 @@ Partial Class FrmMain
         Me.Controls.Add(Me.btnOpenFont)
         Me.Controls.Add(Me.lstCharCodes)
         Me.Controls.Add(Me.PictureBox1)
-        Me.Margin = New System.Windows.Forms.Padding(2)
+        Me.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.Name = "FrmMain"
         Me.Text = "字体查看器"
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()

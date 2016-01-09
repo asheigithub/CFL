@@ -111,8 +111,8 @@ namespace cfl
 		//获取字符串的长度。注意，调用此方法将执行ucs4编码。返回的是ucs4编码后的字符串长。
 		size_t length() const;
 
-
-
+		//获取指定位置字符的ucs4(unicode32)编码
+		unsigned int charCodeAt(size_t index) const;
 
 
 

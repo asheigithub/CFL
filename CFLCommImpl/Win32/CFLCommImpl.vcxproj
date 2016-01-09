@@ -104,6 +104,8 @@
     <ClCompile Include="..\CommSrc\CFLVertexPointer.cpp" />
     <ClCompile Include="..\CommSrc\CFLGameImageRender.cpp" />
     <ClCompile Include="..\CommSrc\FontTexture.cpp" />
+    <ClCompile Include="..\CommSrc\GameImageEffectNormal.cpp" />
+    <ClCompile Include="..\CommSrc\GameImageEffectSDF.cpp" />
     <ClCompile Include="..\CommSrc\GLLineRender.cpp" />
     <ClCompile Include="..\CommSrc\HalfFloatGLLineRender.cpp" />
     <ClCompile Include="..\CommSrc\Texture2DRef.cpp" />
@@ -114,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CommSrc\buildinshaders\GameImage_Atlas_TinyColor.h" />
+    <ClInclude Include="..\CommSrc\buildinshaders\GameImage_SDF_Shader.h" />
     <ClInclude Include="..\CommSrc\buildinshaders\GameImage_Separate_TinyColor_Shader.h" />
     <ClInclude Include="..\CommSrc\buildinshaders\GameImage_TinyColor_Shader.h" />
     <ClInclude Include="..\CommSrc\buildinshaders\GLLineShader.h" />
@@ -123,6 +126,8 @@
     <ClInclude Include="..\CommSrc\headers\CFLVertBufferTemplate.h" />
     <ClInclude Include="..\CommSrc\headers\CFLLineRender.h" />
     <ClInclude Include="..\CommSrc\headers\FontTexture.h" />
+    <ClInclude Include="..\CommSrc\headers\GameImageEffectNormal.h" />
+    <ClInclude Include="..\CommSrc\headers\GameImageEffectSDF.h" />
     <ClInclude Include="..\CommSrc\headers\GBKTable.h" />
     <ClInclude Include="..\CommSrc\headers\GraphicRenders.h" />
     <ClInclude Include="..\CommSrc\headers\IGameImageEffect.h" />
