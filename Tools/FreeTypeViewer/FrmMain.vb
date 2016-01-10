@@ -603,8 +603,8 @@
 
                     'Dim a As Double = smoothstep((0 - signed.minDis - (sdfwidth / 2 / outsize)) / (signed.maxDis - signed.minDis), (0 - signed.minDis + (sdfwidth / 2 / outsize)) / (signed.maxDis - signed.minDis), dist)
 
-                    Dim a As Double = smoothstep((0.8 - (3 / outsize)),
-                                                 (0.8 + (3 / outsize)), dist)
+                    Dim a As Double = smoothstep((0.8 - (2 / outsize)),
+                                                 (0.8 + (2 / outsize)), dist)
 
 
                     'a = Math.Pow(a, 1.0 / 1.5)
@@ -877,8 +877,11 @@
             Next
         Next
 
-        'Dim huffman As New HuffmanWapperLib.Huffman()
-        'Dim cc = huffman.huffmanCompress(odata)
+        Dim huffman As New HuffmanWapperLib.Huffman()
+
+        Dim bytes = DCT.dctcovt88(resut.data)
+
+        Dim cc = huffman.huffmanCompress(bytes)
 
 
         'Dim compressed = Compress.dxt1compress(resut.data)
@@ -886,8 +889,8 @@
         'resut.data = Compress.uncompress(compressed)
         'Dim undata = Compress.uncompress(compressed)
 
+        'Dim ccc = huffman.huffmanCompress(Compress.toDataArray(resut.data))
 
-        DCT.dctcovt(resut.data)
 
 
         Return resut

@@ -1,4 +1,19 @@
 ﻿Public Class Compress
+
+    Public Shared Function toDataArray(data(,) As Byte) As Byte()
+        Using ms As New System.IO.MemoryStream()
+            For j = 0 To 31
+                For i = 0 To 31
+                    ms.WriteByte(data(i, j))
+                Next
+
+
+            Next
+            Return ms.ToArray()
+        End Using
+    End Function
+
+
     Public Shared Function dxt1compress(data(,) As Byte) As Byte()
 
         Using ms As New System.IO.MemoryStream()
