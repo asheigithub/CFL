@@ -8,6 +8,8 @@ namespace cfl
 	namespace content
 	{
 
+		unsigned int readBits(const unsigned char* bytes, size_t toreadbits, size_t& stbit);
+
 
 		//huffman±àÂëÑ¹ËõÍ·
 		struct HuffmanHeader

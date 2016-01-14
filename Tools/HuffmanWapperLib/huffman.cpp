@@ -493,7 +493,7 @@ namespace cfl
 			return file;
 		}
 
-		inline unsigned int readBits(const unsigned char* bytes, size_t toreadbits, size_t& stbit)
+		unsigned int readBits(const unsigned char* bytes, size_t toreadbits, size_t& stbit)
 		{
 			static unsigned char masktable[8] = {
 				0xff,
@@ -515,38 +515,6 @@ namespace cfl
 			size_t stbyteBit = stbit % 8;
 
 			size_t canreadBits = 8 - stbyteBit;
-
-
-
-			//
-			//memcpy(&buff, (bytes + stbit /8), sizeof(unsigned int));
-			////反转字节序
-			//union {
-			//	unsigned int i;
-			//	char c[4];
-			//} u, r;
-
-			//u.i = buff;
-			//r.c[0] = u.c[3];
-			//r.c[1] = u.c[2];
-			//r.c[2] = u.c[1];
-			//r.c[3] = u.c[0];
-
-			//buff=r.i;
-			//
-			//buff = buff & (0xffffffff >> (stbit % 8));
-
-			//
-
-			//
-			//auto rightshift = (32 - ((stbit % 8) +toreadbits) ) % 32;
-			//buff = buff >> (rightshift);
-
-			//stbit = stbit + toreadbits;
-
-			//return buff;
-
-
 
 			buff = (*(bytes + stbyte)) &   masktable[stbyteBit];;//擦除高位stbyteBit个位
 

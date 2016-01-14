@@ -34,10 +34,19 @@ Partial Class FrmMain
         Me.btnPerView = New System.Windows.Forms.Button()
         Me.TrackBar1 = New System.Windows.Forms.TrackBar()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.trackBarQuality = New System.Windows.Forms.TrackBar()
+        Me.lblInfo = New System.Windows.Forms.Label()
+        Me.PictureBox4 = New System.Windows.Forms.PictureBox()
+        Me.trackDis = New System.Windows.Forms.TrackBar()
+        Me.trackPow = New System.Windows.Forms.TrackBar()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.trackBarQuality, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.trackDis, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.trackPow, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'PictureBox1
@@ -80,7 +89,7 @@ Partial Class FrmMain
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 426)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Padding = New System.Windows.Forms.Padding(1, 0, 13, 0)
-        Me.StatusStrip1.Size = New System.Drawing.Size(1021, 22)
+        Me.StatusStrip1.Size = New System.Drawing.Size(1067, 22)
         Me.StatusStrip1.TabIndex = 3
         Me.StatusStrip1.Text = "StatusStrip1"
         '
@@ -96,7 +105,7 @@ Partial Class FrmMain
         '
         'PictureBox3
         '
-        Me.PictureBox3.Location = New System.Drawing.Point(653, 22)
+        Me.PictureBox3.Location = New System.Drawing.Point(688, 20)
         Me.PictureBox3.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.PictureBox3.Name = "PictureBox3"
         Me.PictureBox3.Size = New System.Drawing.Size(352, 338)
@@ -123,7 +132,7 @@ Partial Class FrmMain
         '
         'TrackBar1
         '
-        Me.TrackBar1.Location = New System.Drawing.Point(568, 68)
+        Me.TrackBar1.Location = New System.Drawing.Point(547, 68)
         Me.TrackBar1.Margin = New System.Windows.Forms.Padding(4)
         Me.TrackBar1.Maximum = 128
         Me.TrackBar1.Minimum = 16
@@ -135,18 +144,69 @@ Partial Class FrmMain
         '
         'PictureBox2
         '
-        Me.PictureBox2.Location = New System.Drawing.Point(549, 220)
+        Me.PictureBox2.Location = New System.Drawing.Point(547, 205)
         Me.PictureBox2.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(79, 62)
+        Me.PictureBox2.Size = New System.Drawing.Size(56, 62)
         Me.PictureBox2.TabIndex = 10
         Me.PictureBox2.TabStop = False
+        '
+        'trackBarQuality
+        '
+        Me.trackBarQuality.Location = New System.Drawing.Point(610, 68)
+        Me.trackBarQuality.Maximum = 20
+        Me.trackBarQuality.Name = "trackBarQuality"
+        Me.trackBarQuality.Orientation = System.Windows.Forms.Orientation.Vertical
+        Me.trackBarQuality.Size = New System.Drawing.Size(56, 130)
+        Me.trackBarQuality.TabIndex = 11
+        Me.trackBarQuality.Value = 1
+        '
+        'lblInfo
+        '
+        Me.lblInfo.AutoSize = True
+        Me.lblInfo.Location = New System.Drawing.Point(688, 364)
+        Me.lblInfo.Name = "lblInfo"
+        Me.lblInfo.Size = New System.Drawing.Size(0, 15)
+        Me.lblInfo.TabIndex = 12
+        '
+        'PictureBox4
+        '
+        Me.PictureBox4.Location = New System.Drawing.Point(609, 205)
+        Me.PictureBox4.Name = "PictureBox4"
+        Me.PictureBox4.Size = New System.Drawing.Size(57, 62)
+        Me.PictureBox4.TabIndex = 13
+        Me.PictureBox4.TabStop = False
+        '
+        'trackDis
+        '
+        Me.trackDis.Location = New System.Drawing.Point(541, 275)
+        Me.trackDis.Maximum = 2048
+        Me.trackDis.Minimum = 1
+        Me.trackDis.Name = "trackDis"
+        Me.trackDis.Size = New System.Drawing.Size(106, 56)
+        Me.trackDis.TabIndex = 14
+        Me.trackDis.Value = 1
+        '
+        'trackPow
+        '
+        Me.trackPow.Location = New System.Drawing.Point(541, 337)
+        Me.trackPow.Maximum = 100
+        Me.trackPow.Minimum = 1
+        Me.trackPow.Name = "trackPow"
+        Me.trackPow.Size = New System.Drawing.Size(106, 56)
+        Me.trackPow.TabIndex = 15
+        Me.trackPow.Value = 1
         '
         'FrmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1021, 448)
+        Me.ClientSize = New System.Drawing.Size(1067, 448)
+        Me.Controls.Add(Me.trackPow)
+        Me.Controls.Add(Me.trackDis)
+        Me.Controls.Add(Me.PictureBox4)
+        Me.Controls.Add(Me.lblInfo)
+        Me.Controls.Add(Me.trackBarQuality)
         Me.Controls.Add(Me.PictureBox2)
         Me.Controls.Add(Me.TrackBar1)
         Me.Controls.Add(Me.btnPerView)
@@ -159,11 +219,15 @@ Partial Class FrmMain
         Me.Controls.Add(Me.PictureBox1)
         Me.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.Name = "FrmMain"
-        Me.Text = "字体查看器"
+        Me.Text = "字体生成器"
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.trackBarQuality, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.trackDis, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.trackPow, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -180,5 +244,10 @@ Partial Class FrmMain
     Friend WithEvents btnPerView As System.Windows.Forms.Button
     Friend WithEvents TrackBar1 As System.Windows.Forms.TrackBar
     Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
+    Friend WithEvents trackBarQuality As System.Windows.Forms.TrackBar
+    Friend WithEvents lblInfo As System.Windows.Forms.Label
+    Friend WithEvents PictureBox4 As System.Windows.Forms.PictureBox
+    Friend WithEvents trackDis As System.Windows.Forms.TrackBar
+    Friend WithEvents trackPow As System.Windows.Forms.TrackBar
 
 End Class

@@ -83,6 +83,10 @@ namespace HuffmanWapperLib {
 	{
 	public:
 
+		static unsigned int readBits(array<unsigned char>^ bytes, size_t toreadbits, size_t stbit);
+
+
+
 		HuffmanFileWapper^ huffmanCompress(array<unsigned char>^ bytes);
 
 		array<unsigned char>^ unHuffmanCompress(array<unsigned char>^ bytes);

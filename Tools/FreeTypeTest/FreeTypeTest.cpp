@@ -405,7 +405,7 @@ void testhumman()
 	//—πÀı≤‚ ‘
 	std::ifstream fstm;
 	{
-		fstm.open("E:/CFL/Tools/FreeTypeViewer/SIMSUN.ff", std::ios::binary);
+		fstm.open("E:/CFL/Tools/FreeTypeViewer/ARIAL_DCT.ff", std::ios::binary);
 		fstm.seekg(0, std::ios::end);
 		auto end_pos = fstm.tellg();
 

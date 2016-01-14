@@ -6,6 +6,16 @@
 
 namespace HuffmanWapperLib {
 
+	unsigned int Huffman::readBits(array<unsigned char>^ bytes, size_t toreadbits, size_t stbit)
+	{
+		auto p = System::Runtime::InteropServices::Marshal::UnsafeAddrOfPinnedArrayElement(bytes, 0);
+
+		return cfl::content::readBits((unsigned char*)p.ToPointer(), toreadbits, stbit);
+
+	}
+
+
+
 	HuffmanFileWapper^ Huffman::huffmanCompress(array<unsigned char>^ bytes)
 	{
 		/*auto p = System::Runtime::InteropServices::Marshal::UnsafeAddrOfPinnedArrayElement(ret->bitmap, 0);

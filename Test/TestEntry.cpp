@@ -180,7 +180,7 @@ void up(CFLContext* context,float dettime)
 
 		font = graphic::font::Font::getFont("simsun");
 		gimg = font.getGlyphForRending(CFLString("¿Î").charCodeAt(0))->glyphImage;
-		context->graphic->drawString(gimg, 301, 10, 24);
+		context->graphic->drawString(gimg, 301, 10, math::sinf(((context->totalframes ) % 60)/60.0f*3.14)*256+24 );
 
 		/*if (tex2d != nullptr )
 		{

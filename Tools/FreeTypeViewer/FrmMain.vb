@@ -2,6 +2,10 @@
 
     Const SDFIMAGESIZE As Integer = 1024
 
+    Private Function getquality() As Double
+        Return Me.trackBarQuality.Value * 1.0 / Me.trackBarQuality.Maximum
+    End Function
+
     Dim freetype As cfl.tools.freetypewapper.FreeTypeWapperLib
     Private Sub btnOpenFont_Click(sender As Object, e As EventArgs) Handles btnOpenFont.Click
         'Me.OpenFileDialog1.InitialDirectory = System.Environment.GetEnvironmentVariable("windir") + "\fonts"
@@ -409,7 +413,7 @@
         Public outlineSigned As Double
 
         Public data(31, 31) As Byte
-
+        Public floatdata(31, 31) As Single
     End Class
 
 
@@ -432,7 +436,7 @@
 
                 trd.IsBackground = True
 
-                trd.Start(SaveFileDialog1.FileName)
+                trd.Start(New Tuple(Of String, Double)(SaveFileDialog1.FileName, getquality()))
 
                 Me.btnExport.Enabled = False
                 Me.btnOpenFont.Enabled = False
@@ -470,7 +474,11 @@
 
     End Sub
 
-    Private Sub _doExport(fn As String)
+    Private Sub _doExport(args As Tuple(Of String, Double))
+        Dim fn As String = args.Item1
+        Dim quality As Double = args.Item2
+
+
         Dim info = freetype.getInfo()
         Dim codes = freetype.getAllCharCodes()
 
@@ -547,17 +555,42 @@
         Next
 
 
-
+        Dim dctResultlist As New List(Of DCT.DCTResult)
         '**写入每个字符的图像***
         For index = 0 To sdflist.Count - 1
 
-            Dim sdf = sdflist(index)
-            For row = 0 To 31
-                For col = 0 To 31
-                    bw.Write(sdf.data(col, row))
-                Next
-            Next
+            Dim sdf = sdflist(index)           
+            'For row = 0 To 31
+            '    For col = 0 To 31
+            '        bw.Write(sdf.data(col, row))
+            '    Next
+            'Next
+
+            '量化后数据写入测试
+            'Dim towrite = DCT.dctcovt88(sdf.data, quality)
+            'bw.Write(towrite)
+            dctResultlist.Add(DCT.dctcovt88(sdf.floatdata, quality, 128, 0.2))
         Next
+
+        Dim huffman As New HuffmanWapperLib.Huffman()
+        Dim priority As List(Of HuffmanWapperLib.PriorityItemWapper) '频率表
+        Using p1bytes As New System.IO.MemoryStream()
+            For Each dr In dctResultlist
+                p1bytes.Write(dr.ZeroAndGroup, 0, dr.ZeroAndGroup.Length)
+            Next
+            priority = huffman.getPriority(p1bytes.ToArray())
+        End Using
+
+        For Each fontdct In dctResultlist
+            Dim fonthuffman = huffman.huffmanCompress(fontdct.ZeroAndGroup, priority, True)
+            bw.Write(CType(fonthuffman.data.Length, Short))
+            bw.Write(fonthuffman.data, 0, fonthuffman.data.Length)
+            bw.Write(fontdct.VLICode, 0, fontdct.VLICode.Length)
+
+        Next
+
+
+
 
         Dim bytes = fontdata.ToArray()
         fontdata.Dispose()
@@ -572,8 +605,51 @@
     Private Sub btnPerView_Click(sender As Object, e As EventArgs) Handles btnPerView.Click
         Dim sdfwidth As Double = SDFIMAGESIZE
 
+        
         If lstCharCodes.SelectedIndex >= 0 Then
             Dim signed = MakeAnSDF(CType(lstCharCodes.SelectedItem, item).code)
+
+            'Dim huffman As New HuffmanWapperLib.Huffman()
+
+            'Dim haardata = Haar.Haar(signed.data, getquality())
+            'Dim bytes As Byte()
+            'Using ms As New System.IO.MemoryStream
+            '    ms.Write(haardata.ZeroAndGroup, 0, haardata.ZeroAndGroup.Length)
+            '    ms.Write(haardata.VLICode, 0, haardata.VLICode.Length)
+            '    bytes = ms.ToArray()
+            'End Using
+
+            'Dim cc = huffman.huffmanCompress(bytes)
+            'lblInfo.Text = String.Format("压缩前{0},压缩后{1}字节", cc.header.uncompresslen, cc.header.compressedlen)
+
+            'Dim unhaar = Haar.UnHaarData(haardata, getquality())
+            'Dim compressedimage As New Bitmap(32, 32)
+            'For j = 0 To 31
+            '    For i = 0 To 31
+            '        Dim c = unhaar(i, j)
+            '        compressedimage.SetPixel(i, j, Color.FromArgb(255, c, c, c))
+            '    Next
+            'Next
+            'PictureBox4.Image = compressedimage
+
+            'signed.data = unhaar
+
+
+
+            
+            Dim huffman As New HuffmanWapperLib.Huffman()
+
+            Dim dctresult = DCT.dctcovt88(signed.floatdata, getquality(), Me.trackDis.Value, Me.trackPow.Value * 1.0 / Me.trackPow.Maximum)
+            Dim bytes As Byte()
+            Using ms As New System.IO.MemoryStream
+                ms.Write(dctresult.ZeroAndGroup, 0, dctresult.ZeroAndGroup.Length)
+                ms.Write(dctresult.VLICode, 0, dctresult.VLICode.Length)
+                bytes = ms.ToArray()
+            End Using
+
+            Dim cc = huffman.huffmanCompress(bytes)
+            lblInfo.Text = String.Format("压缩前{0},压缩后{1}字节", cc.header.uncompresslen, cc.header.compressedlen)
+
 
             Dim sdfimage As New Bitmap(32, 32)
             For j = 0 To 31
@@ -584,6 +660,18 @@
             Next
             PictureBox2.Image = sdfimage
 
+
+            Dim undct = DCT.UnDct(dctresult, getquality(), Me.trackDis.Value, Me.trackPow.Value * 1.0 / Me.trackPow.Maximum)
+            Dim compressedimage As New Bitmap(32, 32)
+            For j = 0 To 31
+                For i = 0 To 31
+                    Dim c = undct(i, j)
+                    compressedimage.SetPixel(i, j, Color.FromArgb(255, c, c, c))
+                Next
+            Next
+            PictureBox4.Image = compressedimage
+
+            signed.data = undct
 
 
 
@@ -603,8 +691,8 @@
 
                     'Dim a As Double = smoothstep((0 - signed.minDis - (sdfwidth / 2 / outsize)) / (signed.maxDis - signed.minDis), (0 - signed.minDis + (sdfwidth / 2 / outsize)) / (signed.maxDis - signed.minDis), dist)
 
-                    Dim a As Double = smoothstep((0.8 - (2 / outsize)),
-                                                 (0.8 + (2 / outsize)), dist)
+                    Dim a As Double = smoothstep((0.5 - (4 / outsize)),
+                                                 (0.5 + (4 / outsize)), dist)
 
 
                     'a = Math.Pow(a, 1.0 / 1.5)
@@ -791,7 +879,7 @@
         Next
 
         '**重调整min,max
-        min = -max * 4
+        min = -max '* 2
         'For i = 0 To 32 - 1
         '    For j = 0 To 32 - 1
         '        If signeddata(j, i) < min Then
@@ -859,8 +947,10 @@
                     'signed = signed >> 2
                     'signed = signed << 2
 
+                    resut.floatdata(i, j) = (signeddata(j, i) - min) / (max - min) * 255
                     resut.data(i, j) = signed
                 Else
+                    resut.floatdata(i, j) = 0
                     resut.data(i, j) = 0
                     resut.maxDis = 1024
                     resut.minDis = -1024
@@ -877,22 +967,7 @@
             Next
         Next
 
-        Dim huffman As New HuffmanWapperLib.Huffman()
-
-        Dim bytes = DCT.dctcovt88(resut.data)
-
-        Dim cc = huffman.huffmanCompress(bytes)
-
-
-        'Dim compressed = Compress.dxt1compress(resut.data)
-
-        'resut.data = Compress.uncompress(compressed)
-        'Dim undata = Compress.uncompress(compressed)
-
-        'Dim ccc = huffman.huffmanCompress(Compress.toDataArray(resut.data))
-
-
-
+        
         Return resut
 
 
