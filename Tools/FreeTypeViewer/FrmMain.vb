@@ -6,6 +6,20 @@
         Return Me.trackBarQuality.Value * 1.0 / Me.trackBarQuality.Maximum
     End Function
 
+    Private Sub btnViewFF_Click(sender As Object, e As EventArgs) Handles btnViewFF.Click
+        Me.OpenFileDialog2.FileName = ""
+        Me.OpenFileDialog2.Filter = "*.ff|*.ff"
+
+        If Me.OpenFileDialog2.ShowDialog() = Windows.Forms.DialogResult.OK Then
+
+            Dim frmff As New FrmFFView
+            frmff.fontdir = Me.OpenFileDialog2.FileName
+            frmff.ShowDialog(Me)
+
+        End If
+
+    End Sub
+
     Dim freetype As cfl.tools.freetypewapper.FreeTypeWapperLib
     Private Sub btnOpenFont_Click(sender As Object, e As EventArgs) Handles btnOpenFont.Click
         'Me.OpenFileDialog1.InitialDirectory = System.Environment.GetEnvironmentVariable("windir") + "\fonts"
@@ -327,7 +341,7 @@
 
 
 
-    Private Function sampler(u As Double, v As Double, tex As Byte(,)) As Color
+    Public Shared Function sampler(u As Double, v As Double, tex As Byte(,)) As Color
 
         '//double uu = tex.Width  * u;
         '// double vv = tex.Height * v;
@@ -386,12 +400,12 @@
 
     End Function
 
-    Private Function clamp(v As Double, min As Double, max As Double) As Double
+    Private Shared Function clamp(v As Double, min As Double, max As Double) As Double
 
         Return Math.Max(Math.Min(v, max), min)
     End Function
 
-    Private Function smoothstep(edge0 As Double, edge1 As Double, x As Double) As Single
+    Public Shared Function smoothstep(edge0 As Double, edge1 As Double, x As Double) As Single
         Dim t As Double   '/* Or genDType t; */
         t = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0)
         Return t * t * (3.0 - 2.0 * t)
@@ -436,7 +450,7 @@
 
                 trd.IsBackground = True
 
-                trd.Start(New Tuple(Of String, Double)(SaveFileDialog1.FileName, getquality()))
+                trd.Start(New Tuple(Of String, Double, Double)(SaveFileDialog1.FileName, getquality(), Me.trackDis.Value))
 
                 Me.btnExport.Enabled = False
                 Me.btnOpenFont.Enabled = False
@@ -474,10 +488,10 @@
 
     End Sub
 
-    Private Sub _doExport(args As Tuple(Of String, Double))
+    Private Sub _doExport(args As Tuple(Of String, Double, Double))
         Dim fn As String = args.Item1
         Dim quality As Double = args.Item2
-
+        Dim dis As Double = args.Item3
 
         Dim info = freetype.getInfo()
         Dim codes = freetype.getAllCharCodes()
@@ -522,6 +536,9 @@
         bw.Write(info.units_per_EM)
         bw.Write(SDFIMAGESIZE)
 
+        bw.Write(quality)
+        bw.Write(dis)
+
         bw.Write(sdflist.Count)
 
         '**写入kern表
@@ -532,6 +549,60 @@
             bw.Write(kernlist(index).Item3)
             bw.Write(kernlist(index).Item4)
         Next
+
+        Dim dctResultlist As New List(Of DCT.DCTResult)
+        '**生成每个字符的图像***
+        For index = 0 To sdflist.Count - 1
+
+            Dim sdf = sdflist(index)
+            'For row = 0 To 31
+            '    For col = 0 To 31
+            '        bw.Write(sdf.data(col, row))
+            '    Next
+            'Next
+
+            '量化后数据写入测试
+            'Dim towrite = DCT.dctcovt88(sdf.data, quality)
+            'bw.Write(towrite)
+            dctResultlist.Add(DCT.dctcovt88(sdf.floatdata, quality, dis))
+        Next
+
+        Dim huffman As New HuffmanWapperLib.Huffman()
+        '***先检查频率表****
+        Dim priority As List(Of HuffmanWapperLib.PriorityItemWapper) '频率表
+        Using p1bytes As New System.IO.MemoryStream()
+            For Each dr In dctResultlist
+                p1bytes.Write(dr.ZeroAndGroup, 0, dr.ZeroAndGroup.Length)
+            Next
+            priority = huffman.getPriority(p1bytes.ToArray())
+        End Using
+
+        '字形压缩数据列表
+        Dim fonthuffmandatas As New List(Of Byte())
+
+        For i = 0 To dctResultlist.Count - 1
+            Dim fontdct = dctResultlist(i)
+
+            Using fontms As New System.IO.MemoryStream()
+                Using fontbw As New System.IO.BinaryWriter(fontms)
+                    '第一个字形写入字符表
+
+                    Dim fonthuffman = huffman.huffmanCompress(fontdct.ZeroAndGroup, priority, IIf(i = 0, False, True))
+
+                    fontbw.Write(CType(fonthuffman.data.Length, Short))
+                    fontbw.Write(CType(fontdct.ZeroAndGroup.Length, Short))
+
+                    fontbw.Write(fonthuffman.data, 0, fonthuffman.data.Length)
+                    fontbw.Write(fontdct.VLICode, 0, fontdct.VLICode.Length)
+
+                    fonthuffmandatas.Add(fontms.ToArray())
+
+                End Using
+
+            End Using
+
+        Next
+
 
         '**写入每个字符的信息***
         For index = 0 To sdflist.Count - 1
@@ -549,46 +620,15 @@
             bw.Write(sdf.glyph.imagewidth)
             bw.Write(sdf.glyph.imageheight)
 
-            bw.Write(CType(sdf.minDis, Single))
-            bw.Write(CType(sdf.maxDis, Single))
+            'bw.Write(CType(sdf.minDis, Single))
+            'bw.Write(CType(sdf.maxDis, Single))
 
+            '压缩后的长度
+            bw.Write(CType(fonthuffmandatas(index).Length, Short))
         Next
-
-
-        Dim dctResultlist As New List(Of DCT.DCTResult)
-        '**写入每个字符的图像***
-        For index = 0 To sdflist.Count - 1
-
-            Dim sdf = sdflist(index)           
-            'For row = 0 To 31
-            '    For col = 0 To 31
-            '        bw.Write(sdf.data(col, row))
-            '    Next
-            'Next
-
-            '量化后数据写入测试
-            'Dim towrite = DCT.dctcovt88(sdf.data, quality)
-            'bw.Write(towrite)
-            dctResultlist.Add(DCT.dctcovt88(sdf.floatdata, quality, 128, 0.2))
+        For index = 0 To fonthuffmandatas.Count - 1
+            bw.Write(fonthuffmandatas(index), 0, fonthuffmandatas(index).Length)
         Next
-
-        Dim huffman As New HuffmanWapperLib.Huffman()
-        Dim priority As List(Of HuffmanWapperLib.PriorityItemWapper) '频率表
-        Using p1bytes As New System.IO.MemoryStream()
-            For Each dr In dctResultlist
-                p1bytes.Write(dr.ZeroAndGroup, 0, dr.ZeroAndGroup.Length)
-            Next
-            priority = huffman.getPriority(p1bytes.ToArray())
-        End Using
-
-        For Each fontdct In dctResultlist
-            Dim fonthuffman = huffman.huffmanCompress(fontdct.ZeroAndGroup, priority, True)
-            bw.Write(CType(fonthuffman.data.Length, Short))
-            bw.Write(fonthuffman.data, 0, fonthuffman.data.Length)
-            bw.Write(fontdct.VLICode, 0, fontdct.VLICode.Length)
-
-        Next
-
 
 
 
@@ -639,7 +679,7 @@
             
             Dim huffman As New HuffmanWapperLib.Huffman()
 
-            Dim dctresult = DCT.dctcovt88(signed.floatdata, getquality(), Me.trackDis.Value, Me.trackPow.Value * 1.0 / Me.trackPow.Maximum)
+            Dim dctresult = DCT.dctcovt88(signed.floatdata, getquality(), Me.trackDis.Value)
             Dim bytes As Byte()
             Using ms As New System.IO.MemoryStream
                 ms.Write(dctresult.ZeroAndGroup, 0, dctresult.ZeroAndGroup.Length)
@@ -661,7 +701,7 @@
             PictureBox2.Image = sdfimage
 
 
-            Dim undct = DCT.UnDct(dctresult, getquality(), Me.trackDis.Value, Me.trackPow.Value * 1.0 / Me.trackPow.Maximum)
+            Dim undct = DCT.UnDct(dctresult, getquality(), Me.trackDis.Value)
             Dim compressedimage As New Bitmap(32, 32)
             For j = 0 To 31
                 For i = 0 To 31
@@ -977,5 +1017,6 @@
 
     
 
+    
     
 End Class

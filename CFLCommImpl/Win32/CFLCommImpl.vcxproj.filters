@@ -168,6 +168,9 @@
     <ClCompile Include="..\CommSrc\GameImageEffectSDF.cpp">
       <Filter>源文件\graphic</Filter>
     </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLHuffman.cpp">
+      <Filter>源文件\content</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CFLMainLoopThread.h">
@@ -226,6 +229,12 @@
     </ClInclude>
     <ClInclude Include="..\CommSrc\buildinshaders\GameImage_SDF_Shader.h">
       <Filter>头文件\buildinshaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\headers\VLITable.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommSrc\headers\fidct.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

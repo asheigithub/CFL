@@ -7,6 +7,8 @@
 
 #include "CFLGameImage.h"
 
+#include "../Content/CFLHuffman.h"
+
 namespace cfl
 {
 	namespace graphic
@@ -30,6 +32,11 @@ namespace cfl
 				unsigned int glyphCount = 0;  //字形数量
 
 				bool useKerning = false;	//是否支持字距微调
+
+				double q=0;           //压缩参数Q
+				double d = 0;		  //压缩参数d
+
+				std::shared_ptr<cfl::content::huffman::DecodeInfo> decodeinfo=nullptr; //哈夫曼编码信息
 
 			};
 
@@ -65,14 +72,14 @@ namespace cfl
 				int imagewidth;  //图像大小
 				int imageheight; //图像大小
 
-				float minDis;    
-				float maxDis;
+				
 
 				size_t offset;//图形偏移量
+				size_t bytesize;//图形数据占用字节数
 
 				GameImage glyphImage; //引用的GameImage;
 
-
+				bool isfirstglyph = false; //是否是第一个字形(第一个字形里包含了编码信息头)
 			};
 
 

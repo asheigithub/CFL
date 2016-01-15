@@ -77,3 +77,5 @@ Test/Win32/TestEntry/CLR/TestEntry.log
 *.ttf
 Tools/FreeTypeViewer/HIMALAYA.ff
 *.ff
+*.a
+*.a

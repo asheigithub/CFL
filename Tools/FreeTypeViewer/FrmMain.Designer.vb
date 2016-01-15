@@ -39,6 +39,8 @@ Partial Class FrmMain
         Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.trackDis = New System.Windows.Forms.TrackBar()
         Me.trackPow = New System.Windows.Forms.TrackBar()
+        Me.btnViewFF = New System.Windows.Forms.Button()
+        Me.OpenFileDialog2 = New System.Windows.Forms.OpenFileDialog()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -154,12 +156,12 @@ Partial Class FrmMain
         'trackBarQuality
         '
         Me.trackBarQuality.Location = New System.Drawing.Point(610, 68)
-        Me.trackBarQuality.Maximum = 20
+        Me.trackBarQuality.Maximum = 100
         Me.trackBarQuality.Name = "trackBarQuality"
         Me.trackBarQuality.Orientation = System.Windows.Forms.Orientation.Vertical
         Me.trackBarQuality.Size = New System.Drawing.Size(56, 130)
         Me.trackBarQuality.TabIndex = 11
-        Me.trackBarQuality.Value = 1
+        Me.trackBarQuality.Value = 7
         '
         'lblInfo
         '
@@ -180,12 +182,12 @@ Partial Class FrmMain
         'trackDis
         '
         Me.trackDis.Location = New System.Drawing.Point(541, 275)
-        Me.trackDis.Maximum = 2048
+        Me.trackDis.Maximum = 30
         Me.trackDis.Minimum = 1
         Me.trackDis.Name = "trackDis"
         Me.trackDis.Size = New System.Drawing.Size(106, 56)
         Me.trackDis.TabIndex = 14
-        Me.trackDis.Value = 1
+        Me.trackDis.Value = 21
         '
         'trackPow
         '
@@ -196,12 +198,27 @@ Partial Class FrmMain
         Me.trackPow.Size = New System.Drawing.Size(106, 56)
         Me.trackPow.TabIndex = 15
         Me.trackPow.Value = 1
+        Me.trackPow.Visible = False
+        '
+        'btnViewFF
+        '
+        Me.btnViewFF.Location = New System.Drawing.Point(125, 23)
+        Me.btnViewFF.Name = "btnViewFF"
+        Me.btnViewFF.Size = New System.Drawing.Size(101, 23)
+        Me.btnViewFF.TabIndex = 16
+        Me.btnViewFF.Text = "已处理字体"
+        Me.btnViewFF.UseVisualStyleBackColor = True
+        '
+        'OpenFileDialog2
+        '
+        Me.OpenFileDialog2.FileName = "OpenFileDialog2"
         '
         'FrmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1067, 448)
+        Me.Controls.Add(Me.btnViewFF)
         Me.Controls.Add(Me.trackPow)
         Me.Controls.Add(Me.trackDis)
         Me.Controls.Add(Me.PictureBox4)
@@ -249,5 +266,7 @@ Partial Class FrmMain
     Friend WithEvents PictureBox4 As System.Windows.Forms.PictureBox
     Friend WithEvents trackDis As System.Windows.Forms.TrackBar
     Friend WithEvents trackPow As System.Windows.Forms.TrackBar
+    Friend WithEvents btnViewFF As System.Windows.Forms.Button
+    Friend WithEvents OpenFileDialog2 As System.Windows.Forms.OpenFileDialog
 
 End Class

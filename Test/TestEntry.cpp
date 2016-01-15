@@ -178,9 +178,9 @@ void up(CFLContext* context,float dettime)
 		gimg = font.getGlyph('c')->glyphImage;
 		context->graphic->drawString(gimg, 101, 10, 128);
 
-		font = graphic::font::Font::getFont("simsun");
-		gimg = font.getGlyphForRending(CFLString("¿Î").charCodeAt(0))->glyphImage;
-		context->graphic->drawString(gimg, 301, 10, math::sinf(((context->totalframes ) % 60)/60.0f*3.14)*256+24 );
+		//font = graphic::font::Font::getFont("simsun");
+		//gimg = font.getGlyphForRending(CFLString("¿Î").charCodeAt(0))->glyphImage;
+		//context->graphic->drawString(gimg, 301, 10, math::sinf(((context->totalframes ) % 60)/60.0f*3.14)*256+24 );
 
 		/*if (tex2d != nullptr )
 		{
@@ -411,7 +411,7 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 	LOGI("font init timer: %d\n", t);
 
 	tick = cfl::getTimer();
-	for (size_t i = 0; i < 1000; i++)
+	for (size_t i = 0x21; i < 1024; i++)
 	{
 		auto k = afont.queryKerning(32, 932);
 
@@ -425,13 +425,13 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 	afont.getGlyphForRending('S');
 	cfl::graphic::font::Font::regFont(afont, "arial");
 
-	tick = cfl::getTimer();
-	auto hfont = cfl::graphic::font::Font::init(cfl::file::DirType::asset, "fonts/SIMSUN.ff"); 
-	
-	cfl::graphic::font::Font::regFont(hfont, "simsun");
-	t = cfl::getTimer() - tick;
-	LOGI("simsun init timer: %d\n", t);
+	//tick = cfl::getTimer();
+	//auto hfont = cfl::graphic::font::Font::init(cfl::file::DirType::asset, "fonts/SIMSUN.ff"); 
 	//
+	//cfl::graphic::font::Font::regFont(hfont, "simsun");
+	//t = cfl::getTimer() - tick;
+	//LOGI("simsun init timer: %d\n", t);
+	
 	//render::textures::Texture2D texture;
 	//texture.initFromFile(file::DirType::asset, "testreadfile/ktx888.ktx",false);
 

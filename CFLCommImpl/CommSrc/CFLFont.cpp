@@ -9,6 +9,7 @@
 #include "Content/CFLMemoryDataSource.h"
 
 #include "headers/FontTexture.h"
+#include "Content/CFLHuffman.h"
 
 namespace cfl
 {
@@ -206,6 +207,10 @@ namespace cfl
 				info.units_per_EM = br.readInt();
 				info.makeImageSize = br.readInt();
 
+				info.q = br.readDouble();
+				info.d = br.readDouble();
+
+
 				info.glyphCount = br.readInt();
 					
 				int keringcount = br.readInt();
@@ -240,7 +245,7 @@ namespace cfl
 				ret.innerData->keringtable = keringmap;
 				ret.innerData->dir = dir;
 				ret.innerData->path = path;
-
+				
 
 				std::vector<Glyph*> glyphlist;
 
@@ -260,8 +265,7 @@ namespace cfl
 					g->imagewidth = br.readInt(); //bw.Write(sdf.glyph.imagewidth)
 					g->imageheight = br.readInt(); //bw.Write(sdf.glyph.imageheight)
 
-					g->minDis = br.readFloat(); //bw.Write(CType(sdf.minDis, Single))
-					g->maxDis = br.readFloat(); //bw.Write(CType(sdf.maxDis, Single))
+					g->bytesize = br.readShort();
 					
 					glyphlist.push_back(g);
 				}
@@ -272,14 +276,24 @@ namespace cfl
 				for (size_t i = 0; i < info.glyphCount; i++)
 				{
 					glyphlist[i]->offset = offset;
-					offset += 32*32;
+					offset += glyphlist[i]->bytesize; //32*32;
 
 					ret.innerData->glyphtable->emplace(std::make_pair(glyphlist[i]->charcode, glyphlist[i]));
 				}
 
+				glyphlist[0]->isfirstglyph = true;
 
+				//读取第一个字符的哈夫曼编码表.后面所有字符用的都是同一个哈夫曼编码表
+				auto huffmanLen = br.readShort();
+				auto zeroandgrouplen = br.readShort();
 
-
+				size_t outoffset = 0;
+				size_t uncompressedlen = 0;
+				ret.getInfo()->decodeinfo = cfl::content::huffman::loadDecodeInfo(fd.data + glyphlist[0]->offset + 4,
+					huffmanLen, outoffset, uncompressedlen
+					);
+				
+				
 				fd.close();
 
 				return ret;
@@ -328,8 +342,9 @@ namespace cfl
 				//br.readBytes( buff ,32 * 32);
 
 				//fd.close();
-
-				auto addresult = addGlyph(data->dir,data->path,glyph->offset);
+				
+				auto addresult = addGlyph(data->dir,data->path,glyph->offset, glyph->bytesize,
+					glyph->isfirstglyph,data->info.decodeinfo, data->info.q,data->info.d);
 				auto tref = addresult.texRef;
 
 				std::shared_ptr<GameImageData> gimgData = std::make_shared<GameImageData>();

@@ -39,11 +39,15 @@ namespace cfl
 			{
 				//vec4 texcolor = texture2D(s_texture, to_uv);
 				float dist = texture2D(s_texture, to_uv).x;
-				float alpha = smoothstep(0.8 - smoothrange, 0.8 + smoothrange, dist);
+				float alpha = smoothstep(0.5 - smoothrange, 0.5 + smoothrange, dist);
+
+
 
 				vec4 texcolor = vec4(1.0,1.0,1.0,alpha);
-
+				
 				gl_FragColor = texcolor *tiny_color;
+
+				
 
 			}
 		);

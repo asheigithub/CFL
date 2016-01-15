@@ -4,7 +4,7 @@
         Public VLICode As Byte()
     End Class
 
-    Public Shared Function UnDct(dct As DCTResult, quality As Double, dis As Double, pow As Double) As Byte(,)
+    Public Shared Function UnDct(dct As DCTResult, quality As Double, dis As Double) As Byte(,)
 
         '        Dim qt(,) As Single = {
         '    {16, 11, 10, 16, 24, 40, 51, 61},
@@ -29,7 +29,7 @@
         For index = 0 To 7
             For j = 0 To 7
                 'qt(index, j) = Math.Pow(1 + (index + 1 + j + 1 - 1) * quality * 1024, 1 / Math.PI)
-                qt(index, j) = Math.Pow(1 + Math.Sqrt(index * index + j * j) * 1.0 / 20 * dis, Math.Pow(quality, pow))
+                qt(index, j) = Math.Pow(1 + (index + 1 + j + 1 - 1), quality) * dis / 2
                 'qt(index, j) = Math.Pow(1 + (index + 1 + j + 1 - 1) * 1.0 / 20 * 347, Math.Pow(0.45, 0.9)) * quality * 5
 
             Next
@@ -45,7 +45,7 @@
 
             For c = 0 To 7
                 For r = 0 To 7
-                    data(c, r) *= Math.Round(qt(c, r))
+                    data(c, r) = Math.Max(Short.MinValue, Math.Min(Short.MaxValue, data(c, r) * qt(c, r)))
                 Next
             Next
 
@@ -412,7 +412,7 @@
 
     End Function
 
-    Public Shared Function dctcovt88(data(,) As Single, quality As Double, dis As Double, pow As Double) As DCTResult
+    Public Shared Function dctcovt88(data(,) As Single, quality As Double, dis As Double) As DCTResult
         '        Dim qt(,) As Single = {
         '    {16, 11, 10, 16, 24, 40, 51, 61},
         '    {12, 12, 14, 19, 26, 58, 60, 55},
@@ -454,7 +454,7 @@
         For index = 0 To 7
             For j = 0 To 7
                 'qt(index, j) = Math.Pow(1 + (index + 1 + j + 1 - 1) * quality * 1024, 1 / Math.PI)
-                qt(index, j) = Math.Pow(1 + Math.Sqrt(index * index + j * j) * 1.0 / 20 * dis, Math.Pow(quality, pow))
+                qt(index, j) = Math.Pow(1 + (index + 1 + j + 1 - 1), quality) * dis / 2
 
                 'qt(index, j) = Math.Pow(1 + (index + 1 + j + 1 - 1) * 1.0 / 20 * 347, Math.Pow(0.45, 0.9)) * quality * 5
             Next
@@ -482,7 +482,7 @@
 
                 For c = 0 To 7
                     For r = 0 To 7
-                        dctbyte(c, r) /= Math.Round(qt(c, r))
+                        dctbyte(c, r) = Math.Min(Short.MaxValue, Math.Max(Short.MinValue, Math.Round(dctbyte(c, r) / qt(c, r))))
 
                     Next
                 Next
@@ -590,7 +590,7 @@
 
                 Next
 
-                output(u, v) = Math.Round(ALPHA * BETA * tmp)
+                output(u, v) = Math.Min(Short.MaxValue, Math.Max(Short.MinValue, Math.Round(ALPHA * BETA * tmp)))
 
             Next
         Next

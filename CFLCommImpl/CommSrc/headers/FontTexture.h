@@ -5,6 +5,8 @@
 #include "Content/CFLMemoryDataSource.h"
 #include <memory>
 
+#include "Content/CFLHuffman.h"
+
 namespace cfl
 {
 	namespace graphic
@@ -37,11 +39,23 @@ namespace cfl
 
 			void updateFontTexture();
 
-			AddGlyphResut addGlyph( cfl::file::DirType fontdir,CFLString fontpath  ,size_t imagedataoffset );
+			AddGlyphResut addGlyph( cfl::file::DirType fontdir,CFLString fontpath  ,
+				size_t imagedataoffset, size_t datasize , bool isfirstglyph,
+				std::shared_ptr<cfl::content::huffman::DecodeInfo> decodeinfo ,double q,double d);
 
 			void clearFontTexture();
 
+			
+
+			void unDCT(unsigned char* result, char* zeroandgroup, 
+				unsigned int zeroandgrouplen, char* vlicode, 
+				unsigned int vlicodelen , double q,double d );
+			
+
+
 		}
+
+
 	}
 }
 

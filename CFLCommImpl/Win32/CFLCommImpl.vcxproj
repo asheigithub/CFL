@@ -90,6 +90,7 @@
     <ClCompile Include="..\CommSrc\CFLGLVBO.cpp" />
     <ClCompile Include="..\CommSrc\CFLGraphic.cpp" />
     <ClCompile Include="..\CommSrc\CFLHALF_FLOAT.cpp" />
+    <ClCompile Include="..\CommSrc\CFLHuffman.cpp" />
     <ClCompile Include="..\CommSrc\CFLKTX.cpp" />
     <ClCompile Include="..\CommSrc\CFLMath.cpp" />
     <ClCompile Include="..\CommSrc\CFLMemoryDataSource.cpp" />
@@ -125,6 +126,7 @@
     <ClInclude Include="..\CommSrc\headers\CFLGameImageRender_DrawElement.h" />
     <ClInclude Include="..\CommSrc\headers\CFLVertBufferTemplate.h" />
     <ClInclude Include="..\CommSrc\headers\CFLLineRender.h" />
+    <ClInclude Include="..\CommSrc\headers\fidct.h" />
     <ClInclude Include="..\CommSrc\headers\FontTexture.h" />
     <ClInclude Include="..\CommSrc\headers\GameImageEffectNormal.h" />
     <ClInclude Include="..\CommSrc\headers\GameImageEffectSDF.h" />
@@ -132,6 +134,7 @@
     <ClInclude Include="..\CommSrc\headers\GraphicRenders.h" />
     <ClInclude Include="..\CommSrc\headers\IGameImageEffect.h" />
     <ClInclude Include="..\CommSrc\headers\UnicodeTable.h" />
+    <ClInclude Include="..\CommSrc\headers\VLITable.h" />
     <ClInclude Include="..\CommSrc\xxhash\xxhash.h" />
     <ClInclude Include="src\CFLMainLoopThread.h" />
   </ItemGroup>

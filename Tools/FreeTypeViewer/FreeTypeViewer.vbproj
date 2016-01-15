@@ -73,6 +73,12 @@
     <Compile Include="BitWriter.vb" />
     <Compile Include="Compress.vb" />
     <Compile Include="DCT.vb" />
+    <Compile Include="FrmFFView.Designer.vb">
+      <DependentUpon>FrmFFView.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FrmFFView.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FrmMain.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -100,6 +106,9 @@
     <Compile Include="RLCCode.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FrmFFView.resx">
+      <DependentUpon>FrmFFView.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmMain.resx">
       <DependentUpon>FrmMain.vb</DependentUpon>
     </EmbeddedResource>

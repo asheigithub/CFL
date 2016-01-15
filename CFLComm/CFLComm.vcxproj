@@ -67,6 +67,7 @@
     <ClInclude Include="src\Content\CFLCTF.h" />
     <ClInclude Include="src\Content\CFLEndian.h" />
     <ClInclude Include="src\Content\CFLFileDataResource.h" />
+    <ClInclude Include="src\Content\CFLHuffman.h" />
     <ClInclude Include="src\Content\CFLKTX.h" />
     <ClInclude Include="src\Content\CFLMemoryDataSource.h" />
     <ClInclude Include="src\Geom\CFLGeom.h" />

@@ -81,6 +81,11 @@
     End Function
 
     Public Shared Function query(value As Short) As VLI
+        If value < -32767 Then
+            value = -32767
+        End If
+
+
         For Each r In table.rows
 
             If value >= r.low1 And value <= r.high1 Then
