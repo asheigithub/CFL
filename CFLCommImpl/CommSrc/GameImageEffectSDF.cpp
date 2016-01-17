@@ -72,9 +72,9 @@ namespace cfl
 		{
 			auto smoothrange = program->getUniform("smoothrange")->location;
 
-			auto ss= (outsize - 16.0f) / (128.0f - 16.0f) * (16-8.0f)+8.0f;
-			if (ss > 12){ ss = 12; }
-
+			auto ss= (outsize - 16.0f) / (128.0f - 16.0f) * (8.0f-8.0f)+8.0f;
+			if (ss > 18){ ss = 18; }
+			
 			glUniform1f(smoothrange, ss/outsize);
 
 			return;

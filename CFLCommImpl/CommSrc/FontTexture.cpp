@@ -112,7 +112,7 @@ namespace cfl
 				if (lastTexRef == nullptr || glyphidx == 0)
 				{
 					char* data = new char[FONT_TEXTURESIZE * FONT_TEXTURESIZE];
-
+					memset(data, 0, FONT_TEXTURESIZE*FONT_TEXTURESIZE);
 					lastdatasource = std::make_shared<content::MemoryDataSource>(
 						std::shared_ptr<char>(data, std::default_delete<char[]>()), FONT_TEXTURESIZE*FONT_TEXTURESIZE);
 
@@ -289,18 +289,22 @@ namespace cfl
 
 
 
+			typedef short zigslist[16][64];
 
-
-			std::vector<short*> loadfromDctResult(char* zeroandgroup,
+			zigslist* loadfromDctResult(char* zeroandgroup,
 				unsigned int zeroandgrouplen, char* vlicode,
 				unsigned int vlicodelen)
 			{
-				std::vector<short*> ret;
+				//std::vector<short*> ret;
+
+				static zigslist ret;
+
 				size_t p1idx = 0;
 				size_t p2idx = 0;
 				for (size_t toread = 0; toread < 16; toread++)
 				{
-					short* result = new short[64];
+					//short* result = new short[64];
+					short* result = ret[toread];
 					auto stbit = p1idx;
 
 					unsigned char bits[64]; unsigned int zerocount[64]; unsigned char rlcbitcount = 0;
@@ -360,9 +364,9 @@ namespace cfl
 					p2idx = stbit % 8 == 0 ? stbit : stbit + (8 - (stbit % 8)); 
 					
 					//	ret.Add(result.ToArray())
-					ret.push_back(result);
+					//ret.push_back(result);
 				}
-				return ret;
+				return &ret;
 			}
 
 
@@ -452,7 +456,10 @@ namespace cfl
 					}
 				}
 
-				auto zigs = loadfromDctResult(zeroandgroup, zeroandgrouplen, vlicode, vlicodelen);
+				
+				auto zigs = *loadfromDctResult(zeroandgroup, zeroandgrouplen, vlicode, vlicodelen);
+
+				
 
 				for (size_t k = 0; k < 16; k++)
 				{
@@ -462,7 +469,9 @@ namespace cfl
 					{
 						for (size_t r = 0; r < 8; r++)
 						{
-							data[c][r] =(short)( data[c][r] * qt[c][r]);
+							auto v = data[c][r] * qt[c][r];
+
+							data[c][r] =(short)( v);
 						}
 					}
 
@@ -496,7 +505,7 @@ namespace cfl
 						}
 					}
 
-					delete zigs[k];
+					//delete[] zigs[k];
 				}
 
 

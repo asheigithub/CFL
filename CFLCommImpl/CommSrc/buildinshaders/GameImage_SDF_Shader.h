@@ -41,10 +41,18 @@ namespace cfl
 				float dist = texture2D(s_texture, to_uv).x;
 				float alpha = smoothstep(0.5 - smoothrange, 0.5 + smoothrange, dist);
 
+				//dropshadow halo
+				//float halovalue = texture2D(s_texture, to_uv -0.0/512.0 ).x;
+				//vec4 halo = vec4(1.0, 0.0, 0.0, halovalue);
 
+				//float outline = smoothstep(0.1 - smoothrange, 0.9 + smoothrange, dist);
+				//vec4 halo = vec4(1.0, 0.0, 0.0, outline);
 
-				vec4 texcolor = vec4(1.0,1.0,1.0,alpha);
+				//vec4 texcolor = vec4(1.0,1.0,1.0,1.0) * alpha + (1.0-alpha) *halo ;
 				
+				vec4 texcolor = vec4(1.0, 1.0, 1.0, alpha);
+
+
 				gl_FragColor = texcolor *tiny_color;
 
 				

@@ -987,7 +987,7 @@
                     'signed = signed >> 2
                     'signed = signed << 2
 
-                    resut.floatdata(i, j) = (signeddata(j, i) - min) / (max - min) * 255
+                    resut.floatdata(i, j) = signed '(signeddata(j, i) - min) / (max - min) * 255
                     resut.data(i, j) = signed
                 Else
                     resut.floatdata(i, j) = 0

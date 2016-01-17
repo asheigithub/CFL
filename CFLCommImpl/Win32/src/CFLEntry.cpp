@@ -249,6 +249,9 @@ bool _winMsg(MSG& msg, bool& done)
 		if (msg.message == WM_QUIT)
 		{
 			done = 1;
+
+			closeGL(cfl::CFLContext::getCurrentInstance());
+
 			cfl::CFLContext::getCurrentInstance()->taskPool->dispose();
 			
 			cfl::CFLContext::getCurrentInstance()->glObjCollection->__notifyLostEGL(

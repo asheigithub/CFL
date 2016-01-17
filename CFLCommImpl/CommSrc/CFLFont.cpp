@@ -349,6 +349,25 @@ namespace cfl
 
 				std::shared_ptr<GameImageData> gimgData = std::make_shared<GameImageData>();
 				
+
+				auto detx = glyph->padleft / 2;
+				auto dety = glyph->padtop / 2;
+
+				glyph->padleft -= detx;
+				glyph->padtop -= dety;
+
+				glyph->clipwidth += detx * 2;  //data->info.makeImageSize;
+				glyph->clipheight += dety * 2; //data->info.makeImageSize;
+				if (glyph->padleft + glyph->clipwidth > data->info.makeImageSize)
+				{
+					glyph->clipwidth = data->info.makeImageSize - glyph->padleft;
+				}
+				if (glyph->padtop + glyph->clipheight > data->info.makeImageSize)
+				{
+					glyph->clipheight = data->info.makeImageSize - glyph->padtop;
+				}
+
+
 				gimgData->refTexture = std::shared_ptr<Texture2DRef>(tref);
 				gimgData->clipHeight = glyph->clipheight ;
 				gimgData->clipWidth = glyph->clipwidth ;
