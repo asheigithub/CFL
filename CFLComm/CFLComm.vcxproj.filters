@@ -159,6 +159,15 @@
     <ClInclude Include="src\Content\CFLHuffman.h">
       <Filter>头文件\Content</Filter>
     </ClInclude>
+    <ClInclude Include="src\Content\CFLStream.h">
+      <Filter>头文件\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CFLFileStream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Content\CFLMemoryStream.h">
+      <Filter>头文件\Content</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

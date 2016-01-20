@@ -6,7 +6,7 @@
 #include "CFLString.h"
 #include "CFLAsyncFunc.h"
 #include "Content/CFLBinaryCache.h"
-
+#include "Content/CFLMemoryStream.h"
 
 #include "Content/CFLBuildInData.h"
 #include "Content/CFLFileDataResource.h"
@@ -179,8 +179,23 @@ void up(CFLContext* context,float dettime)
 		context->graphic->drawString(gimg, 101, 10, 128);
 
 		font = graphic::font::Font::getFont("simsun");
-		gimg = font.getGlyphForRending(CFLString("激").charCodeAt(0))->glyphImage;
-		context->graphic->drawString(gimg, 301, 10,16 );
+		//gimg = font.getGlyphForRending(CFLString("偏").charCodeAt(0))->glyphImage;
+
+		static int hcharcode = CFLString("偏").charCodeAt(0);
+		auto rcode = std::rand() % (0x9f00 - 0x4e00) + 0x4e00;
+		g = font.getGlyphForRending(rcode);
+		if (g)
+		{
+			hcharcode = rcode;
+			gimg = g->glyphImage;
+			context->graphic->drawString(gimg, 301, 10, 32);
+		}
+		else
+		{
+			g = font.getGlyphForRending(hcharcode);
+			gimg = g->glyphImage;
+			context->graphic->drawString(gimg, 301, 10, 32);
+		}
 
 		/*if (tex2d != nullptr )
 		{
@@ -335,7 +350,50 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 
 	cfl::content::BinaryCache::getInstance()->setMaxCacheSize(1024 * 1024 * 2);
 
-	
+	{
+		//文件流测试
+		auto fs = cfl::file::getDirectory(file::DirType::asset)->getfile("testreadfile/file.txt")
+			->openFileStreamForRead();
+		
+		//内存流测试
+		/*auto fi = cfl::file::getDirectory(file::DirType::asset)->getfile("testreadfile/file.txt");
+		cfl::file::FileData fd;
+		fi->readFile(&fd);
+		std::shared_ptr<content::memoryStream> fs = std::make_shared<content::memoryStream>(fd.data,2, fd.filesize);
+*/
+		auto len = fs->getLength();
+		LOGI("fs getLength");
+		unsigned char* str = new unsigned char[len+1];
+		memset(str, 0, len + 1);
+
+		str[0] = 'a';
+		
+		fs->seek(0, cfl::content::seekOrigin::begin);
+
+		fs->read(str, 1, 2);
+		LOGI("fs read: %s \n", str);
+
+		fs->read(str, 0, 3);
+
+		fs->setPosition(6);
+		fs->read(str, 2, 100);
+
+
+		fs->setPosition(0);
+		auto byte = fs->readByte();
+		int count = 0;
+		while (byte >0)
+		{
+			str[count] = byte;
+
+			count++;
+			byte = fs->readByte();
+		}
+
+		LOGI("fs len: %d, fs info: %s \n", len,str);
+		
+	}
+
 	content::Content::initGameImageFromFile(file::DirType::asset, "testreadfile/commimage1/imgfilecfg.bin", "testreadfile/commimage1/");
 
 	CFLString img = "testreadfile/commimage1/装饰纹案3/装饰纹案-3_05.png";
@@ -405,11 +463,34 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 		}
 		LOGI("\n");
 	}
+
+
+	
+
+#ifdef ANDROID
+	{
+		auto fontfile = cfl::file::getDirectory(cfl::file::DirType::appStorage)->getfile("fonts/ARIAL.ff");
+		if (!fontfile->isExists())
+		{
+			auto src = cfl::file::getDirectory(cfl::file::DirType::asset)->getfile("fonts/ARIAL.ff");
+			cfl::file::FileData fd;
+			src->readFile(&fd);
+			fontfile->writeFile(fd.data, fd.filesize);
+			fd.close();
+		}
+	}
+	tick = cfl::getTimer();
+	auto afont = cfl::graphic::font::Font::init(cfl::file::DirType::appStorage, "fonts/ARIAL.ff");
+	t = cfl::getTimer() - tick;
+	LOGI("font init timer: %d\n", t);
+
+#else
 	tick = cfl::getTimer();
 	auto afont = cfl::graphic::font::Font::init(cfl::file::DirType::asset, "fonts/ARIAL.ff");
 	t = cfl::getTimer() - tick;
 	LOGI("font init timer: %d\n", t);
-
+#endif
+	
 	tick = cfl::getTimer();
 	for (size_t i = 0x21; i < 1024; i++)
 	{
@@ -425,12 +506,34 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 	afont.getGlyphForRending('S');
 	cfl::graphic::font::Font::regFont(afont, "arial");
 
+#ifdef ANDROID
+	{
+		auto fontfile = cfl::file::getDirectory(cfl::file::DirType::appStorage)->getfile("fonts/FONT_DCT.ff");
+		if (!fontfile->isExists())
+		{
+			auto src = cfl::file::getDirectory(cfl::file::DirType::asset)->getfile("fonts/FONT_DCT.ff");
+			cfl::file::FileData fd;
+			src->readFile(&fd);
+			fontfile->writeFile(fd.data, fd.filesize);
+			fd.close();
+		}
+	}
+
 	tick = cfl::getTimer();
-	auto hfont = cfl::graphic::font::Font::init(cfl::file::DirType::asset, "fonts/YH_LOW.ff"); 
-	
+	auto hfont = cfl::graphic::font::Font::init(cfl::file::DirType::appStorage, "fonts/FONT_DCT.ff"); 
 	cfl::graphic::font::Font::regFont(hfont, "simsun");
 	t = cfl::getTimer() - tick;
 	LOGI("simsun init timer: %d\n", t);
+#else
+
+	tick = cfl::getTimer();
+	auto hfont = cfl::graphic::font::Font::init(cfl::file::DirType::asset, "fonts/FONT_DCT.ff");
+	cfl::graphic::font::Font::regFont(hfont, "simsun");
+	t = cfl::getTimer() - tick;
+	LOGI("simsun init timer: %d\n", t);
+#endif
+
+	
 	
 	//render::textures::Texture2D texture;
 	//texture.initFromFile(file::DirType::asset, "testreadfile/ktx888.ktx",false);

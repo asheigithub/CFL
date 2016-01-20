@@ -1,5 +1,6 @@
 #include "Content/CFLBinaryReader.h"
 
+#include "Content/CFLMemoryStream.h"
 #include "CFLEntry.h"
 
 namespace cfl
@@ -9,35 +10,58 @@ namespace cfl
 		struct binaryreader_indata
 		{
 			binaryreader_indata(
-				const char* data,
+				/*const char* data,
 				size_t stpos,
-				size_t length,
-				const Endian endian
-				) :data(data),
+				size_t length,*/
+
+				const stream* basestream,
+
+				const Endian endian,
+
+				bool disposestream
+				) :
+				basestream( const_cast<stream*>( basestream)),
+				/*data(data),
 				stpos(stpos),
 				length(length),
 				
-				offset(0),
+				offset(0),*/
 				endian(endian),
-				machineEndian( CFLContext::getCurrentInstance()->capability->getEndian()  )
+				machineEndian( CFLContext::getCurrentInstance()->capability->getEndian()  ),
+
+				disposestream(disposestream)
 			{
 				
 			}
 
-			const char* data;
+			~binaryreader_indata()
+			{
+				if (disposestream)
+				{
+					basestream->dispose();
+					delete basestream;
+				}
+			}
+
+			/*const char* data;
 			size_t stpos;
-			size_t length;
+			size_t length;*/
+
+			stream* basestream;
 
 			Endian endian;
 
 			Endian machineEndian;
 
-			size_t offset;
+			bool disposestream;
 
-			const char* getptr()
+
+			//size_t offset;
+
+			/*const char* getptr()
 			{
 				return data + stpos+ offset;
-			}
+			}*/
 		};
 
 
@@ -45,10 +69,17 @@ namespace cfl
 			size_t stpos, 
 			size_t length, 
 			const Endian endian
-			) :indata(new binaryreader_indata(bytes,stpos,length,endian))
+			) :indata(new binaryreader_indata( new memoryStream(bytes,stpos,length), endian,true))
 		{
 			
 		}
+
+		BinaryReader::BinaryReader(const stream* stream, const Endian endian)
+			: indata( new binaryreader_indata( stream,endian,false) )
+		{
+			
+		}
+
 		BinaryReader::~BinaryReader()
 		{
 		}
@@ -64,24 +95,31 @@ namespace cfl
 
 		size_t BinaryReader::getPosition() const
 		{
-			return indata->offset;
+			//return indata->offset;
+			return indata->basestream->getPosition();
 		}
 		void BinaryReader::setPosition(size_t offset)
 		{
-			indata->offset = offset;
+			//indata->offset = offset;
+
+			indata->basestream->setPosition(offset);
+
 		}
 
 
 		char BinaryReader::readByte() const
 		{
-			if (indata->offset + 1 > indata->length)
+			if (indata->basestream->getPosition() + 1 > static_cast<long>( indata->basestream->getLength()))
 			{
 				throw new EOFException();
 			}
 
+			auto byte = indata->basestream->readByte();
+			CFL_ASSERT(byte >= 0);
+
+
 			char ret;
-			memcpy(&ret, indata->getptr(), 1);
-			indata->offset += 1;
+			memcpy(&ret, &byte, 1);
 
 			return ret;
 
@@ -89,26 +127,40 @@ namespace cfl
 
 		void BinaryReader::readBytes(char* dst, size_t len) const
 		{
-			if (indata->offset + len > indata->length)
+			/*if (indata->offset + len > indata->length)
 			{
 				throw new EOFException();
 			}
 
 			memcpy(dst, indata->getptr(), len);
-			indata->offset += len;
-		}
+			indata->offset += len;*/
 
-		int BinaryReader::readInt() const
-		{
-			if (indata->offset+4 > indata->length)
+			if (indata->basestream->getPosition() + static_cast<long>(len) > static_cast<long>(indata->basestream->getLength()))
 			{
 				throw new EOFException();
 			}
 
-			int ret;
-			memcpy(&ret, indata->getptr() , 4);
+			indata->basestream->read( reinterpret_cast<unsigned char*>( dst), 0, len);
+		}
 
-			indata->offset += 4;
+		int BinaryReader::readInt() const
+		{
+			/*if (indata->offset+4 > indata->length)
+			{
+				throw new EOFException();
+			}*/
+
+			if (indata->basestream->getPosition() + 4 > static_cast<long>(indata->basestream->getLength()))
+			{
+				throw new EOFException();
+			}
+			unsigned char buff[4];
+			indata->basestream->read(buff, 0, 4);
+
+			int ret;
+			memcpy(&ret, buff , 4);
+
+			//indata->offset += 4;
 
 			if (indata->endian != indata->machineEndian)
 			{
@@ -134,15 +186,22 @@ namespace cfl
 
 		unsigned int BinaryReader::readUnsignedInt() const
 		{
-			if (indata->offset + 4 > indata->length)
+			/*if (indata->offset + 4 > indata->length)
+			{
+				throw new EOFException();
+			}*/
+
+			if (indata->basestream->getPosition() + 4 > static_cast<long>(indata->basestream->getLength()))
 			{
 				throw new EOFException();
 			}
+			unsigned char buff[4];
+			indata->basestream->read(buff, 0, 4);
 
 			unsigned int ret;
-			memcpy(&ret, indata->getptr(), 4);
+			memcpy(&ret, buff, 4);
 
-			indata->offset += 4;
+			//indata->offset += 4;
 
 			if (indata->endian != indata->machineEndian)
 			{
@@ -168,15 +227,22 @@ namespace cfl
 
 		short BinaryReader::readShort() const
 		{
-			if (indata->offset + 2 > indata->length)
+			/*if (indata->offset + 2 > indata->length)
+			{
+				throw new EOFException();
+			}*/
+
+			if (indata->basestream->getPosition() + 2 > static_cast<long>(indata->basestream->getLength()))
 			{
 				throw new EOFException();
 			}
+			unsigned char buff[2];
+			indata->basestream->read(buff, 0, 2);
 
 			short ret;
-			memcpy(&ret, indata->getptr(), 2);
+			memcpy(&ret, buff, 2);
 
-			indata->offset += 2;
+			//indata->offset += 2;
 
 			if (indata->endian != indata->machineEndian)
 			{
@@ -198,18 +264,63 @@ namespace cfl
 			return ret;
 		}
 
-
-		float BinaryReader::readFloat() const
+		unsigned short BinaryReader::readUnsignedShort() const
 		{
-			if (indata->offset + 4 > indata->length)
+			/*if (indata->offset + 2 > indata->length)
+			{
+				throw new EOFException();
+			}*/
+
+			if (indata->basestream->getPosition() + 2 > static_cast<long>(indata->basestream->getLength()))
 			{
 				throw new EOFException();
 			}
+			unsigned char buff[2];
+			indata->basestream->read(buff, 0, 2);
+
+			unsigned short ret;
+			memcpy(&ret, buff, 2);
+
+			//indata->offset += 2;
+
+			if (indata->endian != indata->machineEndian)
+			{
+				//·´×ª×Ö½ÚÐò
+				union {
+					unsigned short i;
+					char c[2];
+				} u, r;
+
+				u.i = ret;
+				r.c[0] = u.c[1];
+				r.c[1] = u.c[0];
+
+
+				return r.i;
+			}
+
+
+			return ret;
+		}
+
+		float BinaryReader::readFloat() const
+		{
+			/*if (indata->offset + 4 > indata->length)
+			{
+				throw new EOFException();
+			}*/
+
+			if (indata->basestream->getPosition() + 4 > static_cast<long>(indata->basestream->getLength()))
+			{
+				throw new EOFException();
+			}
+			unsigned char buff[4];
+			indata->basestream->read(buff, 0, 4);
 
 			float ret;
-			memcpy(&ret, indata->getptr(), 4);
+			memcpy(&ret, buff, 4);
 
-			indata->offset += 4;
+			//indata->offset += 4;
 
 			if (indata->endian != indata->machineEndian)
 			{
@@ -234,15 +345,22 @@ namespace cfl
 
 		double BinaryReader::readDouble() const
 		{
-			if (indata->offset + 8 > indata->length)
+			/*if (indata->offset + 8 > indata->length)
+			{
+				throw new EOFException();
+			}*/
+
+			if (indata->basestream->getPosition() + 8 > static_cast<long>(indata->basestream->getLength()))
 			{
 				throw new EOFException();
 			}
+			unsigned char buff[8];
+			indata->basestream->read(buff, 0, 8);
 
 			double ret;
-			memcpy(&ret, indata->getptr(), 8);
+			memcpy(&ret, buff, 8);
 
-			indata->offset += 8;
+			//indata->offset += 8;
 
 			if (indata->endian != indata->machineEndian)
 			{
@@ -271,18 +389,24 @@ namespace cfl
 
 		CFLString BinaryReader::readUTFBytes(size_t length) const
 		{
-			if (indata->offset + length > indata->length)
+			/*if (indata->offset + length > indata->length)
+			{
+				throw new EOFException();
+			}*/
+
+			if (indata->basestream->getPosition() + static_cast<long>(length) > static_cast<long>(indata->basestream->getLength()))
 			{
 				throw new EOFException();
 			}
+			
 
 			char* buff = new char[length + 1];
 
-			memcpy(buff, indata->getptr(), length);
+			//memcpy(buff, indata->getptr(), length);
 			buff[length] = 0;
+			indata->basestream->read( reinterpret_cast<unsigned char*>( buff), 0, length);
 
-
-			indata->offset += length;
+			//indata->offset += length;
 
 			CFLString ret= CFLString(buff,text::Encoding::utf8);
 

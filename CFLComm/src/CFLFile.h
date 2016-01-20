@@ -15,6 +15,8 @@
 #include <memory>
 //#include "CFLAsyncFunc.h"
 
+#include "CFLFileStream.h"
+
 namespace cfl
 {
 	namespace file
@@ -179,8 +181,11 @@ namespace cfl
 			*/
 			size_t writeFile(const char* buff, size_t count);
 
-			
-
+			/*
+			打开文件流
+			如果文件打开失败则返回nullptr
+			*/
+			std::shared_ptr<fileStream> openFileStreamForRead();
 
 		private:
 			FileInfo(const DirectoryInfo* dir, const char* file);

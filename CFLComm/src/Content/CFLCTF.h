@@ -58,7 +58,7 @@ namespace cfl
 
 			 unsigned int endiness = 0x04030201;
 
-			 ALIGN(4) unsigned int  version = 110;
+			 unsigned int  version = 110;
 
 			 CTFContentType contentType;
 			 CTFAlphaType   alphaType;		//如何处理透明

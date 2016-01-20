@@ -10,6 +10,9 @@
 #include "headers/VLITable.h"
 
 #include "headers/fidct.h"
+#include "CFLFileStream.h"
+
+#include "CFLEntry.h"
 
 namespace cfl
 {
@@ -177,12 +180,20 @@ namespace cfl
 					}
 					else
 					{
-						return a->fontpath.getHashCode() < b->fontpath.getHashCode();
+						if (a->fontpath != b->fontpath)
+						{
+							return a->fontpath.getHashCode() < b->fontpath.getHashCode();
+						}
+						else
+						{
+							return a->imagedataoffset < b->imagedataoffset;
+						}
+						
 					}
 				});
-
-
-				cfl::file::FileData fd;
+				  
+				std::shared_ptr<cfl::file::fileStream> fs;
+				//cfl::file::FileData fd;
 				cfl::file::DirType lastdir = cfl::file::DirType::asset;
 				CFLString lastpath;
 
@@ -199,19 +210,26 @@ namespace cfl
 						lastdir = toInitList[i]->fontdir;
 						lastpath = toInitList[i]->fontpath;
 
-						fd.close();
+						//fd.close();
+						if (fs !=nullptr)
+						{
+							fs->dispose();
+						}
 
 						auto directony = cfl::file::getDirectory(toInitList[i]->fontdir);
 						auto file = directony->getfile(toInitList[i]->fontpath.c_str());
-						file->readFile(&fd);
+						//file->readFile(&fd);
+						fs = file->openFileStreamForRead();
+
 					}
 
 					content::BinaryReader br =
-						content::BinaryReader(fd.data, 0, fd.filesize, cfl::content::little_endian);//必然是小端
+						content::BinaryReader(fs.get(), cfl::content::little_endian);//必然是小端
 
 					
 					br.setPosition(toInitList[i]->imagedataoffset);
 
+					
 					//解码字形数据
 					auto huffmanLen = br.readShort();
 					auto zeroandgrouplen = br.readShort();
@@ -220,19 +238,32 @@ namespace cfl
 
 					if (toInitList[i]->isfirstglyph)
 					{
-						zeroandgroup=cfl::content::huffman::unHuffmanCompress(fd.data + br.getPosition(), huffmanLen);
+						char huffmanbuff[64 * 16];
+						br.readBytes(huffmanbuff, huffmanLen);
+						zeroandgroup = cfl::content::huffman::unHuffmanCompress(huffmanbuff, huffmanLen);
+						//zeroandgroup=cfl::content::huffman::unHuffmanCompress(fd.data + br.getPosition(), huffmanLen);
 					}
 					else
 					{
+						char huffmanbuff[64 * 16];
+						br.readBytes(huffmanbuff, huffmanLen);
+
 						zeroandgroup.dataSize = zeroandgrouplen;
 						zeroandgroup.data = cfl::content::huffman::doUnCompress(zeroandgrouplen,
 							toInitList[i]->decodeinfo->encodeTableRows,
 							toInitList[i]->decodeinfo->encoderows,
-							toInitList[i]->decodeinfo->symboltable, reinterpret_cast<unsigned char*>( fd.data) + br.getPosition());
+							toInitList[i]->decodeinfo->symboltable,
+							//reinterpret_cast<unsigned char*>( fd.data) + br.getPosition());
+							reinterpret_cast<unsigned char*>(huffmanbuff));
+
 					}
 
 					size_t vlisize = toInitList[i]->datasize - huffmanLen - 4;//sizeof(huffmanLen)+sizeof(zeroandgrouplen)
-					char* vlicode = fd.data + br.getPosition() + huffmanLen;
+					//char* vlicode = fd.data + br.getPosition() + huffmanLen;
+					char vlicode[64 * 16];
+					br.readBytes(vlicode, vlisize);
+
+					
 
 					//br.readBytes( buff ,32 * 32);
 					char buff[32 * 32];
@@ -254,8 +285,12 @@ namespace cfl
 
 				}
 
-				fd.close();
-
+				//fd.close();
+				if (fs != nullptr)
+				{
+					fs->dispose();
+				}
+				
 				toInitList.clear();
 
 				for (auto i = toloadmap.begin(); i != toloadmap.end(); i++)

@@ -13,7 +13,7 @@
 
 
 #include "Content/CFLHuffman.h"
-
+#include "Content/CFLBinaryReader.h"
 
 namespace cfl
 {
@@ -711,7 +711,16 @@ namespace cfl
 				}
 
 				HuffmanHeader header;
-				memcpy(&header, bytes, sizeof(HuffmanHeader));
+				content::BinaryReader br = content::BinaryReader(bytes, 0, len, content::little_endian);
+				auto endiness = br.readUnsignedInt();
+				if (endiness != 0x01020304)
+				{
+					br.setEndian(content::big_endian);
+				}
+				header.uncompresslen = br.readUnsignedInt();
+				header.symbolsCount = br.readUnsignedShort();
+				header.encodeTableRows = br.readUnsignedShort();
+				header.compressedlen = br.readUnsignedInt();
 
 
 				uncompressedlen = header.uncompresslen;

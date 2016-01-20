@@ -95,13 +95,19 @@ namespace cfl
 		//每帧渲染队列交换前被调用
 		void Graphic::onBeforRenderQueueSwap(CFLContext* ctx)
 		{
+			//动态更新需要在交换render前完成，否则本帧无法生效
+			
+			font::updateFontTexture();
+			
+			
+
 			_g->totalframes = ctx->totalframes;
 			_g->activeRender(nullptr);
 
 			_g->gllinerender->swapRenderQueue(ctx);
 			_g->gameimagerender->swapRenderQueue(ctx);
 
-			font::updateFontTexture();
+			
 
 		}
 

@@ -171,6 +171,12 @@
     <ClCompile Include="..\CommSrc\CFLHuffman.cpp">
       <Filter>源文件\content</Filter>
     </ClCompile>
+    <ClCompile Include="src\CFLFileStream.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommSrc\CFLMemoryStream.cpp">
+      <Filter>源文件\content</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CFLMainLoopThread.h">

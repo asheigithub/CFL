@@ -91,6 +91,7 @@ cmd /C ndk-build clean</NMakeCleanCommandLine>
     <ClCompile Include="CFLAndroidMainLoopThread.cpp" />
     <ClCompile Include="CFLEntry.cpp" />
     <ClCompile Include="CFLFile.cpp" />
+    <ClCompile Include="CFLFileStream.cpp" />
     <ClCompile Include="jnitool.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -187,14 +187,14 @@ namespace cfl
 			Font Font::init(cfl::file::DirType dir, CFLString path)
 			{
 				auto directony = cfl::file::getDirectory(dir);
-				auto file = directony->getfile(path.c_str());
-				
-				cfl::file::FileData fd;
-				file->readFile(&fd);
+				auto file = directony->getfile(path.c_str())->openFileStreamForRead();
+
+				//cfl::file::FileData fd;
+				//file->readFile(&fd);
 
 				//读取字体文件信息
 				content::BinaryReader br=
-					content::BinaryReader( fd.data,0,fd.filesize, cfl::content::little_endian );//必然是小端
+					content::BinaryReader(file.get(), cfl::content::little_endian);// fd.data, 0, fd.filesize, cfl::content::little_endian );//必然是小端
 
 				FontInfo info;
 				info.ascender = br.readShort();
@@ -289,12 +289,19 @@ namespace cfl
 
 				size_t outoffset = 0;
 				size_t uncompressedlen = 0;
-				ret.getInfo()->decodeinfo = cfl::content::huffman::loadDecodeInfo(fd.data + glyphlist[0]->offset + 4,
+
+				char* huffbuff = new char[huffmanLen];
+
+				br.readBytes(huffbuff, huffmanLen);
+
+				ret.getInfo()->decodeinfo = cfl::content::huffman::loadDecodeInfo(huffbuff,
 					huffmanLen, outoffset, uncompressedlen
 					);
 				
-				
-				fd.close();
+				delete[] huffbuff;
+
+				file->dispose();
+				//fd.close();
 
 				return ret;
 

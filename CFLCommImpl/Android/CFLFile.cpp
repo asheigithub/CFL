@@ -119,7 +119,7 @@ namespace cfl
 
 				ANativeActivity* pActivity = state->activity;
 
-
+				
 				auto jnia = attachCurrentThread(state);
 				if (!jnia.success)
 				{
@@ -132,26 +132,36 @@ namespace cfl
 
 				// 通过Activity里面getPackageCodePath的方法获取程序运行路径，通过JNI用C++搞JAVA
 				JNIEnv* env = jnia.env;
-				jclass clazz = env->GetObjectClass(pActivity->clazz);
-				{
-					jmethodID methodID = env->GetMethodID(clazz, "getFilesDir", "()Ljava/io/File;");
 
-					jobject jfile = env->CallObjectMethod(pActivity->clazz, methodID);
+				const char* internalDataPath = app->activity->internalDataPath;
+				if (internalDataPath == nullptr)
+				{					
+					jclass clazz = env->GetObjectClass(pActivity->clazz);
+					{
+						jmethodID methodID = env->GetMethodID(clazz, "getFilesDir", "()Ljava/io/File;");
 
-					jclass jfileclass = env->GetObjectClass(jfile);
-					jmethodID jfilepath = env->GetMethodID(jfileclass, "getPath", "()Ljava/lang/String;");
-					jobject result = env->CallObjectMethod(jfile, jfilepath);
+						jobject jfile = env->CallObjectMethod(pActivity->clazz, methodID);
 
-					jboolean isCopy;
-					auto m_pStrBuf = env->GetStringUTFChars((jstring)result, &isCopy);
-					auto m_nStrLen = env->GetStringLength((jstring)result);
-					//__android_log_print(LOGINFO_INFO, "android_main", "Code Path =%d %s", strPath.m_nStrLen, strPath.m_pStrBuf);
-					
-					
-					DirectoryInfo::appStoragePath = m_pStrBuf;
-					env->ReleaseStringUTFChars((jstring)result, m_pStrBuf);
+						jclass jfileclass = env->GetObjectClass(jfile);
+						jmethodID jfilepath = env->GetMethodID(jfileclass, "getAbsolutePath", "()Ljava/lang/String;");
+						jobject result = env->CallObjectMethod(jfile, jfilepath);
 
+						jboolean isCopy;
+						auto m_pStrBuf = env->GetStringUTFChars((jstring)result, &isCopy);
+						auto m_nStrLen = env->GetStringLength((jstring)result);
+						//__android_log_print(LOGINFO_INFO, "android_main", "Code Path =%d %s", strPath.m_nStrLen, strPath.m_pStrBuf);
+
+
+						DirectoryInfo::appStoragePath = m_pStrBuf;
+						env->ReleaseStringUTFChars((jstring)result, m_pStrBuf);
+
+					}
 				}
+				else
+				{
+					DirectoryInfo::appStoragePath = internalDataPath;
+				}
+
 				{
 
 
@@ -472,6 +482,49 @@ namespace cfl
 
 		}
 
+		std::shared_ptr<fileStream> FileInfo::openFileStreamForRead()
+		{
+			if (basedir->_DirType == DirType::asset)
+			{
+				//return _readfromAssetManager(filepath.c_str(), buff);
+				//return nullptr;
+
+				
+				if (application == nullptr)
+				{
+					trace_e("CFLfile::openFileStreamForRead android_app not inited");
+					return nullptr;
+				}
+				
+				auto asset = AAssetManager_open(application->activity->assetManager, filepath.c_str(), AASSET_MODE_STREAMING);
+				if (asset != nullptr)
+				{
+					std::tuple<android_app*, bool>* extargs = new std::tuple<android_app*, bool>(application, true);
+					return std::make_shared<fileStream>(asset, extargs);
+				}
+				else
+				{
+					trace_e("CFLfile::openFileStreamForRead file not exist:%s", filepath.c_str());
+					return nullptr;
+				}
+
+			}
+			else
+			{
+				FILE *fp = fopen(filepath.c_str(), "rb");
+				if (fp == nullptr)
+				{
+					return nullptr;
+				}
+
+				std::tuple<android_app*, bool>* extargs = new std::tuple<android_app*, bool>(application, false);
+				return std::make_shared<fileStream>(fp, extargs);
+
+			}
+
+		}
+
+
 		static FileData* _readfileasync(FileInfo file, FileData* buff, FileInfo::readFileProgress progress)
 		{
 			do
@@ -657,7 +710,9 @@ namespace cfl
 			}
 
 
-			char test[CFL_MAXFILEPATH] = { '\0' };
+			char test[CFL_MAXFILEPATH];// = { '\0' };
+			memset(test, '\0', CFL_MAXFILEPATH);
+
 			auto begin = filepath.begin();
 			auto end = filepath.end();
 
@@ -680,7 +735,7 @@ namespace cfl
 					auto dir = opendir(test);
 					if (dir == nullptr)
 					{
-						auto mk = mkdir(test, S_IRUSR | S_IWUSR);
+						auto mk = mkdir(test, 0770);
 						if (mk < 0)
 						{
 							trace_e("writeFile makedir error %s", test);
@@ -691,6 +746,7 @@ namespace cfl
 					else
 					{
 						closedir(dir);
+
 					}
 
 					
@@ -698,13 +754,13 @@ namespace cfl
 				pos++;
 				begin++;
 			}
-
+			
 			
 			FILE* wf;
 			wf = fopen(test, "wb");
 			if (wf ==nullptr)
 			{
-				trace_e("writeFile openfile error %s", test);
+				trace_e("writeFile openfile error %s,errno: %d", test,errno);
 				return 0;
 			}
 

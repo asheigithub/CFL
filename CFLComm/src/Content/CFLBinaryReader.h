@@ -5,6 +5,7 @@
 #include "../CFLString.h"
 #include <memory>
 #include "CFLEndian.h"
+#include "CFLStream.h"
 
 namespace cfl
 {
@@ -32,6 +33,7 @@ namespace cfl
 		{
 		public:
 			BinaryReader(const char* bytes,size_t stpos,size_t length,const Endian endian=Endian::big_endian);
+			BinaryReader(const stream* stream, const Endian endian = Endian::big_endian);
 			~BinaryReader();
 			
 			Endian getEndian() const;

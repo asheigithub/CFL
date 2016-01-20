@@ -276,7 +276,17 @@ namespace cfl
 
 		}
 
-		
+		std::shared_ptr<fileStream> FileInfo::openFileStreamForRead()
+		{
+			FILE *fp;
+			auto ok = fopen_s(&fp, filepath.c_str(), "rb");
+			if (ok != 0)
+			{
+				return nullptr;
+			}
+
+			return std::make_shared<fileStream>(fp,nullptr);
+		}
 
 		
 

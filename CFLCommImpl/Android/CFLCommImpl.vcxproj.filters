@@ -64,6 +64,9 @@
     <ClCompile Include="..\CommSrc\CFLDrawCommand.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="CFLFileStream.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="jnitool.h">

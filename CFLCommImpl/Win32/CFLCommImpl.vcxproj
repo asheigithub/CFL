@@ -94,6 +94,7 @@
     <ClCompile Include="..\CommSrc\CFLKTX.cpp" />
     <ClCompile Include="..\CommSrc\CFLMath.cpp" />
     <ClCompile Include="..\CommSrc\CFLMemoryDataSource.cpp" />
+    <ClCompile Include="..\CommSrc\CFLMemoryStream.cpp" />
     <ClCompile Include="..\CommSrc\CFLShader.cpp" />
     <ClCompile Include="..\CommSrc\CFLStage.cpp" />
     <ClCompile Include="..\CommSrc\CFLString.cpp" />
@@ -113,6 +114,7 @@
     <ClCompile Include="..\CommSrc\xxhash\xxhash.c" />
     <ClCompile Include="src\CFLEntry.cpp" />
     <ClCompile Include="src\CFLFile.cpp" />
+    <ClCompile Include="src\CFLFileStream.cpp" />
     <ClCompile Include="src\CFLMainLoopThread.cpp" />
   </ItemGroup>
   <ItemGroup>
