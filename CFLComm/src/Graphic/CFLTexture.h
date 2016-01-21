@@ -47,7 +47,7 @@ namespace cfl
 				//从二进制资源里上传纹理(格式见CTFHeader)
 				void uploadFromDataResource(const std::shared_ptr<content::IGLDataResource> source,  size_t offset, bool autoGenMipmap, bool async = false);
 
-				//直接从图像数据中上传纹理。当miplevel等于指定最大miplevel或者选择自动生成mipmap时开始上传。
+				//直接从图像数据中上传纹理。当miplevel等于指定最大miplevel或者选择自动生成mipmap时开始上传。只有当当前是绘图线程时，才能设置immediately为true!!!
 				void uploadFromImageData(
 					int mipLevel,
 					GLsizei width,
@@ -57,7 +57,8 @@ namespace cfl
 					std::shared_ptr<content::IGLDataResource> source,
 					size_t stride,
 					size_t offset,//二进制数据偏移量 
-					bool autoGenMipmap
+					bool autoGenMipmap,
+					bool immediately=false
 					);
 
 				//更新指定miplevel的图像
@@ -67,7 +68,8 @@ namespace cfl
 					tex2d_pixeltype::PixelType type,
 					std::shared_ptr<content::IGLDataResource> pixelSource,
 					size_t offset,
-					size_t stride);
+					size_t stride,
+					bool immediately=false);
 
 
 				//获取内部纹理格式

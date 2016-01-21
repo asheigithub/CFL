@@ -313,7 +313,8 @@ namespace cfl
 			tex2d_pixeltype::PixelType type,
 			std::shared_ptr<content::IGLDataResource> pixelSource,
 			size_t offset,
-			size_t stride)
+			size_t stride,
+			bool immediately)
 		{
 			for (auto i = mipmaps->begin(); i != mipmaps->end(); i++)
 			{
@@ -323,15 +324,23 @@ namespace cfl
 					auto iformat = std::get<1>(mip);
 					*i = std::make_tuple(level, iformat, width, height, format, type, pixelSource, offset, stride);
 					
-					auto fun = [this,level](){
-						//LOGI("befor build tex %d\n", objId);
-						doTexUpdateImage2d(level);
-						//LOGI("end build tex %d\n", objId);
-					};
+					if (!immediately)
+					{
 
-					auto command = new funcDrawCommand< decltype(fun)>(fun, "doTexUpdateImage2d");
-					pushMainLooperCommand(command);
-					
+						auto fun = [this, level](){
+							//LOGI("befor build tex %d\n", objId);
+							doTexUpdateImage2d(level);
+							//LOGI("end build tex %d\n", objId);
+						};
+
+						auto command = new funcDrawCommand< decltype(fun)>(fun, "doTexUpdateImage2d");
+						pushMainLooperCommand(command);
+
+					}
+					else
+					{
+						doTexUpdateImage2d(level);
+					}
 					return;
 				}
 			}
@@ -341,19 +350,27 @@ namespace cfl
 		}
 
 
-		void GLTex2D::texImage2d(bool autoGenMipmap )
+		void GLTex2D::texImage2d(bool autoGenMipmap, bool immediately)
 		{
 			_autogenmipmap = autoGenMipmap;
 
-			auto fun = [this](){
-				//LOGI("befor build tex %d\n", objId);
+			if (immediately) //只有当是绘图线程时，才能使用immediately理解提交gpu。
+			{
 				doTexImage2d();
-				//LOGI("end build tex %d\n", objId);
-			};
+			}
+			else
+			{
+				auto fun = [this](){
+					//LOGI("befor build tex %d\n", objId);
+					doTexImage2d();
+					//LOGI("end build tex %d\n", objId);
+				};
 
-			auto command = new funcDrawCommand< decltype(fun)>(fun,"doTexImage2d");
-			pushMainLooperCommand(command);
+				auto command = new funcDrawCommand< decltype(fun)>(fun, "doTexImage2d");
+				pushMainLooperCommand(command);
 
+			}
+			
 			//LOGI("send build tex %d\n",objId);
 
 		}

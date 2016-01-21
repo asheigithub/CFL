@@ -23,6 +23,8 @@
 #include "../CFLCapability.h"
 #include "CFLGLProxy.h"
 
+#include "CFLFont.h"
+
 namespace cfl
 {
 	
@@ -133,7 +135,7 @@ namespace cfl
 
 
 
-			void drawString(const GameImage& image,float tx,float ty,float size);
+			void drawString(const CFLString& string, const cfl::graphic::font::Font& font, float fontsize, float x, float y, const Color* color = nullptr, const cfl::geom::Matrix3D* matrix=nullptr);
 
 
 			//绘制一条直线

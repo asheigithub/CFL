@@ -30,8 +30,8 @@ namespace cfl
 				const Color* color = nullptr,
 				FilterMode filter = FilterMode::linear,
 				BlendMode blendmode = BlendMode::alphablend,
-				IGameImageEffect* effect = GameImageEffectNormal::getInstance(),
-				GameImageEffectDX effectDX =nullptr
+				std::shared_ptr<IGameImageEffect> effect = GameImageEffectNormal::getInstance()
+				
 				)=0;
 
 		};
@@ -71,8 +71,8 @@ namespace cfl
 				const Color* color = nullptr,
 				FilterMode filter = FilterMode::linear,
 				BlendMode blendmode = BlendMode::alphablend,
-				IGameImageEffect* effect = GameImageEffectNormal::getInstance(),
-				GameImageEffectDX effectDX = nullptr
+				std::shared_ptr<IGameImageEffect> effect = GameImageEffectNormal::getInstance()
+				
 				) override final;
 
 

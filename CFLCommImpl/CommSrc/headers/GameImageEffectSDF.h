@@ -9,14 +9,12 @@ namespace cfl
 {
 	namespace graphic
 	{
-		//GameImageEffectSDFÉ¾³ýÆ÷
-		void EffectSDFDX(IGameImageEffect* effect);
-
+		
 
 		class GameImageEffectSDF : public IGameImageEffect
 		{
 		public:
-			static GameImageEffectSDF* getInstance(float outsize);
+			static std::shared_ptr<GameImageEffectSDF> getInstance(float outsize);
 
 			render::GLProgram* getProgram(Texture2DRef* refTex2D, std::vector<render::GLProgram**>& addlist) override final;
 

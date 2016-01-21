@@ -510,7 +510,8 @@ namespace cfl
 				tex2d_pixeltype::PixelType type,
 				std::shared_ptr<content::IGLDataResource> pixelSource,
 				size_t offset,
-				size_t stride)
+				size_t stride,
+				bool immediately)
 			{
 				CHECK_ISNOTDISPOSE;
 				GLTex2D* tex2d = reinterpret_cast<GLTex2D*>(_indata->tex2dobj);
@@ -521,7 +522,7 @@ namespace cfl
 					pixelSource->load();
 				}
 
-				tex2d->texUpdateImage2d(level,width,height,format,type,pixelSource,offset,stride);
+				tex2d->texUpdateImage2d(level,width,height,format,type,pixelSource,offset,stride,immediately);
 
 			}
 
@@ -535,7 +536,8 @@ namespace cfl
 				std::shared_ptr<content::IGLDataResource> source,
 				size_t stride,
 				size_t offset,
-				bool autoGenMipmap
+				bool autoGenMipmap,
+				bool immediately
 				)
 			{
 
@@ -579,7 +581,7 @@ namespace cfl
 				
 				if (autoGenMipmap || mipLevel == _indata->streaminglevels)
 				{
-					tex2d->texImage2d(autoGenMipmap);
+					tex2d->texImage2d(autoGenMipmap,immediately);
 
 					
 					_indata->onDone();

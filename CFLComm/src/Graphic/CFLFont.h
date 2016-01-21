@@ -110,6 +110,9 @@ namespace cfl
 				//按name查找已保存的字体
 				static Font getFont(const CFLString name);
 
+				//从所有已注册的字体中查找一个存在的字形
+				static std::tuple<Glyph*, Font*> searchGlyphForRending(unsigned int charcode);
+
 				//销毁所有已保存的字体
 				static void clearFonts();
 			private:

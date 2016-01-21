@@ -82,3 +82,5 @@ Tools/FreeTypeViewer/HIMALAYA.ff
 CFLCommImpl/Android/obj/local/arm64-v8a/libCFLCommImpl.a
 CFLCommImpl/Android/obj/local/x86_64/libCFLCommImpl.a
 CFLCommImpl/Android/obj/local/x86/libCFLCommImpl.a
+*.a
+*.a

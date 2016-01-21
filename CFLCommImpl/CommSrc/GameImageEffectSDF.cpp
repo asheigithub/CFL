@@ -7,25 +7,19 @@ namespace cfl
 	namespace graphic
 	{
 		
-		GameImageEffectSDF* GameImageEffectSDF::getInstance(float outsize)
+		std::shared_ptr<GameImageEffectSDF> GameImageEffectSDF::getInstance(float outsize)
 		{
 			auto stage = CFLContext::getCurrentInstance()->stage;
 
 			//换算到实际像素
 			auto port = stage->getGLViewPort();
 
-			return new GameImageEffectSDF(outsize * port.width / stage->stageWidth()   );
-			//static GameImageEffectSDF instance;
-			//return &instance;
+
+			return std::shared_ptr<GameImageEffectSDF>(new GameImageEffectSDF(outsize * port.width / stage->stageWidth()));
+
 		}
 
-		void EffectSDFDX(IGameImageEffect* effect)
-		{
-			GameImageEffectSDF* sdf = reinterpret_cast<GameImageEffectSDF*>(effect);
-			
-			delete sdf;
-			
-		}
+		
 
 		//着色器(sdf)
 		static render::GLProgram* gameimage_sdf = nullptr;

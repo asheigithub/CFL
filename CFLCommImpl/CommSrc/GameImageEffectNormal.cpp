@@ -10,10 +10,11 @@ namespace cfl
 {
 	namespace graphic
 	{
-		GameImageEffectNormal* GameImageEffectNormal::getInstance()
+		std::shared_ptr<GameImageEffectNormal> GameImageEffectNormal::getInstance()
 		{
-			static GameImageEffectNormal instance;
-			return &instance;
+			//static GameImageEffectNormal instance;
+			static std::shared_ptr<GameImageEffectNormal> instance(new GameImageEffectNormal());
+			return instance;
 		}
 
 		

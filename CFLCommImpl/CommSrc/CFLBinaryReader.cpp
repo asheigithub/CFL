@@ -154,11 +154,14 @@ namespace cfl
 			{
 				throw new EOFException();
 			}
-			unsigned char buff[4];
+			/*unsigned char buff[4];
 			indata->basestream->read(buff, 0, 4);
 
 			int ret;
-			memcpy(&ret, buff , 4);
+			memcpy(&ret, buff , 4);*/
+
+			int ret;
+			indata->basestream->read( reinterpret_cast<unsigned char*>( &ret), 0, 4);
 
 			//indata->offset += 4;
 
@@ -195,11 +198,12 @@ namespace cfl
 			{
 				throw new EOFException();
 			}
-			unsigned char buff[4];
-			indata->basestream->read(buff, 0, 4);
+			///*unsigned char buff[4];
+			//indata->basestream->read(buff, 0, 4);*/
 
 			unsigned int ret;
-			memcpy(&ret, buff, 4);
+			//memcpy(&ret, buff, 4);
+			indata->basestream->read(reinterpret_cast<unsigned char*>(&ret), 0, 4);
 
 			//indata->offset += 4;
 
@@ -236,11 +240,12 @@ namespace cfl
 			{
 				throw new EOFException();
 			}
-			unsigned char buff[2];
-			indata->basestream->read(buff, 0, 2);
+			/*unsigned char buff[2];
+			indata->basestream->read(buff, 0, 2);*/
 
 			short ret;
-			memcpy(&ret, buff, 2);
+			//memcpy(&ret, buff, 2);
+			indata->basestream->read(reinterpret_cast<unsigned char*>(&ret), 0, 2);
 
 			//indata->offset += 2;
 
@@ -275,12 +280,12 @@ namespace cfl
 			{
 				throw new EOFException();
 			}
-			unsigned char buff[2];
-			indata->basestream->read(buff, 0, 2);
+			/*unsigned char buff[2];
+			indata->basestream->read(buff, 0, 2);*/
 
 			unsigned short ret;
-			memcpy(&ret, buff, 2);
-
+			//memcpy(&ret, buff, 2);
+			indata->basestream->read(reinterpret_cast<unsigned char*>(&ret), 0, 2);
 			//indata->offset += 2;
 
 			if (indata->endian != indata->machineEndian)
@@ -314,11 +319,12 @@ namespace cfl
 			{
 				throw new EOFException();
 			}
-			unsigned char buff[4];
-			indata->basestream->read(buff, 0, 4);
+			/*unsigned char buff[4];
+			indata->basestream->read(buff, 0, 4);*/
 
 			float ret;
-			memcpy(&ret, buff, 4);
+			//memcpy(&ret, buff, 4);
+			indata->basestream->read(reinterpret_cast<unsigned char*>(&ret), 0, 4);
 
 			//indata->offset += 4;
 
@@ -354,12 +360,12 @@ namespace cfl
 			{
 				throw new EOFException();
 			}
-			unsigned char buff[8];
-			indata->basestream->read(buff, 0, 8);
+			/*unsigned char buff[8];
+			indata->basestream->read(buff, 0, 8);*/
 
 			double ret;
-			memcpy(&ret, buff, 8);
-
+			//memcpy(&ret, buff, 8);
+			indata->basestream->read(reinterpret_cast<unsigned char*>(&ret), 0, 8);
 			//indata->offset += 8;
 
 			if (indata->endian != indata->machineEndian)

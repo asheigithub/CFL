@@ -368,9 +368,9 @@ namespace cfl
 			auto num = ed - st;
 			auto image = draws[st]->image;
 			
-			auto effect = draws[st]->effectData.effect;
-			auto dx = draws[st]->effectData.dx;
-			
+			auto effect = draws[st]->effect; //draws[st]->effectData.effect;
+			//auto dx = draws[st]->effectData.dx;
+			draws[st]->effect = nullptr;
 
 
 			auto program = effect->getProgram(
@@ -380,7 +380,7 @@ namespace cfl
 			
 			auto voffset = vertAlloc.offset;
 			
-			auto fun = [this, num, voffset, image, program, effect,dx]()
+			auto fun = [this, num, voffset, image, program, effect]()
 			{
 				
 				//»ìºÏÄ£Ê½
@@ -464,10 +464,7 @@ namespace cfl
 				glBindBuffer(vertVbo->getTarget(), 0);
 				glBindBuffer(indexVbo->getTarget(), 0);
 
-				if (dx)
-				{
-					dx(effect);
-				}
+				
 
 				
 			};
@@ -530,8 +527,7 @@ namespace cfl
 			const Color* color ,
 			FilterMode filter ,
 			BlendMode blendmode,
-			IGameImageEffect* effect,
-			GameImageEffectDX effectDX
+			std::shared_ptr<IGameImageEffect> effect
 			)
 		{
 
@@ -580,8 +576,7 @@ namespace cfl
 			d->filtermode = filter;
 			
 
-			d->effectData.dx = effectDX;
-			d->effectData.effect = effect;
+			d->effect = effect;
 
 			if (!isAppend)
 			{
@@ -876,7 +871,7 @@ namespace cfl
 				return true;
 			}
 			
-			if (!(d1->effectData.effect->checkCompatible(d2->effectData.effect)))
+			if (!(d1->effect->checkCompatible(d2->effect.get())))
 			{
 				return true;
 			}

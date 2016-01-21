@@ -39,7 +39,7 @@ namespace cfl
 
 		};
 
-		struct GameImageEffectData;
+		/*struct GameImageEffectData;
 
 		typedef void(*GameImageEffectDX)(IGameImageEffect* effect);
 
@@ -55,7 +55,7 @@ namespace cfl
 			
 			
 
-		};
+		};*/
 
 	}
 }

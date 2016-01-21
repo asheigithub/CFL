@@ -36,6 +36,25 @@ namespace cfl
 					throw new std::runtime_error("Font Not Found");
 				}
 			}
+			//从所有已注册的字体中查找一个存在的字形
+			std::tuple<Glyph*, Font*> Font::searchGlyphForRending(unsigned int charcode)
+			{
+				
+				auto end = fontMap.end();
+
+				for (auto begin = fontMap.begin(); begin !=end; begin++)
+				{
+					auto g=(*begin).second.getGlyphForRending(charcode);
+					if (g)
+					{
+						return std::make_tuple(g, &begin->second);
+					}
+				}
+
+				return std::make_tuple(nullptr, nullptr);
+
+			}
+
 
 			void Font::clearFonts()
 			{
@@ -360,32 +379,32 @@ namespace cfl
 				auto detx = glyph->padleft / 2;
 				auto dety = glyph->padtop / 2;
 
-				glyph->padleft -= detx;
-				glyph->padtop -= dety;
+				auto padleft= glyph->padleft - detx;
+				auto padtop= glyph->padtop - dety;
 
-				glyph->clipwidth += detx * 2;  //data->info.makeImageSize;
-				glyph->clipheight += dety * 2; //data->info.makeImageSize;
-				if (glyph->padleft + glyph->clipwidth > data->info.makeImageSize)
+				auto clipwidth= glyph->clipwidth + detx * 2;  //data->info.makeImageSize;
+				auto clipheight= glyph->clipheight + dety * 2; //data->info.makeImageSize;
+				if (padleft + clipwidth > data->info.makeImageSize)
 				{
-					glyph->clipwidth = data->info.makeImageSize - glyph->padleft;
+					clipwidth = data->info.makeImageSize - padleft;
 				}
-				if (glyph->padtop + glyph->clipheight > data->info.makeImageSize)
+				if (padtop + clipheight > data->info.makeImageSize)
 				{
-					glyph->clipheight = data->info.makeImageSize - glyph->padtop;
+					clipheight = data->info.makeImageSize - padtop;
 				}
 
 
 				gimgData->refTexture = std::shared_ptr<Texture2DRef>(tref);
-				gimgData->clipHeight = glyph->clipheight ;
-				gimgData->clipWidth = glyph->clipwidth ;
+				gimgData->clipHeight = clipheight ;
+				gimgData->clipWidth = clipwidth ;
 				gimgData->height = glyph->imagewidth;
 				gimgData->width = glyph->imageheight;
-				gimgData->leftTopU = (addresult.intex_x * 1.0f / FONT_TEXTURESIZE) + 32.0f / FONT_TEXTURESIZE * glyph->padleft *1.0f / glyph->imagewidth ;
-				gimgData->leftTopV = (addresult.intex_y * 1.0f / FONT_TEXTURESIZE) + 32.0f / FONT_TEXTURESIZE * glyph->padtop *1.0f / glyph->imageheight;
-				gimgData->padLeft = glyph->padleft;
-				gimgData->padTop = glyph->padtop;
-				gimgData->rightBottomU = (addresult.intex_x * 1.0f / FONT_TEXTURESIZE) + 32.0f / FONT_TEXTURESIZE *(glyph->padleft + glyph->clipwidth) * 1.0f / glyph->imagewidth;
-				gimgData->rightBottomV = (addresult.intex_y * 1.0f / FONT_TEXTURESIZE) + 32.0f / FONT_TEXTURESIZE *(glyph->padtop + glyph->clipheight) * 1.0f / glyph->imageheight;
+				gimgData->leftTopU = (addresult.intex_x * 1.0f / FONT_TEXTURESIZE) + 32.0f / FONT_TEXTURESIZE * padleft *1.0f / glyph->imagewidth ;
+				gimgData->leftTopV = (addresult.intex_y * 1.0f / FONT_TEXTURESIZE) + 32.0f / FONT_TEXTURESIZE * padtop *1.0f / glyph->imageheight;
+				gimgData->padLeft = padleft;
+				gimgData->padTop = padtop;
+				gimgData->rightBottomU = (addresult.intex_x * 1.0f / FONT_TEXTURESIZE) + 32.0f / FONT_TEXTURESIZE *(padleft + clipwidth) * 1.0f / glyph->imagewidth;
+				gimgData->rightBottomV = (addresult.intex_y * 1.0f / FONT_TEXTURESIZE) + 32.0f / FONT_TEXTURESIZE *(padtop + clipheight) * 1.0f / glyph->imageheight;
 				
 				glyph->glyphImage = GameImage(gimgData);
 

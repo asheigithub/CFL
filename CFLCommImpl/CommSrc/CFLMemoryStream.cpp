@@ -84,7 +84,7 @@ namespace cfl
 				size = static_cast<int>(getLength()) - data->pos;
 			}
 
-			CFL_ASSERT(data->pos >= 0 && data->pos + size <= data->len);
+			CFL_ASSERT(data->pos >= 0 && data->pos + size <= static_cast<int>(data->len));
 
 
 			memcpy(bytes+offset, data->bytes + data->pos , size);

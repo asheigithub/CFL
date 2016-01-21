@@ -28,7 +28,7 @@ namespace cfl
 				p1(geom::Vector4()), p2(geom::Vector4()), p3(geom::Vector4()), p4(geom::Vector4()),
 				_leftu(0), _rightu(0), _topv(0), _bottomv(0),
 				_screenleft(0), _screentop(0), _screenright(0), _screenbottom(0),
-				effectData()
+				effect(nullptr)
 			{
 				
 			}
@@ -76,8 +76,8 @@ namespace cfl
 			float  _screenright ;
 			float  _screenbottom ;
 
-
-			GameImageEffectData effectData;
+			std::shared_ptr<IGameImageEffect> effect;
+			//GameImageEffectData effectData;
 
 
 			//绘图指令调用不能多线程！
@@ -104,8 +104,9 @@ namespace cfl
 			d->matrix = nullptr;
 			d->clip = nullptr;
 
-			d->effectData.dx = nullptr;
-			d->effectData.effect = nullptr;
+			d->effect = nullptr;
+			//d->effectData.dx = nullptr;
+			//d->effectData.effect = nullptr;
 
 			++poolidx;
 			return d;

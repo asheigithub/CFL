@@ -303,7 +303,7 @@ namespace cfl
 							render::tex2d_pixeltype::glubyte, 
 							i->second,
 							FONT_TEXTURESIZE, 
-							0, false);
+							0, false,true);
 					}
 					else
 					{
@@ -312,7 +312,7 @@ namespace cfl
 							render::tex2d_inputformat::glluminace, 
 							render::tex2d_pixeltype::glubyte, 
 							i->second, 
-							0, FONT_TEXTURESIZE);
+							0, FONT_TEXTURESIZE,true);
 					}
 				}
 

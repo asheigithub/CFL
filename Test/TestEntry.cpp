@@ -69,12 +69,6 @@ content::BuildInData getTestData()
 
 
 float times = 0;
-bool hasinitshader = false;
-
-render::GLProgram* prog;
-render::VertexPointer* vtx;
-render::textures::Texture2D* tex2d;
-
 void up(CFLContext* context,float dettime)
 {
 	context->graphic->clear(0, 0, 0.0f, 1, 0, 0, cfl::graphic::ClearMaskBit::color);
@@ -83,29 +77,31 @@ void up(CFLContext* context,float dettime)
 
 	times += dettime;
 	//cfl::trace("%f\n", dettime);
-	if (times >= 1)
-	{
-		LOGI("%d\n", (int)cfl::getFPS());
-		times = 0;
+	//if (times >= 1)
+	//{
+		//LOGI("%d\n", (int)cfl::getFPS());
+		//times = 0;
 
-		if (prog && prog->isValid())
+		
+
+		/*if (prog && prog->isValid())
 		{
 			LOGI("location: %d\n", prog->getAttribute("vPosition")->location);
 
 
-		}
+		}*/
 
-	}
+	//}
 	
-	if (prog && prog->isValid() )
-	{
+	
+
 
 		auto iimg = content::Content::loadGameImage("testreadfile/commimage1/新资源/公用资源/竞技场-皇榜-上.png");
 		auto iimg2 = content::Content::loadGameImage("testreadfile/commimage1/旗子导出2/白右/baiqiyou_00005.png");
 		auto iimg3 = content::Content::loadGameImage("testreadfile/commimage1/界面文字/界面文字-标题/图鉴.png");
 				
 
-		context->graphic->drawGameImage(content::Content::loadGameImage("testreadfile/commimage1/主界面背景图.png"), 0.0f, 0.0f, 1.0f, nullptr, 1.0f);
+		context->graphic->drawGameImage(content::Content::loadGameImage("testreadfile/commimage1/主界面背景图.png"), 0.0f, 0.0f, 0.8f, nullptr, 1.0f);
 		//context->graphic->drawGameImage(content::Content::loadGameImage("testreadfile/commimage1/主界面背景图.png"), 0.0f, 0.0f, 1.0f, nullptr, 1.0f);
 
 		//context->graphic->testDrawVertex(prog, *vtx,*tex2d);
@@ -155,172 +151,61 @@ void up(CFLContext* context,float dettime)
 		
 		auto font = graphic::font::Font::getFont("arial");
 
-		auto gimg = font.getGlyphForRending('S')->glyphImage;
+		std::ostringstream oss;
+		oss << "FPS:" << cfl::getFPS();
 
-		auto g = font.getGlyphForRending((context->totalframes / 5) % 1000);
-		if (g)
-		{ 
-			auto ggimg = g->glyphImage;
-			//context->graphic->drawGameImage(ggimg, 0, 0, 1.0f, nullptr, 0.5f);
-			context->graphic->drawString(ggimg,10,10,16);
-		}
-		else
-		{
-			//context->graphic->drawGameImage(gimg, 0, 0, 1.0f, nullptr, 0.5f);
-			context->graphic->drawString(gimg,10,10,16);
-		}
-		gimg = font.getGlyphForRending('K')->glyphImage;
-		context->graphic->drawString(gimg, 20, 10, 26);
-		gimg = font.getGlyphForRending('b')->glyphImage;
-		context->graphic->drawString(gimg, 55, 10, 30);
-		gimg = font.getGlyphForRending('b')->glyphImage;
-		context->graphic->drawString(gimg, 85, 10, 16);
-		gimg = font.getGlyphForRending(0xc8)->glyphImage;
-		context->graphic->drawString(gimg, 101, 10, 128);
+		context->graphic->drawString(oss.str().c_str(), font, 24, 0, 0);
 
-		font = graphic::font::Font::getFont("simsun");
-		//gimg = font.getGlyphForRending(CFLString("偏").charCodeAt(0))->glyphImage;
+		context->graphic->drawString(
+			"泰文:" + CFLString(3626) + CFLString(3657) + CFLString(3657) + CFLString(3657) + CFLString(3657) + CFLString(3657),
+			font, 32, 30, 50, nullptr
+			);
 
-		static int hcharcode = CFLString("偏").charCodeAt(0);
-		auto rcode = std::rand() % (0x9f00 - 0x4e00) + 0x4e00;
-		g = font.getGlyphForRending(rcode);
-		if (g)
-		{
-			hcharcode = rcode;
-			gimg = g->glyphImage;
-			context->graphic->drawString(gimg, 301, 10, 32);
-		}
-		else
-		{
-			g = font.getGlyphForRending(hcharcode);
-			gimg = g->glyphImage;
-			context->graphic->drawString(gimg, 301, 10, 32);
-		}
 
-		/*if (tex2d != nullptr )
-		{
-			delete tex2d;
-			tex2d = nullptr;
-		}*/
+		context->graphic->drawString(
+			"组合音标[u+0063][u+0301]：" + CFLString(0x0063) + CFLString(0x0301),
+			font,32,30,90
+			);
+
+		context->graphic->drawString(
+			"火星文：(￣▽￣)~* ",
+			font, 32, 30, 90+40
+			);
+
+		auto rcode = std::rand() % (4094) + 0x4e00;
+		context->graphic->drawString(
+			"每帧随机生成一个汉字：" + CFLString(rcode),
+			font, 32, 30, 90 + 40*2
+			);
 		
-	}
+		context->graphic->drawString(
+			"实时高质量缩放：" ,
+			font, 32, 30, 90 + 40 * 3
+			);
+
+		float scale = cfl::math::sinf (((context->totalframes) % 60) / 60.0f * PI * 2 ) * 5 + 0.5;
+		context->graphic->drawString(
+			"嘿",
+			font, 32, 30+32*8, 90 + 40 * 3,
+			nullptr,
+			&cfl::geom::Matrix3D().appendScale(scale,scale,scale )
+			);
+
+		auto fcolor = cfl::graphic::Color(math::cosf((context->totalframes % 30)  * PI / 30 * 2)*0.5f + 0.5f,
+			math::sinf((context->totalframes % 45)  * PI / 45 * 2)*0.5f + 0.5f,
+			math::cosf((context->totalframes % 60)  * PI / 60 * 2)*0.5f + 0.5f, 1.0f);
+		context->graphic->drawString(
+			"字形三维旋转：",
+			font, 64, 30, 150 + 40 * 4,
+			&fcolor,
+			&cfl::geom::Matrix3D().appendRotation(toRadians(context->totalframes ), geom::Y_AXIS)
+			);
+
 	
 	testgeom();
 	//testfileread();
 	
-	if (!hasinitshader)
-	{
-		hasinitshader = true;
-
-		auto shader = context->glObjCollection->createShader();
-
-
-		const char* vShaderStr = STRINGIFY(
-			attribute vec4 vPosition;
-			attribute vec2 a_texCoord;
-			varying vec2 v_texCoord;
-		void main()
-		{
-			gl_Position = vPosition;
-			v_texCoord = a_texCoord;
-		}
-
-		);
-
-
-		auto fshader = context->glObjCollection->createShader();
-		const char* fShaderStr = STRINGIFY(
-			precision mediump float;
-			varying vec2 v_texCoord;
-			uniform sampler2D s_texture;
-			void main()
-			{
-				gl_FragColor =   texture2D(s_texture, v_texCoord);
-			}
-		);
-
-
-		shader->compile(vShaderStr, cfl::render::ShaderType::vertex_shader);
-		fshader->compile(fShaderStr, cfl::render::ShaderType::fragment_shader);
-
-		auto program = context->glObjCollection->createProgram();
-		program->link(shader, fshader);
-
-		prog = program;
-		//auto data = reinterpret_cast<GLfloat*>( getTestData().getData());
-		auto data = getTestData();
-
-		data.loadAsync([](std::shared_ptr< content::IGLDataResource> ds,void * args ){
-			auto k = ds->isDone();
-		},nullptr,nullptr);
-
-		render::VertexPointer* vp =
-			new render::VertexPointer(0, 3, cfl::render::vertexPointerType::glFloat , false, 5*sizeof(GLfloat),
-				std::make_shared<content::BuildInData>(data));
-
-
-		vtx = vp;
-
-
-
-		auto getPixels = []()-> std::shared_ptr< content::BuildInData>
-		{
-			//static GLubyte pixels[4 * 3] =
-			//{
-			//	255, 0,0, // Red
-			//	0, 255,0, // Green
-			//	0, 0,255, // Blue
-			//	255, 255,0// Yellow
-			//};
-			//return std::make_shared<content::BuildInData>(pixels, sizeof(pixels));
-
-			auto rgbadata = cfl::content::BinaryCache::getInstance()->getData(cfl::file::DirType::asset, "testreadfile/outrgba.dat");
-			auto data = rgbadata.getData();
-
-			content::CTFHeader header;
-			memcpy(&header, data, sizeof(header));
-
-			data += sizeof(header);
-
-			static char* cache = nullptr;
-			if (!cache)
-			{
-				cache = (char *) malloc(header.length);
-				memcpy(cache, data, header.length);
-
-			}
-
-
-			return std::make_shared<content::BuildInData>(cache, header.length );
-		};
-
-		tex2d = new render::textures::Texture2D();
-
-		tex2d->addUploadEventHandler(
-			[]( render::textures::Texture2D* tex,void* args )
-		{
-			LOGI("tex progress: %f\n", tex->getPorgress());
-		}, 
-			
-			nullptr, nullptr);
-		tex2d->initFromFile(cfl::file::DirType::asset, "testreadfile/ktx1.ktx", true, true);
-
-
-		//auto fs = std::make_shared<content::FileDataResource>(cfl::file::DirType::asset, "testreadfile/outrgba.dat");
-
-		/*tex2d = new render::textures::Texture2D(render::tex2d_internalformat::glrgba,1024,512);
-		tex2d->uploadFromImageData(0, 1024, 512, render::tex2d_inputformat::glrgba,
-			render::tex2d_pixeltype::glubyte, fs,
-			1024 * 4,
-			sizeof(content::CTFHeader),
-			true
-			);*/
-
-		/*tex2d->appendMipLevel(0, render::tex2d_internalformat::glrgba, 1024, 512,
-			render::tex2d_inputformat::glrgba, render::tex2d_pixeltype::glubyte, fs, sizeof(content::CTFHeader) , 1024*4);
-		*/
-
-	}
+	
 
 };
 
@@ -339,11 +224,6 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 	ctx->stage->stageWidth(1280);
 	ctx->stage->stageHeight(720);
 
-
-	//cfl::setFPS(30);
-	hasinitshader = false;
-	prog = nullptr;
-
 	cfl::registerUpdateFunc(ctx, up);
 
 	//testdo();
@@ -354,20 +234,20 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 		//文件流测试
 		auto fs = cfl::file::getDirectory(file::DirType::asset)->getfile("testreadfile/file.txt")
 			->openFileStreamForRead();
-		
+
 		//内存流测试
 		/*auto fi = cfl::file::getDirectory(file::DirType::asset)->getfile("testreadfile/file.txt");
 		cfl::file::FileData fd;
 		fi->readFile(&fd);
 		std::shared_ptr<content::memoryStream> fs = std::make_shared<content::memoryStream>(fd.data,2, fd.filesize);
-*/
+		*/
 		auto len = fs->getLength();
 		LOGI("fs getLength");
-		unsigned char* str = new unsigned char[len+1];
+		unsigned char* str = new unsigned char[len + 1];
 		memset(str, 0, len + 1);
 
 		str[0] = 'a';
-		
+
 		fs->seek(0, cfl::content::seekOrigin::begin);
 
 		fs->read(str, 1, 2);
@@ -382,7 +262,7 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 		fs->setPosition(0);
 		auto byte = fs->readByte();
 		int count = 0;
-		while (byte >0)
+		while (byte > 0)
 		{
 			str[count] = byte;
 
@@ -390,8 +270,8 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 			byte = fs->readByte();
 		}
 
-		LOGI("fs len: %d, fs info: %s \n", len,str);
-		
+		LOGI("fs len: %d, fs info: %s \n", len, str);
+
 	}
 
 	content::Content::initGameImageFromFile(file::DirType::asset, "testreadfile/commimage1/imgfilecfg.bin", "testreadfile/commimage1/");
@@ -401,19 +281,19 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 	/*auto gbkenc= cfl::text::Endoder::getGBK();
 	auto string= gbkenc->getString("testreadfile/commimage1/装饰纹案3/装饰纹案-3_05.png");
 	*/
-	auto exists =content::Content::isExists(img);
+	auto exists = content::Content::isExists(img);
 
-	
+
 	LOGI(" GameImage exists:%d, path: %s \n", exists, img.log_str());
-	auto iimg=content::Content::loadGameImage("testreadfile/commimage1/icon_预览.png");
+	auto iimg = content::Content::loadGameImage("testreadfile/commimage1/icon_预览.png");
 	iimg->refTexture->upload(true);
-	
+
 	UChar c('A');
 	auto cat = UChar::getUnicodeCategory(c);
 
 	auto cc = UChar::toLower(c);
 
-	if (c ==  UChar::toUpper( cc))
+	if (c == UChar::toUpper(cc))
 	{
 		LOGI(" %c==%c\n", c.charCode, cc.charCode);
 	}
@@ -421,9 +301,9 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 	LOGI(" %s,len: %d\n", img.log_str(), img.length());
 
 	CFLString unichar = CFLString(c);
-	
+
 	auto len = unichar.length();
-	auto acc= unichar.log_str();
+	auto acc = unichar.log_str();
 
 	auto ucc2 = unichar + unichar;
 
@@ -441,22 +321,22 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 
 	auto t = cfl::getTimer() - tick;
 
-	LOGI("timer: %d,%s\n",t,(uni2+c).log_str());
+	LOGI("timer: %d,%s\n", t, (uni2 + c).log_str());
 
 
 
 	unsigned int  u4code[7] = { 0x0627, 0x0655, 0x0650, 0x064A, 0x0647, 0x064E, 0 };
 
-	unsigned int u4code2[4] = { 0x0627,0x0628,0x064C,0 };
+	unsigned int u4code2[4] = { 0x0627, 0x0628, 0x064C, 0 };
 
 	CFLString myString(u4code);
 
-	text::TextElementEnumerator tee(myString + CFLString(u4code2) );
+	text::TextElementEnumerator tee(myString + CFLString(u4code2));
 	tee.reset();
 	while (tee.moveNext())
 	{
 		auto te = tee.getCurrent();
-		LOGI("st:%d,len:%d ", te->index,te->len );
+		LOGI("st:%d,len:%d ", te->index, te->len);
 		for (size_t i = te->index; i < te->index + te->len; i++)
 		{
 			LOGI("hex: %04X ", te->uchars[i]);
@@ -465,7 +345,7 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 	}
 
 
-	
+
 
 #ifdef ANDROID
 	{
@@ -490,7 +370,7 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 	t = cfl::getTimer() - tick;
 	LOGI("font init timer: %d\n", t);
 #endif
-	
+
 	tick = cfl::getTimer();
 	for (size_t i = 0x21; i < 1024; i++)
 	{
@@ -498,7 +378,7 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 
 		//afont.getGlyphForRending(i);
 	}
-	
+
 	t = cfl::getTimer() - tick;
 	LOGI("query timer: %d\n", t);
 
@@ -533,8 +413,39 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 	LOGI("simsun init timer: %d\n", t);
 #endif
 
-	
-	
+
+
+
+#ifdef ANDROID
+	{
+		auto fontfile = cfl::file::getDirectory(cfl::file::DirType::appStorage)->getfile("fonts/TAI.ff");
+		if (!fontfile->isExists())
+		{
+			auto src = cfl::file::getDirectory(cfl::file::DirType::asset)->getfile("fonts/TAI.ff");
+			cfl::file::FileData fd;
+			src->readFile(&fd);
+			fontfile->writeFile(fd.data, fd.filesize);
+			fd.close();
+		}
+	}
+	{
+		tick = cfl::getTimer();
+		auto hfont = cfl::graphic::font::Font::init(cfl::file::DirType::appStorage, "fonts/TAI.ff");
+		cfl::graphic::font::Font::regFont(hfont, "tai");
+		t = cfl::getTimer() - tick;
+		LOGI("simsun init timer: %d\n", t);
+	}
+#else
+	{
+		tick = cfl::getTimer();
+		auto hfont = cfl::graphic::font::Font::init(cfl::file::DirType::asset, "fonts/TAI.ff");
+		cfl::graphic::font::Font::regFont(hfont, "tai");
+		t = cfl::getTimer() - tick;
+		LOGI("simsun init timer: %d\n", t);
+	}
+#endif
+
+
 	//render::textures::Texture2D texture;
 	//texture.initFromFile(file::DirType::asset, "testreadfile/ktx888.ktx",false);
 

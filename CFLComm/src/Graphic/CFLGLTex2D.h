@@ -116,7 +116,7 @@ namespace cfl
 				size_t stride);
 
 			//执行纹理创建工作。可指定是否自动创建纹理级别。必须指定了0级，才能自动创建其余所有级别。
-			void texImage2d(bool autoGenMipmap=false);
+			void texImage2d(bool autoGenMipmap = false, bool immediately=false);
 
 			//更新纹理数据
 			void texUpdateImage2d(GLint level,
@@ -125,7 +125,8 @@ namespace cfl
 				tex2d_pixeltype::PixelType type,
 				std::shared_ptr<content::IGLDataResource> pixelSource,
 				size_t offset,
-				size_t stride);
+				size_t stride,
+				bool immediately=false);
 
 
 			inline bool isValid() override final{ return _isvalid; };

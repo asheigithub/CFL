@@ -14,7 +14,7 @@ namespace cfl
 		class GameImageEffectNormal : public IGameImageEffect
 		{
 		public:
-			static GameImageEffectNormal* getInstance();
+			static std::shared_ptr<GameImageEffectNormal> getInstance();
 
 			render::GLProgram* getProgram(Texture2DRef* refTex2D, std::vector<render::GLProgram**>& addlist) override final;
 
