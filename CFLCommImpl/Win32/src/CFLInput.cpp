@@ -89,7 +89,7 @@ namespace cfl
 			{
 				button = 2;
 			}
-
+			
 			return InputState::getInstance()->mousebuttonStates[button];
 		}
 
@@ -109,6 +109,12 @@ namespace cfl
 				button = 2;
 			}
 			return InputState::getInstance()->onMouseButtonUp[button];
+		}
+
+
+		std::vector<Touch>* Input::getTouches()
+		{
+			return &(InputState::getInstance()->touches);
 		}
 
 	}

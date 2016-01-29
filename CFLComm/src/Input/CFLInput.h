@@ -2,6 +2,7 @@
 #define CFLINPUT_H
 
 #include "CFLTouch.h"
+#include <vector>
 
 namespace cfl
 {
@@ -33,6 +34,15 @@ namespace cfl
 			按钮值设定为 0对应左键 ， 1对应右键 ， 2对应中键。
 			*/
 			static bool getMouseButtonUp(unsigned int button);
+
+
+
+			/*
+			返回代表上一帧所有的触摸状态的对象列表（只读）（分配临时变量）
+			每个记录都代表着一个手指在屏幕上的触碰状态
+			*/
+			static std::vector<Touch>* getTouches();
+			
 
 		};
 

@@ -146,14 +146,27 @@ static LRESULT WINAPI CFLWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 			(int)point.x, (int)point.y);*/
 	}
 	break;
-
+	
 	case WM_LBUTTONDOWN:
 	{
 		SetCapture(hWnd);
 		input::InputState::getInstance()->onMouseButtonDown[0] = true;
 		input::InputState::getInstance()->mousebuttonStates[0] = true;
+
+		input::InputState::getInstance()->touches.clear();
+		input::InputState::getInstance()->touches.push_back( input::Touch() );
+
+		auto touch = &(input::InputState::getInstance()->currentToTouch);
+		touch->fingerId = 0;
+		touch->phase = cfl::input::touchPhase::Began;
+
+		touch->position = input::Input::mousePositon();
+		touch->deltaPosition = cfl::geom::Vector2();
+		touch->deltaTime = 0.0f;
+		
 	}
 	break;
+	
 	case WM_LBUTTONUP:
 	{
 		input::InputState::getInstance()->onMouseButtonUp[0] = true;
@@ -162,6 +175,16 @@ static LRESULT WINAPI CFLWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 		{
 			ReleaseCapture();
 		}
+
+		
+		auto touch = &(input::InputState::getInstance()->currentToTouch);
+		touch->fingerId = 0;
+		touch->phase = cfl::input::touchPhase::Ended;
+
+		
+
+		
+
 	}
 	break;
 
@@ -358,6 +381,8 @@ static void WinLoop(CFLContext *esContext)
 			//queryflag = false;
 			QueryPerformanceCounter(&nLast);
 		}
+
+		
 		if (_winMsg(msg, done)){ continue; }
 
 	{
@@ -373,10 +398,14 @@ static void WinLoop(CFLContext *esContext)
 		  queryflag = true;
 
 		  calFps();
-		  
+
+		 
 		  mainthread_mainloop(esContext, deltaTime);
 
-		  input::InputState::getInstance()->update();
+		  input::InputState::getInstance()->mousebuttonStates[0] = GetAsyncKeyState(VK_LBUTTON) ? true : false;
+		  input::InputState::getInstance()->mousebuttonStates[1] = GetAsyncKeyState(VK_RBUTTON) ? true : false;
+		  input::InputState::getInstance()->mousebuttonStates[2] = GetAsyncKeyState(VK_MBUTTON) ? true : false;
+		  input::InputState::getInstance()->update(deltaTime);
 
 
 		  //{ //winMsg ±º‰

@@ -106,5 +106,9 @@ namespace cfl
 			return InputState::getInstance()->onMouseButtonUp[button];
 		}
 
+		std::vector<Touch>* Input::getTouches()
+		{
+			return &(InputState::getInstance()->touches);
+		}
 	}
 }

@@ -154,7 +154,7 @@ void up(CFLContext* context,float dettime)
 		auto cursor = cfl::input::Input::mousePositon();
 
 		std::ostringstream oss;
-		oss << "FPS:" << cfl::getFPS() << " Cursor X:" << cursor.x << "\tY:" << cursor.y  ;
+		oss << "FPS:" << cfl::getFPS() ;
 		
 		if (cfl::input::Input::getMouseButtonDown(0))
 		{
@@ -169,40 +169,86 @@ void up(CFLContext* context,float dettime)
 			oss << " 鼠标左键弹起";
 		}
 
-
 		context->graphic->drawString(oss.str().c_str(), font, 24, 0, 0);
+
+
+		
+
+		auto touches = cfl::input::Input::getTouches();
+		int tidx = 0;
+		for (auto t = touches->begin(); t != touches->end(); t++,tidx++)
+		{
+			oss.str("");
+
+
+
+			auto touch = *t;
+
+			oss << "Touch fingerId: " << touch.fingerId;
+
+			oss << " State:";
+
+			switch (touch.phase)
+			{
+			case cfl::input::touchPhase::Began:
+				oss << "Began";
+				break;
+			case cfl::input::touchPhase::Ended:
+				oss << "Ended";
+				break;
+			case cfl::input::touchPhase::Moved:
+				oss << "Moved";
+				break;
+			case cfl::input::touchPhase::Stationary:
+				oss << "Stationary";
+				break;
+			default:
+				break;
+			}
+
+			oss << " Touch Pos X:" << touch.position.x << " Y:" << touch.position.y;
+			oss << " DeltaTime :" << touch.deltaTime;
+			oss << " DeltaVector X :" << touch.deltaPosition.x << " Y:" << touch.deltaPosition.y;
+
+
+			context->graphic->drawString(oss.str().c_str(), font, 24, 0, 450+tidx*30);
+		}
+
+
+
+
 
 		context->graphic->drawString(
 			"泰文:" + CFLString(3626) + CFLString(3657) + CFLString(3657) + CFLString(3657) + CFLString(3657) + CFLString(3657),
-			font, 32, 30, 50, nullptr
+			font, 32, 30, 90, nullptr
 			);
 
 
 		context->graphic->drawString(
 			"组合音标[u+0063][u+0301]：" + CFLString(0x0063) + CFLString(0x0301),
-			font,32,30,90
+			font,32,30,130
 			);
 
 		context->graphic->drawString(
 			"火星文：(￣▽￣)~* ",
-			font, 32, 30, 90+40
+			font, 32, 30, 130 + 40
 			);
 
 		auto rcode = std::rand() % (4094) + 0x4e00;
 		context->graphic->drawString(
 			"每帧随机生成一个汉字：" + CFLString(rcode),
-			font, 32, 30, 90 + 40*2
+			font, 32, 30, 130 + 40 * 2
 			);
 		
 		context->graphic->drawString(
 			"实时高质量缩放：" ,
-			font, 32, 30, 90 + 40 * 3
+			font, 32, 30, 130 + 40 * 3
 			);
 
 		float scale = cfl::math::sinf (((context->totalframes) % 60) / 60.0f * PI * 2 ) * 5 + 0.5;
 		context->graphic->drawString(
 			"嘿",
-			font, 32, 30+32*8, 90 + 40 * 3,
+			font, 32, 30 + 32 * 8, 130 + 40 * 3,
 			nullptr,
 			&cfl::geom::Matrix3D().appendScale(scale,scale,scale )
 			);
@@ -212,7 +258,7 @@ void up(CFLContext* context,float dettime)
 			math::cosf((context->totalframes % 60)  * PI / 60 * 2)*0.5f + 0.5f, 1.0f);
 		context->graphic->drawString(
 			"字形三维旋转：",
-			font, 64, 30, 150 + 40 * 4,
+			font, 64, 30, 190 + 40 * 4,
 			&fcolor,
 			&cfl::geom::Matrix3D().appendRotation(toRadians(context->totalframes ), geom::Y_AXIS)
 			);

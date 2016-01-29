@@ -434,6 +434,37 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 
 					//LOGI("TOUCHMOVE x = %f  y = %f pid:%d\n", x, y, pid);
 
+					auto temptouches = &(input::InputState::getInstance()->touchTemp);
+					//bool found = false;
+					for (auto t = temptouches->begin(); t != temptouches->end(); t++)
+					{
+						if (pid == t->fingerId)
+						{
+							
+
+							input::Touch* touch = &(*t);
+							touch->position = geom::Vector2(x, y);
+
+							//只在帧更新后才修改状态
+							if (t->phase != cfl::input::touchPhase::Began)
+							{
+								touch->phase = cfl::input::touchPhase::Moved;
+							}
+							//found = true;
+							break;
+						}
+					}
+					/*if (!found)
+					{
+						trace_e("Touch Not Found");
+
+						input::Touch t;
+						t.fingerId = pid;
+						t.position = geom::Vector2(x, y);
+						t.phase = cfl::input::touchPhase::Moved;
+						temptouches->push_back(t);
+					}*/
+
 				}
 
 			}
@@ -452,6 +483,26 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				input::InputState::getInstance()->mousebuttonStates[0] = true;
 				input::InputState::getInstance()->onMouseButtonDown[0] = true;
 
+				{
+
+					auto temptouches = &(input::InputState::getInstance()->touchTemp);
+					for (auto t = temptouches->begin(); t != temptouches->end(); t++)
+					{
+						if (pid == t->fingerId)
+						{
+							trace_e("Touch id has exist !!");
+							temptouches->erase(t);
+							break;
+						}
+					}
+
+					input::Touch t;
+					t.fingerId = pid;
+					t.position = geom::Vector2(x, y);
+					t.phase = cfl::input::touchPhase::Began;
+					temptouches->push_back(t);
+
+				}
 			}
 			break;
 			case AMOTION_EVENT_ACTION_POINTER_UP:
@@ -465,6 +516,23 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 
 				input::InputState::getInstance()->mousebuttonStates[0] = false;
 				input::InputState::getInstance()->onMouseButtonUp[0] = true;
+
+				{
+					auto temptouches = &(input::InputState::getInstance()->touchTemp);
+					
+					for (auto t = temptouches->begin(); t != temptouches->end(); t++)
+					{
+						if (pid == t->fingerId)
+						{
+							input::Touch* touch = &(*t);
+							touch->phase = cfl::input::touchPhase::Ended;
+							
+							break;
+						}
+					}
+					
+				}
+
 
 			}
 			break;
@@ -674,7 +742,7 @@ void updateframe(CFLContext* context, float loopBegin)
 
 		mainthread_mainloop(context, dettime);
 
-		cfl::input::InputState::getInstance()->update();
+		cfl::input::InputState::getInstance()->update(dettime);
 
 		/*if ( context->eglDisplay != EGL_NO_DISPLAY)
 		{

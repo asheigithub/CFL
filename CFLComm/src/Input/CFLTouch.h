@@ -15,6 +15,16 @@ namespace cfl
 		*/
 		struct Touch
 		{
+			Touch() :fingerId(0), 
+				position(0,0),
+				deltaPosition(0,0),
+				deltaTime(0),
+				//tapCount(1),
+				phase( touchPhase::Canceled )
+			{
+				
+			}
+
 			//触摸的唯一索引。
 			int fingerId;
 			//触摸的位置。 
@@ -23,8 +33,9 @@ namespace cfl
 			geom::Vector2 deltaPosition;
 			//自上次改变的时间增量。 
 			float deltaTime;
-			//点击次数。 
-			int tapCount;
+			////点击次数。 
+			//int tapCount;
+
 			//描述触摸的状态。
 			touchPhase::TouchPhase phase;
 
