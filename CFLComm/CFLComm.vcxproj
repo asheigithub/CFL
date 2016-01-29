@@ -90,6 +90,9 @@
     <ClInclude Include="src\Graphic\CFLVertexPointer.h" />
     <ClInclude Include="src\Graphic\IGLDataResouce.h" />
     <ClInclude Include="src\Graphic\CFLTextureBase.h" />
+    <ClInclude Include="src\Input\CFLInput.h" />
+    <ClInclude Include="src\Input\CFLTouch.h" />
+    <ClInclude Include="src\Input\CFLTouchPhase.h" />
     <ClInclude Include="src\Text\CFLEncoding.h" />
     <ClInclude Include="src\Text\CFLEncodingEnum.h" />
     <ClInclude Include="src\Text\CFLTextElementEnumerator.h" />

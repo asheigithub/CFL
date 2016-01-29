@@ -12,6 +12,8 @@
 #include "Content/CFLContent.h"
 #include "Graphic/CFLFont.h"
 
+#include "Win32Input.h"
+
 static int targetFPS=60;
 static int realFps=0;
 namespace cfl
@@ -144,6 +146,61 @@ static LRESULT WINAPI CFLWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 			(int)point.x, (int)point.y);*/
 	}
 	break;
+
+	case WM_LBUTTONDOWN:
+	{
+		SetCapture(hWnd);
+		input::InputState::getInstance()->onMouseButtonDown[0] = true;
+		input::InputState::getInstance()->mousebuttonStates[0] = true;
+	}
+	break;
+	case WM_LBUTTONUP:
+	{
+		input::InputState::getInstance()->onMouseButtonUp[0] = true;
+		input::InputState::getInstance()->mousebuttonStates[0] = false;
+		if (GetCapture() == hWnd)
+		{
+			ReleaseCapture();
+		}
+	}
+	break;
+
+	case WM_RBUTTONDOWN:
+	{
+		SetCapture(hWnd);
+		input::InputState::getInstance()->onMouseButtonDown[1] = true;
+		input::InputState::getInstance()->mousebuttonStates[1] = true;
+	}
+	break;
+	case WM_RBUTTONUP:
+	{
+		input::InputState::getInstance()->onMouseButtonUp[1] = true;
+		input::InputState::getInstance()->mousebuttonStates[1] = false;
+		if (GetCapture() == hWnd)
+		{
+			ReleaseCapture();
+		}
+	}
+	break;
+
+	case WM_MBUTTONDOWN:
+	{
+		SetCapture(hWnd);
+		input::InputState::getInstance()->onMouseButtonDown[2] = true;
+		input::InputState::getInstance()->mousebuttonStates[2] = true;
+	}
+	break;
+	case WM_MBUTTONUP:
+	{
+		input::InputState::getInstance()->onMouseButtonUp[2] = true;
+		input::InputState::getInstance()->mousebuttonStates[2] = false;
+		if (GetCapture() == hWnd)
+		{
+			ReleaseCapture();
+		}
+	}
+	break;
+
 
 	default:
 		lRet = DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -319,7 +376,8 @@ static void WinLoop(CFLContext *esContext)
 		  
 		  mainthread_mainloop(esContext, deltaTime);
 
-		 
+		  input::InputState::getInstance()->update();
+
 
 		  //{ //winMsgÊ±¼ä
 			 // QueryPerformanceCounter(&nNow);
@@ -376,6 +434,8 @@ static void WinLoop(CFLContext *esContext)
 					eglSwapBuffers(esContext->eglDisplay, esContext->eglSurface);
 			  }
 			  
+			  
+
 			  QueryPerformanceCounter(&nNow);
 			  deltaTime = ((float)(nNow.QuadPart - nLast.QuadPart)) / nFreq.QuadPart;
 

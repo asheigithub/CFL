@@ -37,6 +37,9 @@
     <Filter Include="头文件\buildinshaders">
       <UniqueIdentifier>{d6ebf187-ea7f-427f-953f-33aaed5fa7fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\input">
+      <UniqueIdentifier>{a7fb4a0b-c108-4e17-ab71-8f9248164359}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CFLEntry.cpp">
@@ -177,6 +180,9 @@
     <ClCompile Include="..\CommSrc\CFLMemoryStream.cpp">
       <Filter>源文件\content</Filter>
     </ClCompile>
+    <ClCompile Include="src\CFLInput.cpp">
+      <Filter>源文件\input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CFLMainLoopThread.h">
@@ -240,6 +246,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\CommSrc\headers\fidct.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Win32Input.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

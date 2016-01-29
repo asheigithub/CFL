@@ -39,6 +39,7 @@
 #include "CFLStage.h"
 #include "Text/CFLTextElementEnumerator.h"
 #include "CFLString.h"
+#include "Input/CFLInput.h"
 
 namespace cfl
 {

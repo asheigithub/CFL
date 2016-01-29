@@ -25,6 +25,8 @@
 #include "Content/CFLContent.h"
 #include "Graphic/CFLFont.h"
 
+#include "AndroidInput.h"
+
 static int targetFPS = 60;
 static int realFps = 0;
 float GetCurrentTime();
@@ -396,11 +398,14 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 	}
 	else if (eventtype == AINPUT_EVENT_TYPE_MOTION) {
 		engine->animating = 1;
-		engine->state.x = AMotionEvent_getX(event, 0);
-		engine->state.y = AMotionEvent_getY(event, 0);
 
+		input::InputState::getInstance()->cursorx = AMotionEvent_getX(event, 0);
+		input::InputState::getInstance()->cursory = AMotionEvent_getY(event, 0);
 
+		engine->state.x = input::InputState::getInstance()->cursorx;
+		engine->state.y = input::InputState::getInstance()->cursory;
 
+		
 		//LOGI("posx:%d\n", engine->state.x);
 		//LOGI("posy:%d\n", engine->state.y);
 
@@ -443,6 +448,10 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				int index = (id & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
 				int pid = AMotionEvent_getPointerId(event, index);
 				//LOGI("TOUCHDOWN x = %f  y = %f pid:%d\n", x, y, pid);
+
+				input::InputState::getInstance()->mousebuttonStates[0] = true;
+				input::InputState::getInstance()->onMouseButtonDown[0] = true;
+
 			}
 			break;
 			case AMOTION_EVENT_ACTION_POINTER_UP:
@@ -453,6 +462,10 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				int index = (id & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
 				int pid = AMotionEvent_getPointerId(event, index);
 				//LOGI("TOUCHUP pid:%d\n", pid);
+
+				input::InputState::getInstance()->mousebuttonStates[0] = false;
+				input::InputState::getInstance()->onMouseButtonUp[0] = true;
+
 			}
 			break;
 			}
@@ -660,6 +673,8 @@ void updateframe(CFLContext* context, float loopBegin)
 		lastupdatetime = loopBegin;
 
 		mainthread_mainloop(context, dettime);
+
+		cfl::input::InputState::getInstance()->update();
 
 		/*if ( context->eglDisplay != EGL_NO_DISPLAY)
 		{

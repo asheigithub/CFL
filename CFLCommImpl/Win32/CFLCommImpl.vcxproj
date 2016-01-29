@@ -115,6 +115,7 @@
     <ClCompile Include="src\CFLEntry.cpp" />
     <ClCompile Include="src\CFLFile.cpp" />
     <ClCompile Include="src\CFLFileStream.cpp" />
+    <ClCompile Include="src\CFLInput.cpp" />
     <ClCompile Include="src\CFLMainLoopThread.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +140,7 @@
     <ClInclude Include="..\CommSrc\headers\VLITable.h" />
     <ClInclude Include="..\CommSrc\xxhash\xxhash.h" />
     <ClInclude Include="src\CFLMainLoopThread.h" />
+    <ClInclude Include="src\Win32Input.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

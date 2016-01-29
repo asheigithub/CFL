@@ -92,10 +92,12 @@ cmd /C ndk-build clean</NMakeCleanCommandLine>
     <ClCompile Include="CFLEntry.cpp" />
     <ClCompile Include="CFLFile.cpp" />
     <ClCompile Include="CFLFileStream.cpp" />
+    <ClCompile Include="CFLInput.cpp" />
     <ClCompile Include="jnitool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CommSrc\xxhash\xxhash.h" />
+    <ClInclude Include="AndroidInput.h" />
     <ClInclude Include="CFLAndroidMainLoopThread.h" />
     <ClInclude Include="jnitool.h" />
   </ItemGroup>

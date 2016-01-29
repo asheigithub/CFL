@@ -16,6 +16,9 @@
     <Filter Include="源文件\render">
       <UniqueIdentifier>{15211662-6b65-4720-84aa-6f2eac251909}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\input">
+      <UniqueIdentifier>{b0f5746e-c3dd-4b26-b958-053b2c45c96e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />
@@ -67,6 +70,9 @@
     <ClCompile Include="CFLFileStream.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="CFLInput.cpp">
+      <Filter>源文件\input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="jnitool.h">
@@ -76,6 +82,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\CommSrc\xxhash\xxhash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AndroidInput.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

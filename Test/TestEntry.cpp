@@ -151,8 +151,24 @@ void up(CFLContext* context,float dettime)
 		
 		auto font = graphic::font::Font::getFont("arial");
 
+		auto cursor = cfl::input::Input::mousePositon();
+
 		std::ostringstream oss;
-		oss << "FPS:" << cfl::getFPS();
+		oss << "FPS:" << cfl::getFPS() << " Cursor X:" << cursor.x << "\tY:" << cursor.y  ;
+		
+		if (cfl::input::Input::getMouseButtonDown(0))
+		{
+			oss << " 鼠标左键被按下";
+		}
+		if (cfl::input::Input::getMouseButton(0))
+		{
+			oss << " 鼠标左键按下中";
+		}
+		if (cfl::input::Input::getMouseButtonUp(0))
+		{
+			oss << " 鼠标左键弹起";
+		}
+
 
 		context->graphic->drawString(oss.str().c_str(), font, 24, 0, 0);
 
