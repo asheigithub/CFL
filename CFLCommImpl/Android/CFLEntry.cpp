@@ -443,7 +443,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 							
 
 							input::Touch* touch = &(*t);
-							touch->position = geom::Vector2(x, y);
+							touch->position = cfl::input::toGamePosition( geom::Vector2(x, y));
 
 							//只在帧更新后才修改状态
 							if (t->phase != cfl::input::touchPhase::Began)
@@ -498,7 +498,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 
 					input::Touch t;
 					t.fingerId = pid;
-					t.position = geom::Vector2(x, y);
+					t.position = cfl::input::toGamePosition(geom::Vector2(x, y));
 					t.phase = cfl::input::touchPhase::Began;
 					temptouches->push_back(t);
 

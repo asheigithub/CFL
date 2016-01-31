@@ -2,6 +2,7 @@
 #define ANDROIDINPUT_H
 
 #include "Input/CFLInput.h"
+#include "Geom/CFLGeom.h"
 #include <vector>
 #include <unordered_map>
 
@@ -9,7 +10,8 @@ namespace cfl
 {
 	namespace input
 	{
-		
+		cfl::geom::Vector2 toGamePosition(const cfl::geom::Vector2& input);
+
 		struct InputState
 		{
 			float cursorx;

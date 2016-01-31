@@ -11,7 +11,7 @@ namespace cfl
 		using namespace cfl::geom;
 
 		//转换为游戏坐标
-		static Vector2 toGamePosition(const Vector2& input)
+		Vector2 toGamePosition(const Vector2& input)
 		{
 			auto stage = CFLContext::getCurrentInstance()->stage;
 

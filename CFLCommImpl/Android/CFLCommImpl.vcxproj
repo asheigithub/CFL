@@ -38,7 +38,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <NMakeOutput>CFLCommImpl.exe</NMakeOutput>
     <NMakePreprocessorDefinitions>ANDROID;__ANDROID__;__arm__;__GNUC__;__LINUX_COMPILER_H;_NEW;__ASM_GENERIC_SIGNAL_H;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <NMakeIncludeSearchPath>../../GLES;../../CFLComm/src;D:\Android\android-sdk\android-ndk-r10d\sources\cxx-stl\gnu-libstdc++\4.8\libs\x86\include;D:\Android\android-sdk\android-ndk-r10d\sources\cxx-stl\gnu-libstdc++\4.8\include;D:\Android\android-sdk\android-ndk-r10d\sources\android\native_app_glue;D:\Android\android-sdk\android-ndk-r10d\platforms\android-12\arch-arm\usr\include;D:\Android\android-sdk\android-ndk-r10d\toolchains\aarch64-linux-android-4.9\prebuilt\windows-x86_64\lib\gcc\aarch64-linux-android\4.9\include;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath>../../GLES;../../CFLComm/src;D:\crystaxndk\crystax-ndk-10.2.1\sources\cxx-stl\gnu-libstdc++\4.9\libs\x86\include;D:\crystaxndk\crystax-ndk-10.2.1\sources\cxx-stl\gnu-libstdc++\4.9\include;D:\crystaxndk\crystax-ndk-10.2.1\sources\android\native_app_glue;D:\crystaxndk\crystax-ndk-10.2.1\platforms\android-12\arch-arm\usr\include;D:\crystaxndk\crystax-ndk-10.2.1\toolchains\aarch64-linux-android-4.9\prebuilt\windows-x86_64\lib\gcc\aarch64-linux-android\4.9\include;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
     <NMakeBuildCommandLine>@set path=%path%;E:\Cocos\tools\ant\bin
 @set path=%path%;D:\Android\android-sdk\tools
 @set path=%path%;D:\Android\android-sdk\platform-tools
