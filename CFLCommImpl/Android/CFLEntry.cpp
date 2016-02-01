@@ -433,7 +433,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 
 
 					//LOGI("TOUCHMOVE x = %f  y = %f pid:%d\n", x, y, pid);
-
+					
 					auto temptouches = &(input::InputState::getInstance()->touchTemp);
 					//bool found = false;
 					for (auto t = temptouches->begin(); t != temptouches->end(); t++)
@@ -486,13 +486,16 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				{
 
 					auto temptouches = &(input::InputState::getInstance()->touchTemp);
+
+					int addtouchcount=0;
 					for (auto t = temptouches->begin(); t != temptouches->end(); t++)
 					{
 						if (pid == t->fingerId)
 						{
-							trace_e("Touch id has exist !!");
+							addtouchcount++;
+							//trace_e("Touch id has exist !!");
 							temptouches->erase(t);
-							break;
+							//break;
 						}
 					}
 
@@ -500,6 +503,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 					t.fingerId = pid;
 					t.position = cfl::input::toGamePosition(geom::Vector2(x, y));
 					t.phase = cfl::input::touchPhase::Began;
+					t.tapCount += addtouchcount;
 					temptouches->push_back(t);
 
 				}
