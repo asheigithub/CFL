@@ -312,6 +312,7 @@ namespace cfl
 			if (basedir->_DirType == DirType::asset)
 			{
 				trace_e("CFLfile::deletefile asset dir is readonly");
+				return false;
 			}
 			else
 			{ 
