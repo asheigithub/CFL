@@ -29,7 +29,7 @@
 
 #endif
 
-
+#include <sstream>
 #include "CFLThreadTasks.h"
 #include "CFLDrawCommand.h"
 #include "Graphic/CFLGraphic.h"

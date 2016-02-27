@@ -416,7 +416,7 @@ namespace cfl
 
 			CFLString ret= CFLString(buff,text::Encoding::utf8);
 
-			delete buff;
+			delete[] buff;
 
 			return ret;
 		}

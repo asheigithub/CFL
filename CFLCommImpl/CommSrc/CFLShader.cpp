@@ -69,7 +69,7 @@ namespace cfl
 
 					LOGE("Error compiling shader:\n%s\n", infoLog);
 
-					delete infoLog;
+					delete[] infoLog;
 
 				}
 

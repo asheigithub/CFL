@@ -55,7 +55,7 @@ namespace cfl
 				*(gbkchars + gbksize) = '\0';
 
 
-				delete ucs4;
+				delete[] ucs4;
 
 				return std::shared_ptr<char>(gbkchars);
 			}
@@ -71,7 +71,7 @@ namespace cfl
 
 				CFLString ret = CFLString(temp,text::Encoding::utf8);
 
-				delete temp;
+				delete[] temp;
 
 				return ret;
 			}

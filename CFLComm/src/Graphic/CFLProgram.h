@@ -14,7 +14,7 @@
 #include "CFLShader.h"
 
 #include <unordered_map>
-
+#include <sstream>
 namespace cfl
 {
 	namespace render
