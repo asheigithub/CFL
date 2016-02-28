@@ -431,11 +431,8 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 
 					int pid = AMotionEvent_getPointerId(event, i);
 
-
-					//LOGI("TOUCHMOVE x = %f  y = %f pid:%d\n", x, y, pid);
-					
 					auto temptouches = &(input::InputState::getInstance()->touchTemp);
-					//bool found = false;
+					
 					for (auto t = temptouches->begin(); t != temptouches->end(); t++)
 					{
 						if (pid == t->fingerId)
@@ -450,21 +447,11 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 							{
 								touch->phase = cfl::input::touchPhase::Moved;
 							}
-							//found = true;
+							
 							break;
 						}
 					}
-					/*if (!found)
-					{
-						trace_e("Touch Not Found");
-
-						input::Touch t;
-						t.fingerId = pid;
-						t.position = geom::Vector2(x, y);
-						t.phase = cfl::input::touchPhase::Moved;
-						temptouches->push_back(t);
-					}*/
-
+					
 				}
 
 			}
@@ -475,11 +462,10 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				float x = AMotionEvent_getX(event, 0);
 				float y = AMotionEvent_getY(event, 0);
 
-				//LOGI("x = %f  y = %f", x, y);
+				
 				int index = (id & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
 				int pid = AMotionEvent_getPointerId(event, index);
-				//LOGI("TOUCHDOWN x = %f  y = %f pid:%d\n", x, y, pid);
-
+				
 				input::InputState::getInstance()->mousebuttonStates[0] = true;
 				input::InputState::getInstance()->onMouseButtonDown[0] = true;
 
@@ -488,14 +474,18 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 					auto temptouches = &(input::InputState::getInstance()->touchTemp);
 
 					int addtouchcount=0;
-					for (auto t = temptouches->begin(); t != temptouches->end(); t++)
+					for (auto t = temptouches->begin(); t != temptouches->end();)
 					{
 						if (pid == t->fingerId)
 						{
 							addtouchcount++;
 							//trace_e("Touch id has exist !!");
-							temptouches->erase(t);
+							t=temptouches->erase(t);
 							//break;
+						}
+						else
+						{
+							t++;
 						}
 					}
 
