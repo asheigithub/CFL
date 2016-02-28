@@ -354,7 +354,7 @@ bool _winMsg(MSG& msg, bool& done)
 	return false;
 }
 
-
+static bool done = false;
 static void WinLoop(CFLContext *esContext)
 {
 	LARGE_INTEGER nFreq;
@@ -366,7 +366,7 @@ static void WinLoop(CFLContext *esContext)
 	float deltaTime = 0;
 
 	MSG msg = { 0 };
-	bool done = false;
+	//bool done = false;
 
 	bool queryflag = true;
 
@@ -665,6 +665,10 @@ int  main(int argc, char* argv[])
 	return 0;
 }
 
+void cfl::exitApp()
+{
+	done = true;
+}
 
 void cfl::closeGL(CFLContext* context)
 {

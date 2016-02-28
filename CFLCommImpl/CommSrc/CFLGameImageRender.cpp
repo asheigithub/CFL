@@ -631,8 +631,8 @@ namespace cfl
 					}
 					else
 					{
-						int batchstidx  = reftextrue->__useinbatchStIdx();
-						while (idx>batchstidx)
+						int batchstidx = reftextrue->__useinbatchStIdx(); 
+						while (idx>batchstidx )
 						{
 							bool needcheck  = false;
 							drawElement* checkd  = draws[idx - 1];
@@ -653,8 +653,8 @@ namespace cfl
 									break;
 								}
 							}
-
-
+							
+							
 							if ((
 								checkd->_screenright <= draw->_screenleft || 
 								checkd->_screenleft >= draw->_screenright  ||

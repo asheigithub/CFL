@@ -67,10 +67,13 @@ content::BuildInData getTestData()
 	return content::BuildInData(vVertices, sizeof(vVertices));
 }
 
+std::vector<CFLString> lines;
 
 float times = 0;
 void up(CFLContext* context,float dettime)
 {
+	
+
 	context->graphic->clear(0, 0, 0.0f, 1, 0, 0, cfl::graphic::ClearMaskBit::color);
 	
 	static int mmm = 0;
@@ -247,7 +250,7 @@ void up(CFLContext* context,float dettime)
 
 		float scale = cfl::math::sinf (((context->totalframes) % 60) / 60.0f * PI * 2 ) * 5 + 0.5;
 		context->graphic->drawString(
-			"嘿",
+			CFLString(rcode),
 			font, 32, 30 + 32 * 8, 130 + 40 * 3,
 			nullptr,
 			&cfl::geom::Matrix3D().appendScale(scale,scale,scale )
@@ -267,7 +270,53 @@ void up(CFLContext* context,float dettime)
 	testgeom();
 	//testfileread();
 	
-	
+	float liney = 0;
+	static float stliney = 0;
+	static float sspeed = 0;
+
+	if (touches->size() > 0)
+	{
+		auto t = touches->begin();
+		
+		if (t->phase == input::touchPhase::Moved)
+		{
+			stliney += t->deltaPosition.y;
+			sspeed = t->deltaPosition.y;
+		}
+	}
+	else
+	{
+		if (math::abs(sspeed) > 0.1)
+		{
+			stliney += sspeed;
+			sspeed = sspeed / 1.05f;
+		}
+		
+	}
+
+
+
+	if (stliney > 0){ stliney = 0; }
+	if (stliney < -(lines.size() * 28 - 720.0f)){ stliney = -(lines.size() * 28 - 720.0f); }
+
+	for (size_t i = 0; i < lines.size(); i++)
+	{
+		if (  liney + stliney > context->stage->stageHeight())
+		{
+			break;
+		}
+
+		if (i * 28 + stliney > -28)
+		{
+			context->graphic->drawString(lines[i], font, 24, 510, liney + stliney);
+
+		}
+		
+
+		
+		
+		liney += 28;
+	}
 
 };
 
@@ -506,6 +555,32 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 		LOGI("simsun init timer: %d\n", t);
 	}
 #endif
+
+
+	//读取全本三国演义
+	auto sgdata = content::BinaryCache::getInstance()->getData(cfl::file::asset, "testreadfile/SGYY.txt");
+	auto strSG = CFLString(sgdata.getData(), text::gbk);
+
+	for (size_t i = 0; i < strSG.length(); i++)
+	{
+		//CFLString line=CFLString::empty;
+		unsigned int ll[31];
+		int cidx=0;
+		while (i < strSG.length() && cidx<30 )
+		{
+			//line =line + CFLString( strSG.charCodeAt(i));
+			ll[cidx]=strSG.charCodeAt(i);
+			++cidx;
+			i++;
+		}
+		
+		ll[cidx]=0;
+		
+		lines.push_back(ll);
+		
+	}
+
+	trace("lines%d",lines.size());
 
 
 	//render::textures::Texture2D texture;

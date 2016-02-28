@@ -90,7 +90,7 @@ namespace cfl
 	//Ä£ÄâOPGL¶ªÊ§
 	void closeGL(CFLContext*);
 	void buildGL(CFLContext*);
-
+	void exitApp();
 #endif
 
 

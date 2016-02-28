@@ -289,7 +289,10 @@ void OnClick(System::Object ^sender, System::EventArgs ^e)
 
 void OnClosed(System::Object ^sender, System::EventArgs ^e)
 {
-	exit(1);
+	closeGL(context);
+	exitApp();
+
+	//exit(1);
 }
 
 void OnTermDisplayClick(System::Object ^sender, System::EventArgs ^e)
