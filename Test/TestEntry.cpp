@@ -295,7 +295,7 @@ void up(CFLContext* context,float dettime)
 	}
 
 
-
+/*
 	if (stliney > 0){ stliney = 0; }
 	if (stliney < -(lines.size() * 28 - 720.0f)){ stliney = -(lines.size() * 28 - 720.0f); }
 
@@ -317,7 +317,7 @@ void up(CFLContext* context,float dettime)
 		
 		liney += 28;
 	}
-
+*/
 };
 
 //#define ACCESS _access  
@@ -558,29 +558,29 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 
 
 	//读取全本三国演义
-	auto sgdata = content::BinaryCache::getInstance()->getData(cfl::file::asset, "testreadfile/SGYY.txt");
-	auto strSG = CFLString(sgdata.getData(), text::gbk);
+	//auto sgdata = content::BinaryCache::getInstance()->getData(cfl::file::asset, "testreadfile/SGYY.txt");
+	//auto strSG = CFLString(sgdata.getData(), text::gbk);
 
-	for (size_t i = 0; i < strSG.length(); i++)
-	{
-		//CFLString line=CFLString::empty;
-		unsigned int ll[31];
-		int cidx=0;
-		while (i < strSG.length() && cidx<30 )
-		{
-			//line =line + CFLString( strSG.charCodeAt(i));
-			ll[cidx]=strSG.charCodeAt(i);
-			++cidx;
-			i++;
-		}
-		
-		ll[cidx]=0;
-		
-		lines.push_back(ll);
-		
-	}
+	//for (size_t i = 0; i < strSG.length(); i++)
+	//{
+	//	//CFLString line=CFLString::empty;
+	//	unsigned int ll[31];
+	//	int cidx=0;
+	//	while (i < strSG.length() && cidx<30 )
+	//	{
+	//		//line =line + CFLString( strSG.charCodeAt(i));
+	//		ll[cidx]=strSG.charCodeAt(i);
+	//		++cidx;
+	//		i++;
+	//	}
+	//	
+	//	ll[cidx]=0;
+	//	
+	//	lines.push_back(ll);
+	//	
+	//}
 
-	trace("lines%d",lines.size());
+	//trace("lines%d",lines.size());
 
 
 	//render::textures::Texture2D texture;

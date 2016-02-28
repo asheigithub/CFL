@@ -634,7 +634,7 @@ namespace cfl
 						int batchstidx = reftextrue->__useinbatchStIdx(); 
 						while (idx>batchstidx )
 						{
-							bool needcheck  = false;
+							bool needcheck = false; 
 							drawElement* checkd  = draws[idx - 1];
 							if (toskipgroup != checkd->__group)
 							{
@@ -715,7 +715,7 @@ namespace cfl
 		//¼ÆËã´Ë´Î»æÍ¼µÄÆÁÄ»×ø±ê
 		static bool calDrawScreenMatrix(drawElement* d)
 		{
-			auto img  = d->image;
+			GameImage& img  = d->image;
 			//*****¼ÆËã¾ØÕó**********
 			geom::Matrix3D m;
 			
@@ -728,8 +728,14 @@ namespace cfl
 			//***»Ö¸´µ½Ô­Í¼Ïñ*****
 			if (d->clip == nullptr)
 			{
-				m.appendScale((float)img->clipWidth, (float)img->clipHeight, 1.0f);
-				m.appendTranslation((float)img->padLeft, (float)img->padTop, 0.0f);
+				m.M[0][0] = (float)img->clipWidth;
+				m.M[1][1] = (float)img->clipHeight;
+
+				m.M[3][0] = (float)img->padLeft;
+				m.M[3][1] = (float)img->padTop;
+
+				/*m.appendScale((float)img->clipWidth, (float)img->clipHeight, 1.0f);
+				m.appendTranslation((float)img->padLeft, (float)img->padTop, 0.0f);*/
 
 			}
 			else
@@ -802,8 +808,10 @@ namespace cfl
 				rightu = newrightu;
 				bottomv = newbottomv;
 			}
-
+			
 			m.appendScale(d->scale, d->scale, 1);
+			
+			
 			if (d->matrix != nullptr)
 			{
 				m.append( *d->matrix );
@@ -877,8 +885,8 @@ namespace cfl
 			}
 			
 
-			auto ref1 = d1->image->refTexture;
-			auto ref2 = d2->image->refTexture;
+			std::shared_ptr<Texture2DRef>& ref1 = d1->image->refTexture;
+			std::shared_ptr<Texture2DRef>& ref2 = d2->image->refTexture;
 
 			return !( ref1->equals(ref2.get()) );
 		}
