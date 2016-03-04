@@ -346,11 +346,13 @@ namespace cfl
 			float lastAdvancex = 0;
 			for (size_t i = 0; i < slen; i++)
 			{
-				auto fontimage = font.getGlyphForRending(string.charCodeAt(i));
+				auto charcode = string.charCodeAt(i);
+
+				auto fontimage = font.getGlyphForRending(charcode);
 
 				if (!fontimage)
 				{
-					auto search = cfl::graphic::font::Font::searchGlyphForRending(string.charCodeAt(i));
+					auto search = cfl::graphic::font::Font::searchGlyphForRending(charcode);
 					if (std::get<0>(search))
 					{
 						fontimage = std::get<0>(search);
@@ -363,7 +365,7 @@ namespace cfl
 					if (fontinfo->useKerning && i > 0)
 					{
 						//字距微调
-						auto kerning= font.queryKerning(string.charCodeAt(i - 1), string.charCodeAt(i));
+						auto kerning = font.queryKerning(string.charCodeAt(i - 1), charcode);
 						if (kerning)
 						{
 							stx += kerning->detx * 1.0f / fontimage->imagewidth;
@@ -371,7 +373,7 @@ namespace cfl
 					}
 
 					float dety = 0;
-					if ( fontimage->advance_x==0 && UChar::getUnicodeCategory(string.charCodeAt(i)) == cfl::unicodeCategory::NonSpacingMark)
+					if (fontimage->advance_x == 0 && UChar::getUnicodeCategory(charcode) == cfl::unicodeCategory::NonSpacingMark)
 					{
 						//***回退到上一个字符***
 						/*if (fontimage->pen_x == fontimage->imagewidth / 2)

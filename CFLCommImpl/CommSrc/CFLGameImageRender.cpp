@@ -43,8 +43,10 @@ namespace cfl
 		//2D绘图的MVP矩阵
 		static geom::Matrix3D mvp;
 
-		static std::vector<drawElement*> draws;//缓存绘图信息列表
-		
+		//static std::vector<drawElement*> draws;//缓存绘图信息列表
+		static drawElement** draws;
+		static size_t drawsSize;
+
 		//计算此次绘图的屏幕坐标
 		static bool calDrawScreenMatrix(drawElement* d);
 
@@ -177,6 +179,9 @@ namespace cfl
 			indexBuffer->datasource = std::make_shared< VecDataSource<GLushort>>();
 			indexBuffer->datasource->setData(indexBuffer);
 
+			draws = new drawElement*[1024];
+			memset(draws, 0, 1024 * sizeof(drawElement*));
+			drawsSize = 1024;
 		}
 
 		GameImageRender::~GameImageRender()
@@ -219,6 +224,13 @@ namespace cfl
 				delete indexBuffer;
 				indexBuffer = nullptr;
 			}
+
+			if (draws)
+			{
+				delete[] draws;
+				draws = nullptr;
+			}
+
 		}
 
 		void GameImageRender::onGLinited(CFLContext* ctx)
@@ -593,12 +605,26 @@ namespace cfl
 			drawElement* draw
 			)
 		{
-			if (currentdrawindex >= (long)draws.size())
+			/*if (currentdrawindex >= (long)draws.size())
 			{
 				for (size_t i = 0; i < 1024; i++)
 				{
 					draws.push_back(nullptr);
 				}
+			}*/
+
+			if (currentdrawindex >=(long)drawsSize)
+			{
+				drawElement** temp = new drawElement*[drawsSize + 1024];
+				memset(temp, 0, (drawsSize + 1024) * sizeof(drawElement*));
+				memcpy(temp, draws, drawsSize * sizeof(drawElement*));
+
+				delete[] draws;
+
+				drawsSize += 1024;
+				
+				draws = temp;
+
 			}
 
 			auto reftextrue = draw->image->refTexture;

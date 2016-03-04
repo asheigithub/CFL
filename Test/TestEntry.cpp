@@ -157,7 +157,7 @@ void up(CFLContext* context,float dettime)
 		auto cursor = cfl::input::Input::mousePositon();
 
 		std::ostringstream oss;
-		oss << "FPS:" << cfl::getFPS() ;
+		oss << "FPS:" << cfl::getFPS() << " GPU:" << context->capability->getRenderer().c_str() ;
 		
 		if (cfl::input::Input::getMouseButtonDown(0))
 		{
@@ -226,7 +226,12 @@ void up(CFLContext* context,float dettime)
 			font, 32, 30, 90, nullptr
 			);
 
-
+		/*context->graphic->drawString(
+			"" + CFLString(0x0E2C) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E38) + CFLString(0x0E47) + CFLString(0x0E47) + CFLString(0x0E47) + CFLString(0x0E47) + CFLString(0x0E47) + CFLString(0x0E47) + CFLString(0x0E47) + CFLString(0x0E47) + CFLString(0x0E47) + CFLString(0x0E47) + CFLString(0x0E47) + CFLString(0x0E47) + CFLString(0x0E47) + CFLString(0x0E47) + CFLString(0x0E47) + CFLString(0x0E47) + CFLString(0x0E47) + CFLString(0x0E47) + CFLString(0x0E47) + CFLString(0x0E47)
+			,
+			font, 32, 30, 90, nullptr
+			);*/
+		
 		context->graphic->drawString(
 			"组合音标[u+0063][u+0301]：" + CFLString(0x0063) + CFLString(0x0301),
 			font,32,30,130
@@ -237,24 +242,24 @@ void up(CFLContext* context,float dettime)
 			font, 32, 30, 130 + 40
 			);
 
-		auto rcode = std::rand() % (4094) + 0x4e00;
+		/*auto rcode = std::rand() % (4094) + 0x4e00;
 		context->graphic->drawString(
 			"每帧随机生成一个汉字：" + CFLString(rcode),
 			font, 32, 30, 130 + 40 * 2
-			);
+			);*/
 		
 		context->graphic->drawString(
 			"实时高质量缩放：" ,
 			font, 32, 30, 130 + 40 * 3
 			);
 
-		float scale = cfl::math::sinf (((context->totalframes) % 60) / 60.0f * PI * 2 ) * 5 + 0.5;
+		/*float scale = cfl::math::sinf (((context->totalframes) % 60) / 60.0f * PI * 2 ) * 5 + 0.5;
 		context->graphic->drawString(
 			CFLString(rcode),
 			font, 32, 30 + 32 * 8, 130 + 40 * 3,
 			nullptr,
 			&cfl::geom::Matrix3D().appendScale(scale,scale,scale )
-			);
+			);*/
 
 		auto fcolor = cfl::graphic::Color(math::cosf((context->totalframes % 30)  * PI / 30 * 2)*0.5f + 0.5f,
 			math::sinf((context->totalframes % 45)  * PI / 45 * 2)*0.5f + 0.5f,
@@ -301,7 +306,7 @@ void up(CFLContext* context,float dettime)
 
 	for (size_t i = 0; i < lines.size(); i++)
 	{
-		if (  liney + stliney > context->stage->stageHeight())
+		if (liney + stliney > context->stage->stageHeight())
 		{
 			break;
 		}
@@ -311,9 +316,7 @@ void up(CFLContext* context,float dettime)
 			context->graphic->drawString(lines[i], font, 24, 510, liney + stliney);
 
 		}
-		
 
-		
 		
 		liney += 28;
 	}
@@ -560,7 +563,7 @@ int cfl_main(cfl::CFLContext* ctx, int argc, char* argv[])
 	//读取全本三国演义
 	auto sgdata = content::BinaryCache::getInstance()->getData(cfl::file::asset, "testreadfile/SGYY.txt");
 	auto strSG = CFLString(sgdata.getData(), text::gbk);
-
+	lines.clear();
 	for (size_t i = 0; i < strSG.length(); i++)
 	{
 		//CFLString line=CFLString::empty;

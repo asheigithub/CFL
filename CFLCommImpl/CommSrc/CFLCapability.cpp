@@ -70,6 +70,11 @@ namespace cfl
 
 #endif
 
+			auto renderer = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
+			if (renderer != nullptr)
+			{
+				_renderer = renderer;
+			}
 
 			auto exts = reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS));
 			if (exts != nullptr)

@@ -14,6 +14,7 @@
 #endif
 
 #include "Content/CFLEndian.h"
+#include "CFLString.h"
 
 namespace cfl
 {
@@ -26,6 +27,7 @@ namespace cfl
 	public:
 		Capability()
 			:_glver(2),
+			_renderer(),
 			_hasinited(false),
 			_compressed_texure_formats(std::vector<int>()),
 			_extensions(std::vector<std::string>()),
@@ -41,10 +43,14 @@ namespace cfl
 		//查询是否支持半精度扩展
 		bool is_OES_vertex_half_float();
 		
-		int getGlVer() const { return _glver; }
+		int getGlVer() const { return _glver; };
+
+		CFLString getRenderer() const { return _renderer; };
 
 	private:
 		int _glver;
+
+		CFLString _renderer;
 
 		content::Endian endian;
 

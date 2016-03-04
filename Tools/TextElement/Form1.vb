@@ -659,4 +659,29 @@ Public Class Form1
 
 
     End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        Dim input = "ฬุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุุ็็็็็็็็็็็็็็็็็็็็" '"∆˚¬˚åˆøπœ¬¬ππππ´øøøøøøππø¬µµµµ˜˜˜µµµµµ††††††\"
+
+        Dim bytes = System.Text.Encoding.UTF32.GetBytes(input)
+
+        Dim ms As New System.IO.MemoryStream(bytes)
+        Dim br As New System.IO.BinaryReader(ms)
+
+        Dim outstr As String = ""
+
+        While ms.Position < ms.Length
+            Dim code = br.ReadInt32()
+
+            outstr = outstr & "+" & String.Format("CFLString(0x{0:X4})", code)
+
+        End While
+
+        TextBox1.Text = outstr
+
+
+
+
+
+    End Sub
 End Class

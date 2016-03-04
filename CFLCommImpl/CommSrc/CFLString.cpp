@@ -193,9 +193,10 @@ namespace cfl
 	{
 		
 		const unsigned int* tmp = a_data->ucs4.load(std::memory_order_relaxed);
-		std::atomic_thread_fence(std::memory_order_acquire);
+		
 		if (tmp == nullptr)
 		{
+			std::atomic_thread_fence(std::memory_order_acquire);
 			prepare_utf8_str(str); //编码UCS4,首先需要utf8编码
 
 			std::unique_lock<std::mutex> lock((a_data->mtx));
@@ -209,7 +210,7 @@ namespace cfl
 				a_data->ucs4.store(ucs4, std::memory_order_relaxed);
 			}
 		}
-
+		
 
 	}
 
@@ -224,9 +225,10 @@ namespace cfl
 		}
 
 		const char* tmp = a_data->ansi_chars.load(std::memory_order_relaxed);
-		std::atomic_thread_fence(std::memory_order_acquire);
+		
 		if (tmp == nullptr)
 		{
+			std::atomic_thread_fence(std::memory_order_acquire);
 			std::unique_lock<std::mutex> lock((a_data->mtx));
 			
 			tmp = a_data->ansi_chars.load(std::memory_order_relaxed);
@@ -252,9 +254,10 @@ namespace cfl
 	{
 
 		const char* pt = a_data->utf8_chars.load(std::memory_order_relaxed);
-		std::atomic_thread_fence(std::memory_order_acquire);
+		
 		if (pt == nullptr)
 		{
+			std::atomic_thread_fence(std::memory_order_acquire);
 			std::unique_lock<std::mutex> lock((a_data->mtx));
 
 			pt = a_data->utf8_chars.load(std::memory_order_relaxed);

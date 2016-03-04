@@ -100,7 +100,8 @@ namespace cfl
 				fontInnderData(FontInfo& info)
 					:info(info),
 					keringtable(nullptr),
-					glyphtable(nullptr)
+					glyphtable(nullptr),
+					glypharray(nullptr)
 				{
 					
 				}
@@ -128,6 +129,19 @@ namespace cfl
 						glyphtable = nullptr;
 					}
 
+					if (glypharray)
+					{
+						for (size_t i = 0; i < 65535; i++)
+						{
+							if (glypharray[i])
+							{
+								delete glypharray[i];
+							}
+						}
+						delete[] glypharray;
+						glypharray = nullptr;
+					}
+
 				}
 
 				cfl::file::DirType dir; 
@@ -137,6 +151,8 @@ namespace cfl
 				std::unordered_map<kerningkey, Kerning*,kerningkey_hasher>* keringtable;
 
 				std::unordered_map<unsigned int, Glyph*>* glyphtable;
+
+				Glyph** glypharray;
 
 			};
 
@@ -187,19 +203,40 @@ namespace cfl
 
 			Glyph* Font::getGlyphForRending(unsigned int charcode) const
 			{
-				auto f = innerData->glyphtable->find(charcode);
-				if (f != innerData->glyphtable->end())
+				if (charcode < 65535)
 				{
-					if (f->second->glyphImage.isNull())
+					auto g = innerData->glypharray[charcode];
+					if (g)
 					{
-						readyFontGlyphImage(innerData.get(), f->second);
+						if (g->glyphImage.isNull())
+						{
+							readyFontGlyphImage(innerData.get(),g);
+						}
+						return g;
 					}
-					return f->second;
+					else
+					{
+						return nullptr;
+					}
+
 				}
 				else
 				{
-					return nullptr;
+					auto f = innerData->glyphtable->find(charcode);
+					if (f != innerData->glyphtable->end())
+					{
+						if (f->second->glyphImage.isNull())
+						{
+							readyFontGlyphImage(innerData.get(), f->second);
+						}
+						return f->second;
+					}
+					else
+					{
+						return nullptr;
+					}
 				}
+
 			}
 
 
@@ -290,6 +327,8 @@ namespace cfl
 				}
 
 				ret.innerData->glyphtable = new std::unordered_map<unsigned int, Glyph*>();
+				ret.innerData->glypharray = new Glyph*[65535];
+				memset(ret.innerData->glypharray, 0, sizeof(Glyph*) * 65535);
 
 				auto offset = br.getPosition();
 				for (size_t i = 0; i < info.glyphCount; i++)
@@ -297,7 +336,14 @@ namespace cfl
 					glyphlist[i]->offset = offset;
 					offset += glyphlist[i]->bytesize; //32*32;
 
-					ret.innerData->glyphtable->emplace(std::make_pair(glyphlist[i]->charcode, glyphlist[i]));
+					if (glyphlist[i]->charcode < 65535)
+					{
+						ret.innerData->glypharray[glyphlist[i]->charcode] = glyphlist[i];
+					}
+					else
+					{
+						ret.innerData->glyphtable->emplace(std::make_pair(glyphlist[i]->charcode, glyphlist[i]));
+					}
 				}
 
 				glyphlist[0]->isfirstglyph = true;
@@ -329,15 +375,23 @@ namespace cfl
 
 			Glyph* Font::getGlyph(unsigned int charcode) const
 			{
-				auto f = innerData->glyphtable->find(charcode);
-				if (f != innerData->glyphtable->end())
+				if (charcode < 65535)
 				{
-					return f->second;
+					return innerData->glypharray[charcode];
 				}
 				else
 				{
-					return nullptr;
+					auto f = innerData->glyphtable->find(charcode);
+					if (f != innerData->glyphtable->end())
+					{
+						return f->second;
+					}
+					else
+					{
+						return nullptr;
+					}
 				}
+
 			}
 
 
