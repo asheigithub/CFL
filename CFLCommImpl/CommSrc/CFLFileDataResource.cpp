@@ -1,11 +1,21 @@
 #include "Content/CFLFileDataResource.h"
 #include "CFLEntry.h"
+#include "CFLAsyncFunc.h"
 
 namespace cfl
 {
 	namespace content
 	{
 		using namespace render;
+
+		static void BinaryDataPtrDeleter( BinaryData** ptr)
+		{
+			if (*ptr != nullptr)
+			{
+				delete *ptr;
+			}
+			delete ptr;
+		}
 
 		FileDataResource::FileDataResource(const file::DirType basedir, const CFLString path)
 			:basedir(basedir), 
@@ -18,10 +28,7 @@ namespace cfl
 			_isreading(new bool(false)),
 
 			data(new BinaryDataPtr(nullptr), 
-			[](BinaryDataPtr* ptr)
-			{
-					delete *ptr;
-			}
+				BinaryDataPtrDeleter
 			
 			)
 		{
@@ -70,17 +77,20 @@ namespace cfl
 			*_isreading = true;
 
 
-			if (*data != nullptr)
+			/*if (*data != nullptr)
 			{
 				delete *data;
 				*data = nullptr;
-			}
-
+			}*/
 			
+			data.reset(new BinaryDataPtr(nullptr),
+				BinaryDataPtrDeleter
+				);
+
 			try
 			{
 				
-				*data = new BinaryData( std::move( BinaryCache::getInstance()->getData(basedir, path)));
+				*data = new BinaryData( BinaryCache::getInstance()->getData(basedir, path));
 			}
 			catch (content::BinaryDataDeathLockException ex)
 			{
@@ -126,7 +136,7 @@ namespace cfl
 
 		}
 
-		void complate(content::BinaryData* data,void* args)
+		void complate(content::BinaryData* da,void* args)
 		{
 			
 			std::tuple<
@@ -142,22 +152,30 @@ namespace cfl
 			
 			auto datasource = std::get<2>(*packargs);
 
-			
-
-			*datasource->_progress = (float)(data->getReadSize()) / data->getResourceSize();
+			*datasource->_progress = (float)(da->getReadSize()) / da->getResourceSize();
 
 			
-			if (!data->getIsSyncComplet())
+			if (!da->getIsSyncComplet()) //(如果是同步完成的情况，这时候(*data)还没赋值。)
 			{
-				datasource->ondataloaded();
-
-				GLDataResourceLoadCallbacker callbackfun = std::get<0>(*packargs);
-
-				if (callbackfun)
+				if (*(datasource->data) == nullptr)
 				{
-					callbackfun(datasource, std::get<3>(*packargs));
+					LOGI("*data is null,invoke next frame");
+					cfl::asyncFunc::beginInvoke(complate, da, args);
+					return;
 				}
 
+
+				datasource->ondataloaded();
+				
+				GLDataResourceLoadCallbacker callbackfun = std::get<0>(*packargs);
+				
+				if (callbackfun)
+				{
+					
+					callbackfun(datasource, std::get<3>(*packargs));
+					
+				}
+				
 			}
 
 			
@@ -189,6 +207,9 @@ namespace cfl
 
 			*_isreading = true;
 
+			data.reset(new BinaryDataPtr(nullptr),
+				BinaryDataPtrDeleter); 
+
 			std::tuple<
 				GLDataResourceLoadCallbacker,
 				GLDataResourceLoadCallbacker,
@@ -200,27 +221,30 @@ namespace cfl
 								void*>(callbacker,progresscallbacker, std::make_shared<FileDataResource>(*this), args);
 
 			
-			if (*data !=nullptr)
+			/*if (*data !=nullptr)
 			{
 				delete *data;
 				*data = nullptr;
-			}
+			}*/
 			
 			
+
 			*data = new BinaryData( 
-				std::move( 
+				
 					BinaryCache::getInstance()->
 					getDataAsync(
 								basedir, path, progress, complate,
 								packargs
 						)
 				
-					)
+					
 				)
 				;
 			
 			
-			if ((*data)->getIsSyncComplet()) //如果是同步就完成了
+
+
+			if ((*data)->getIsSyncComplet()) //如果是同步就完成了 (回调只能处理异步完成的情况，因为那这时候(*data)还没赋值。)
 			{
 				
 				ondataloaded();
@@ -255,11 +279,17 @@ namespace cfl
 
 		void FileDataResource::close()
 		{
-			if (*data != nullptr)
+			/*if (*data != nullptr)
 			{
 				delete *data;
 				*data = nullptr;
-			}
+			}*/
+
+			
+			data.reset(new BinaryDataPtr(nullptr),
+				BinaryDataPtrDeleter
+				);
+
 			*_isdone = false;
 			*_isvalid = false;
 		}

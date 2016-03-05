@@ -102,8 +102,7 @@ void up(CFLContext* context,float dettime)
 		auto iimg = content::Content::loadGameImage("testreadfile/commimage1/新资源/公用资源/竞技场-皇榜-上.png");
 		auto iimg2 = content::Content::loadGameImage("testreadfile/commimage1/旗子导出2/白右/baiqiyou_00005.png");
 		auto iimg3 = content::Content::loadGameImage("testreadfile/commimage1/界面文字/界面文字-标题/图鉴.png");
-				
-
+		
 		context->graphic->drawGameImage(content::Content::loadGameImage("testreadfile/commimage1/主界面背景图.png"), 0.0f, 0.0f, 0.8f, nullptr, 1.0f);
 		//context->graphic->drawGameImage(content::Content::loadGameImage("testreadfile/commimage1/主界面背景图.png"), 0.0f, 0.0f, 1.0f, nullptr, 1.0f);
 
@@ -242,24 +241,24 @@ void up(CFLContext* context,float dettime)
 			font, 32, 30, 130 + 40
 			);
 
-		/*auto rcode = std::rand() % (4094) + 0x4e00;
+		auto rcode = std::rand() % (4094) + 0x4e00;
 		context->graphic->drawString(
 			"每帧随机生成一个汉字：" + CFLString(rcode),
 			font, 32, 30, 130 + 40 * 2
-			);*/
+			);
 		
 		context->graphic->drawString(
 			"实时高质量缩放：" ,
 			font, 32, 30, 130 + 40 * 3
 			);
 
-		/*float scale = cfl::math::sinf (((context->totalframes) % 60) / 60.0f * PI * 2 ) * 5 + 0.5;
+		float scale = cfl::math::sinf (((context->totalframes) % 60) / 60.0f * PI * 2 ) * 5 + 0.5;
 		context->graphic->drawString(
 			CFLString(rcode),
 			font, 32, 30 + 32 * 8, 130 + 40 * 3,
 			nullptr,
 			&cfl::geom::Matrix3D().appendScale(scale,scale,scale )
-			);*/
+			);
 
 		auto fcolor = cfl::graphic::Color(math::cosf((context->totalframes % 30)  * PI / 30 * 2)*0.5f + 0.5f,
 			math::sinf((context->totalframes % 45)  * PI / 45 * 2)*0.5f + 0.5f,

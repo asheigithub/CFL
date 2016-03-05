@@ -291,27 +291,45 @@ namespace cfl
 					{
 						texdata->hasupload = true;
 
-						auto args = new std::shared_ptr<tex2dRef_indata>(texdata);
+						//auto args = new std::shared_ptr<tex2dRef_indata>(texdata);
+						//auto argfileds = new std::shared_ptr<content::FileDataResource>(fs);
+
+						std::tuple<std::shared_ptr<tex2dRef_indata>, std::shared_ptr<content::FileDataResource>>*
+							packedArgs =
+							new  std::tuple<std::shared_ptr<tex2dRef_indata>, 
+								std::shared_ptr<content::FileDataResource>>
+								(
+									texdata,fs
+								);
 
 						fs->loadAsync(
 						[]
 						(std::shared_ptr<content::IGLDataResource> ds, void * args)
 						{
-							std::shared_ptr<tex2dRef_indata>* arg =
-								reinterpret_cast<std::shared_ptr<tex2dRef_indata>*>(args);
+							
+							/*std::shared_ptr<tex2dRef_indata>* arg =
+								reinterpret_cast<std::shared_ptr<tex2dRef_indata>*>(args);*/
+							std::tuple < std::shared_ptr<tex2dRef_indata>,
+								std::shared_ptr < content::FileDataResource >>* arg
+								= reinterpret_cast<std::tuple < std::shared_ptr<tex2dRef_indata>,
+								std::shared_ptr<content::FileDataResource >> *>(args);
 
-							auto ptr = *arg;
+							
+							//auto ptr = *arg; //( std::get<0>(*arg) );
+							auto ptr = (std::get<0>(*arg));
+							
 							if (!ptr->hasupload)
 							{
 								LOGI("当文件加载完成时，引用已结束");
 								return;
 							}
+							
 							ctffile_loaded(ptr, ds, true);
-
+							
 							delete arg;
-
+							
 						},
-							nullptr,args);
+							nullptr,packedArgs);
 					}
 					else
 					{
